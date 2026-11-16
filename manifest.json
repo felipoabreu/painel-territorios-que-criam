@@ -1,0 +1,190 @@
+{
+ "versao": "2026-11-16",
+ "datasets": [
+  {
+   "id": "cbo_criativas",
+   "file": "cbo_criativas.json",
+   "title": "Ocupações criativas na CBO"
+  },
+  {
+   "id": "cnae",
+   "file": "cnae.json",
+   "title": "Mapeamento CNAE criativo"
+  },
+  {
+   "id": "comex",
+   "file": "comex.json",
+   "title": "Comércio internacional de bens criativos"
+  },
+  {
+   "id": "comex_blocos",
+   "file": "comex_blocos.json",
+   "title": "Comércio de bens criativos de SP por região do mundo (2025)"
+  },
+  {
+   "id": "comex_blocos_mun",
+   "file": "comex_blocos_mun.json",
+   "title": "Comércio de bens criativos por município e região do mundo (2025)"
+  },
+  {
+   "id": "comex_grupos",
+   "file": "comex_grupos.json",
+   "title": "Comércio de bens criativos por grupo de produtos"
+  },
+  {
+   "id": "educacao",
+   "file": "educacao.json",
+   "title": "Fluxo, turmas e docentes 2024"
+  },
+  {
+   "id": "familias_criativas",
+   "file": "familias_criativas.json",
+   "title": "Famílias de ocupações criativas em SP"
+  },
+  {
+   "id": "familias_mun",
+   "file": "familias_mun.json",
+   "title": "Ofícios criativos por território (base formal, 2024)"
+  },
+  {
+   "id": "fontes",
+   "file": "fontes.json",
+   "title": "Fontes e datas de coleta"
+  },
+  {
+   "id": "gasto_hist",
+   "file": "gasto_hist.json",
+   "title": "Gasto com cultura por habitante, 2014–2024"
+  },
+  {
+   "id": "gastocult",
+   "file": "gastocult.json",
+   "title": "Gasto público com cultura (e turismo)"
+  },
+  {
+   "id": "geo",
+   "file": "geo.json",
+   "title": "Malha municipal de SP"
+  },
+  {
+   "id": "governanca",
+   "file": "governanca.json",
+   "title": "Governança cultural e municipal (SNC + MUNIC)"
+  },
+  {
+   "id": "ideb",
+   "file": "ideb.json",
+   "title": "IDEB rede pública"
+  },
+  {
+   "id": "idpec",
+   "file": "idpec.json",
+   "title": "IDPEC-SP e indicadores"
+  },
+  {
+   "id": "ifdm",
+   "file": "ifdm.json",
+   "title": "IFDM FIRJAN 2013–2023"
+  },
+  {
+   "id": "incorp_secao",
+   "file": "incorp_secao.json",
+   "title": "Incorporados criativos por atividade (2024)"
+  },
+  {
+   "id": "infra",
+   "file": "infra.json",
+   "title": "Infraestrutura escolar 2024"
+  },
+  {
+   "id": "intens_ponte",
+   "file": "intens_ponte.json",
+   "title": "Ponte PNAD – RAIS por setor"
+  },
+  {
+   "id": "intens_setor_mun",
+   "file": "intens_setor_mun.json",
+   "title": "Intensidade criativa por setor no território (RAIS)"
+  },
+  {
+   "id": "mtc",
+   "file": "mtc.json",
+   "title": "Mercado de trabalho e empreendimentos criativos"
+  },
+  {
+   "id": "pnab",
+   "file": "pnab.json",
+   "title": "PNAB: adesão, planos e execução"
+  },
+  {
+   "id": "pnab_tempo",
+   "file": "pnab_tempo.json",
+   "title": "PNAB por ano"
+  },
+  {
+   "id": "rouanet",
+   "file": "rouanet.json",
+   "title": "Lei Rouanet por ano"
+  },
+  {
+   "id": "segmentos",
+   "file": "segmentos.json",
+   "title": "Segmentos criativos por território"
+  },
+  {
+   "id": "serie",
+   "file": "serie.json",
+   "title": "Série anual por território"
+  },
+  {
+   "id": "setores_intens",
+   "file": "setores_intens.json",
+   "title": "Setores criativos por intensidade criativa"
+  },
+  {
+   "id": "territorios",
+   "file": "territorios.json",
+   "title": "Indicadores por território"
+  },
+  {
+   "id": "triangulo",
+   "file": "triangulo.json",
+   "title": "Triângulo Criativo"
+  },
+  {
+   "id": "tridente",
+   "file": "tridente.json",
+   "title": "Tridente criativo — SP e Brasil (PNAD)"
+  },
+  {
+   "id": "empresas_resumo",
+   "file": "empresas_resumo.json",
+   "title": "Empresas criativas por território (Receita Federal)"
+  },
+  {
+   "id": "empresas_grupo",
+   "file": "empresas_grupo.json",
+   "title": "Empresas criativas por grupo de atividade"
+  },
+  {
+   "id": "empresas_ano",
+   "file": "empresas_ano.json",
+   "title": "Empresas criativas por ano e mês"
+  },
+  {
+   "id": "empresas_mortalidade_porte",
+   "file": "empresas_mortalidade_porte.json",
+   "title": "Mortalidade das empresas criativas por porte (SP)"
+  },
+  {
+   "id": "empresas_ref_panorama",
+   "file": "empresas_ref_panorama.json",
+   "title": "Conferência com o Panorama (Seade)"
+  },
+  {
+   "id": "empresas_perimetros",
+   "file": "empresas_perimetros.json",
+   "title": "Sobreposição dos perímetros criativos"
+  }
+ ]
+}
