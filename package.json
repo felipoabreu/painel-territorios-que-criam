@@ -1,0 +1,11 @@
+{
+  "name": "painel-territorios-que-criam",
+  "version": "1.7.0",
+  "description": "Painel de Dados - Programa Territórios que Criam | Senac SP (versão local para VS Code)",
+  "private": true,
+  "scripts": {
+    "start": "npx --yes http-server . -p 8080 -c-1 -o",
+    "serve:py": "python -m http.server 8080"
+  },
+  "license": "UNLICENSED"
+}

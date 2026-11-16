@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- noindex: a versão de teste não aparece em buscadores; apague a linha abaixo para liberar -->
+<meta name="robots" content="noindex, nofollow">
+<title>Painel de Dados - Programa Territórios que Criam | Senac SP</title>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/painel.css">
+</head>
+<body>
+<div id="dash-erro" hidden>Os dados não carregaram. Abra o painel por um servidor local (no VS Code: botão <b>Go Live</b> da extensão Live Server, ou <code>npm start</code>) — abrir o index.html direto do disco (file://) não funciona.</div>
+<div id="dash-root">
+<!-- AVISO DE TESTE: apague a linha abaixo quando o painel deixar de ser versão de teste -->
+<p class="aviso-teste" role="note">Versão de teste, não oficial · dados compilados de fontes públicas, carga de 16/11/2026</p>
+<div class="pg" id="painel">
+  <header class="pg-head" id="topo">
+    <div>
+      <h1 class="pg-title">Painel de Dados - Programa Territórios que Criam | Senac SP</h1>
+      <p class="pg-take" id="takeaway" data-draw="takeaway" data-source="territorios">—</p>
+    </div>
+    <div class="pg-meta">
+      <div>Última carga dos dados: <b data-draw="carga" data-source="fontes">—</b></div>
+      <div class="warn">Dados públicos em atualização contínua: cada fonte tem seu próprio calendário (veja Glossário &amp; Metodologia).</div>
+    </div>
+  </header>
+
+  <div class="filters" id="filtros" role="region" aria-label="Filtros de território">
+    <div class="frow">Recorte geográfico (IBGE)</div>
+    <label>Região intermediária (IBGE)
+      <select class="dash-select" data-draw="sel-rgint" data-source="territorios" aria-label="Região intermediária"></select>
+    </label>
+    <label>Região imediata (IBGE)
+      <select class="dash-select" data-draw="sel-rgi" data-source="territorios" aria-label="Região imediata"></select>
+    </label>
+    <label>Município
+      <select class="dash-select" data-draw="sel-mun" data-source="territorios" aria-label="Município"></select>
+    </label>
+    <div class="frow sep">Recorte Senac SP<button class="help" type="button" aria-expanded="false" aria-controls="h-senac" aria-label="Ajuda: recorte Senac SP">?</button></div>
+    <p class="helptext" id="h-senac" hidden>Fonte: “Área de atuação das unidades” das GO1, GO2 e GO3 (Senac SP, GPG – Informações e Análises de Mercado, 26/6/2026). Observação: a cidade de São Paulo aparece nos três documentos (3 unidades da GO1, 6 da GO2 e 7 da GO3); por isso, forma um recorte próprio: “Capital · GO1, GO2 e GO3”.</p>
+    <label>Gerência de Operações (GO)
+      <select class="dash-select" data-draw="sel-go" data-source="territorios" aria-label="Gerência de Operações do Senac SP"></select>
+    </label>
+    <label>Unidade Senac
+      <select class="dash-select" data-draw="sel-un" data-source="territorios" aria-label="Unidade Senac"></select>
+    </label>
+    <label>Município (área da unidade)
+      <select class="dash-select" data-draw="sel-mun-senac" data-source="territorios" aria-label="Município da área de atuação da unidade"></select>
+    </label>
+    <div class="now">Território selecionado<b data-draw="kv" data-source="territorios" data-k="nome" data-f="text">—</b><span data-draw="kv" data-source="territorios" data-k="nivel" data-f="text">—</span><span data-draw="senac-info" data-source="territorios"></span></div>
+    <button class="btn" id="limpar" type="button">Limpar seleção</button>
+    <button class="btn" id="contraste" type="button" aria-pressed="false">Alto contraste</button>
+  </div>
+
+  <nav class="tabs" role="tablist" aria-label="Páginas do painel">
+    <button class="tab" role="tab" type="button" data-tab="comousar" aria-selected="false" aria-controls="comousar">Como usar</button>
+    <button class="tab" role="tab" type="button" data-tab="visao" aria-selected="true" aria-controls="visao">Visão geral</button>
+    <button class="tab" role="tab" type="button" data-tab="territorio" aria-selected="false" aria-controls="territorio">Dados Territoriais</button>
+    <button class="tab" role="tab" type="button" data-tab="criativa" aria-selected="false" aria-controls="criativa">Ecossistema Criativo</button>
+    <button class="tab" role="tab" type="button" data-tab="educacao" aria-selected="false" aria-controls="educacao">Educação</button>
+    <button class="tab" role="tab" type="button" data-tab="comparar" aria-selected="false" aria-controls="comparar">Comparar territórios</button>
+    <button class="tab" role="tab" type="button" data-tab="glossario" aria-selected="false" aria-controls="glossario">Glossário &amp; Metodologia</button>
+  </nav>
+
+  <section id="visao" role="tabpanel" aria-label="Visão geral">
+    <p class="hint">Selecione um município no mapa ou nos filtros acima: todas as páginas passam a mostrar aquele território. Use "Limpar seleção" para voltar ao Estado.</p>
+    <div class="kpis">
+      <div class="tile"><div class="lab">População (Censo 2022, hab.)<button class="help" type="button" aria-expanded="false" aria-controls="h-pop" aria-label="Ajuda: população">?</button></div>
+        <p class="helptext" id="h-pop" hidden>Pessoas residentes contadas pelo Censo Demográfico 2022 (IBGE). Abaixo, a estimativa oficial mais recente do IBGE.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="pop_censo" data-f="int">—</div><div class="s">Estimativa 2025: <span data-draw="kv" data-source="territorios" data-k="pop_2025" data-f="int">—</span></div></div>
+      <div class="tile"><div class="lab">PIB per capita (R$, 2023)<button class="help" type="button" aria-expanded="false" aria-controls="h-pibpc" aria-label="Ajuda: PIB per capita">?</button></div>
+        <p class="helptext" id="h-pibpc" hidden>PIB a preços correntes de 2023 (IBGE, PIB dos Municípios) dividido pela população de 2023, estimada como a média entre o Censo 2022 e a estimativa de 2024.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="pib_pc_2023" data-f="brl">—</div><div class="s">PIB total: <span data-draw="kv" data-source="territorios" data-k="pib_2023_mil" data-f="brlmil">—</span></div></div>
+      <div class="tile"><div class="lab">Empregos formais criativos (2024)<button class="help" type="button" aria-expanded="false" aria-controls="h-emp" aria-label="Ajuda: empregos criativos">?</button></div>
+        <p class="helptext" id="h-emp" hidden>Pessoal assalariado em 31/12 nas 51 classes CNAE dos 13 segmentos criativos (IBGE, Cadastro Central de Empresas). Em municípios pequenos parte dos valores é sigilosa, então o número é um piso.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="cri_emp" data-f="int">—</div><div class="s"><span data-draw="kv" data-source="territorios" data-k="cri_part_emp" data-f="pct2">—</span> do emprego formal total</div></div>
+      <div class="tile"><div class="lab">Estabelecimentos criativos (2024)<button class="help" type="button" aria-expanded="false" aria-controls="h-ul" aria-label="Ajuda: estabelecimentos">?</button></div>
+        <p class="helptext" id="h-ul" hidden>Unidades locais (endereços de atuação de empresas e organizações) nas classes CNAE criativas. Este número não tem sigilo. A densidade usa a estimativa de população de 2024, o mesmo ano do dado.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="cri_ul" data-f="int">—</div><div class="s"><span data-draw="kv" data-source="territorios" data-k="cri_ul_10mil" data-f="d1">—</span> por 10 mil habitantes</div></div>
+      <div class="tile"><div class="lab">IDEB anos iniciais (rede pública, 2023)<button class="help" type="button" aria-expanded="false" aria-controls="h-ideb" aria-label="Ajuda: IDEB">?</button></div>
+        <p class="helptext" id="h-ideb" hidden>Índice de Desenvolvimento da Educação Básica (INEP), de 0 a 10: combina aprendizado (Saeb) e aprovação. As metas oficiais terminaram em 2021. Divulgado por município e pelo Estado, não por região.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="ideb_ai" data-f="d1">—</div><div class="s">Meta de 2021: <span data-draw="kv" data-source="territorios" data-k="meta21_ok_ai" data-f="badge">—</span></div></div>
+      <div class="tile"><div class="lab">IFDM geral (ano-base 2023)<button class="help" type="button" aria-expanded="false" aria-controls="h-ifdm" aria-label="Ajuda: IFDM">?</button></div>
+        <p class="helptext" id="h-ifdm" hidden>Índice FIRJAN de Desenvolvimento Municipal (0 a 1): média de Educação, Saúde e Emprego &amp; Renda. Acima de 0,8 é desenvolvimento alto. Só existe para municípios.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="ifdm_geral_2023" data-f="d3">—</div><div class="s">Posição no Estado: <span data-draw="kv" data-source="territorios" data-k="ranking_estadual_2023" data-f="ord">—</span></div></div>
+    </div>
+    <p class="hint" id="anos-ref">Último dado publicado de cada fonte: emprego e estabelecimentos (IBGE CEMPRE) 2024 · PIB 2023 · população Censo 2022 e estimativa 2025 · IDEB 2023 · IFDM ano-base 2023 · Censo Escolar 2024 · Lei Rouanet projetos 2019–2025. Indicadores por habitante usam a população do mesmo ano.</p>
+    <p class="hint" data-show-nivel="Região intermediária|Região imediata|GO Senac|Unidade Senac" hidden>IDEB e IFDM são publicados por município: para uma região, escolha um município ou use a página Comparar territórios.</p>
+
+    <div class="grid wide">
+      <div class="card" id="card-mapa">
+        <div class="card-h"><h2 class="card-t">Mapa dos municípios paulistas</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-mapa" aria-label="Ajuda: mapa">?</button></div>
+        <p class="card-n">Cores mais escuras indicam resultados melhores no indicador escolhido. Clique em um município para selecioná-lo.</p>
+        <p class="helptext" id="h-mapa" hidden>As cores dividem os 645 municípios em cinco faixas com quantidades parecidas de municípios (quintis). Cinza: sem dado. O contorno escuro marca o território selecionado. No abandono escolar, em que menor é melhor, a escala é invertida.</p>
+        <div class="card-ctl"><select class="dash-select" id="ind-mapa" aria-label="Indicador do mapa e do ranking">
+          <option value="idpec">IDPEC-SP: potencial da economia criativa (0 a 100)</option>
+          <option value="d1_capacidades_humanas">IDPEC-SP · Capacidades humanas (0 a 100)</option>
+          <option value="d2_atratividade_conectividade">IDPEC-SP · Atratividade e conectividade (0 a 100)</option>
+          <option value="d3_ambiente_cultural_empreend">IDPEC-SP · Ambiente cultural e empreendedorismo (0 a 100)</option>
+          <option value="c3_governanca_cultural">Governança cultural e municipal: SNC + MUNIC (0 a 100)</option>
+          <option value="ql_criativo_2024">Quociente locacional do emprego criativo (2024)</option>
+          <option value="mtc_intens_emprego_pct">Intensidade criativa do emprego formal (%, 2024, método OIC)</option>
+          <option value="mtc_ql_especializados">QL dos especializados criativos (2024)</option>
+          <option value="pib_criativo_part_pct">PIB criativo no PIB total (%, 2023, estimativa)</option>
+          <option value="gc_mun_pc_2024">Gasto municipal com cultura por habitante (R$, 2024)</option>
+          <option value="cx_part_export_pct">Bens criativos nas exportações (%, 2025)</option>
+          <option value="cri_part_emp">Participação criativa no emprego formal (%, 2024)</option>
+          <option value="cri_emp">Empregos formais criativos (nº, 2024)</option>
+          <option value="cri_ul_10mil">Estabelecimentos criativos por 10 mil hab. (2024)</option>
+          <option value="cri_rem_media">Remuneração média mensal criativa (R$, 2024)</option>
+          <option value="rou_pc">Captação Lei Rouanet por habitante (R$, projetos 2019–2025)</option>
+          <option value="ideb_ai">IDEB anos iniciais, rede pública (2023)</option>
+          <option value="ideb_af">IDEB anos finais, rede pública (2023)</option>
+          <option value="ideb_em">IDEB ensino médio, rede pública (2023)</option>
+          <option value="afd_ai_2024">Docentes com formação adequada, anos iniciais (%, 2024)</option>
+          <option value="abandono_em_2024">Abandono no ensino médio (%, 2024; menor é melhor)</option>
+          <option value="ifdm_geral_2023">IFDM geral (ano-base 2023)</option>
+          <option value="pib_pc_2023">PIB per capita (R$, 2023)</option>
+        </select></div>
+        <div class="chart map" id="mapa" data-draw="mapa" data-source="geo territorios" role="img" aria-label="Mapa coroplético dos municípios de São Paulo"></div>
+      </div>
+      <div class="card" id="card-ranking">
+        <div class="card-h"><h2 class="card-t">Ranking dos municípios</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-rank" aria-label="Ajuda: ranking">?</button></div>
+        <p class="card-n">Mesmo indicador do mapa, para os municípios da região selecionada (com um município escolhido, a sua região intermediária). Clique em uma linha para selecionar.</p>
+        <p class="helptext" id="h-rank" hidden>"Posição em SP" compara o município com os 645 do Estado (1º = melhor resultado). Clique nos títulos das colunas para ordenar. A busca filtra pelo nome.</p>
+        <div class="card-ctl"><input class="search" id="busca-rank" type="search" placeholder="Buscar município" aria-label="Buscar município no ranking"></div>
+        <div class="tbl-wrap">
+          <table id="tab-ranking" data-source="ranking" data-row-key="cod,ind">
+            <caption class="sr">Ranking de municípios pelo indicador escolhido</caption>
+            <thead><tr><th class="n" data-field="rk"><button type="button" data-sort="rk">Posição em SP</button></th><th data-field="nome"><button type="button" data-sort="nome">Município</button></th><th class="n" data-field="valor"><button type="button" data-sort="valor">Valor</button></th><th data-field="rgi">Região imediata</th></tr></thead>
+            <tbody data-draw="ranking" data-source="ranking territorios"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="criativa" role="tabpanel" aria-label="Ecossistema Criativo" hidden>
+    <p class="hint">Classificação FIRJAN: 4 áreas e 13 segmentos, medidos aqui por 51 classes CNAE no Cadastro Central de Empresas (IBGE). Últimos dados: 2024.</p>
+    <div class="kpis">
+      <div class="tile"><div class="lab">Estabelecimentos criativos (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="cri_ul" data-f="int">—</div><div class="s">Variação 2022–2024: <span data-draw="kv" data-source="territorios" data-k="cri_var_ul" data-f="sig">—</span></div></div>
+      <div class="tile"><div class="lab">Empregos formais criativos (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="cri_emp" data-f="int">—</div><div class="s">Variação 2022–2024: <span data-draw="kv" data-source="territorios" data-k="cri_var_emp" data-f="sig">—</span></div></div>
+      <div class="tile"><div class="lab">Emprego formal total (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="tot_emp" data-f="int">—</div><div class="s">Variação 2022–2024: <span data-draw="kv" data-source="territorios" data-k="tot_var_emp" data-f="sig">—</span></div></div>
+      <div class="tile"><div class="lab">Participação criativa no emprego (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="cri_part_emp" data-f="pct2">—</div><div class="s">Estado de SP: <span data-draw="kv" data-source="territorios" data-k="cri_part_emp" data-f="pct2" data-cod="35">—</span></div></div>
+      <div class="tile"><div class="lab">Remuneração média mensal criativa (R$, 2024)<button class="help" type="button" aria-expanded="false" aria-controls="h-rem" aria-label="Ajuda: remuneração">?</button></div>
+        <p class="helptext" id="h-rem" hidden>Aproximação: salários e outras remunerações do ano ÷ pessoal assalariado ÷ 13 (inclui 13º salário). O IBGE usa o pessoal assalariado médio do ano, por isso o valor oficial pode diferir.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="cri_rem_media" data-f="brl">—</div><div class="s">Estado de SP: <span data-draw="kv" data-source="territorios" data-k="cri_rem_media" data-f="brl" data-cod="35">—</span></div></div>
+      <div class="tile"><div class="lab">Massa salarial criativa (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="cri_sal_mil" data-f="brlmil">—</div><div class="s">Salários e outras remunerações no ano</div></div>
+    </div>
+
+    <div class="grid wide">
+      <div class="card" id="card-segmentos">
+        <div class="card-h"><h2 class="card-t">Os 13 segmentos criativos</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-seg" aria-label="Ajuda: segmentos">?</button></div>
+        <p class="card-n">Cores pelas 4 grandes áreas: Consumo, Cultura, Mídia e Tecnologia.</p>
+        <p class="helptext" id="h-seg" hidden>Cada segmento soma suas classes CNAE (lista completa em Glossário &amp; Metodologia). Empregos e massa salarial são pisos onde há sigilo estatístico; estabelecimentos não têm sigilo.</p>
+        <div class="card-ctl">
+          <select class="dash-select" id="seg-metrica" aria-label="Medida dos segmentos"><option value="emp">Empregos formais (nº)</option><option value="ul">Estabelecimentos (nº)</option><option value="sal_mil">Massa salarial (R$)</option></select>
+          <select class="dash-select" id="seg-ano" aria-label="Ano dos segmentos"><option value="2024">2024</option><option value="2023">2023</option><option value="2022">2022</option></select>
+        </div>
+        <div class="chart tall" id="graf-segmentos" data-draw="segmentos" data-source="segmentos" role="img" aria-label="Barras por segmento criativo"></div>
+      </div>
+      <div class="card" id="card-serie-cri">
+        <div class="card-h"><h2 class="card-t">Evolução do emprego criativo (nº, 2019–2024)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-serie" aria-label="Ajuda: série">?</button></div>
+        <p class="card-n">Empregos formais criativos por ano. A linha tracejada marca a nova série do IBGE.</p>
+        <p class="helptext" id="h-serie" hidden>Em 2022 o IBGE reformulou o Cadastro Central de Empresas: valores a partir de 2022 não são diretamente comparáveis aos anteriores (o número de estabelecimentos, por exemplo, sobe muito pela mudança de método). Compare crescimento dentro de cada série.</p>
+        <div class="chart" id="graf-serie-cri" data-draw="serie-cri" data-source="serie" role="img" aria-label="Série de empregos criativos"></div>
+      </div>
+      <div class="card" id="card-rouanet">
+        <div class="card-h"><h2 class="card-t">Fomento federal: Lei Rouanet</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-rou" aria-label="Ajuda: Rouanet">?</button></div>
+        <p class="card-n">Quanto os projetos culturais de proponentes sediados no território captaram junto a empresas e pessoas pela Lei Rouanet, em reais, ano a ano de 2019 a 2026, pelo ano do projeto. Os valores de 2026 ainda estão em captação.</p>
+        <p class="helptext" id="h-rou" hidden>Fonte: API do SALIC (Ministério da Cultura). O território é o município do proponente; o projeto pode ser realizado em outros lugares. Projetos recentes ainda podem estar captando. A Política Nacional Aldir Blanc está no cartão ao lado.</p>
+        <div class="chart" id="graf-rouanet" data-draw="rouanet" data-source="rouanet" role="img" aria-label="Captação Rouanet por ano"></div>
+      </div>
+      <div class="card" id="card-pnab">
+        <div class="card-h"><h2 class="card-t">Fomento federal: Política Nacional Aldir Blanc – PNAB</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-pnab" aria-label="Ajuda: PNAB">?</button></div>
+        <p class="card-n">Repasses fundo a fundo do Ministério da Cultura às prefeituras do território, em reais, ao longo dos dois ciclos da política: o Ciclo 1 (recursos de 2023), mostrado pelo ano em que o dinheiro chegou e foi aplicado, e o Ciclo 2 (plano de 2025 a 2028), mostrado como valor médio previsto por ano. <span data-draw="pnab-resumo" data-source="pnab"></span></p>
+        <p class="helptext" id="h-pnab" hidden>Linha do tempo: o repasse e a aplicação do Ciclo 1 vêm dos extratos bancários das contas da PNAB (até 12/10/2025), por data do lançamento. Aplicação = pagamentos e transferências a beneficiários menos devoluções; aplicações financeiras e resgates internos da conta não contam. 2025 é parcial. O Ciclo 2 (plano 2025–2028) aparece como previsto: valor do plano ÷ 4 em cada ano, com barra tracejada, porque ainda não é repasse realizado. Ciclo 1: recursos de 2023, repassados entre nov/2023 e 2024; a execução oficial (painel do MinC, 01/11/2025) inclui rendimentos e pode diferir um pouco da soma dos extratos. Ciclo 2: plano de 2025 a 2028, mostrado como média anual (total ÷ 4) para ser comparável ao Ciclo 1. Por habitante: população de 2024 (Ciclo 1) e 2025 (Ciclo 2). Diferente da Lei Rouanet, que é captação junto a empresas, a PNAB é transferência obrigatória a quem aderiu, distribuída por critérios populacionais e do FPE/FPM. Esses repasses também aparecem no gasto com cultura (Siconfi) quando executados: não some os dois. No Estado, o gráfico mostra a soma das prefeituras; o Governo do Estado aparece na dica.</p>
+        <div class="chart" id="graf-pnab" data-draw="pnab-tempo" data-source="pnab_tempo" role="img" aria-label="PNAB por ano: repasse, aplicação e previsto"></div>
+      </div>
+    </div>
+    <h2 class="sec-h" id="empresas">Empresas criativas: cadastro da Receita Federal, no recorte do Panorama Territorial da Economia Criativa Paulista <button class="help" type="button" aria-expanded="false" aria-controls="h-emp" aria-label="Ajuda: empresas criativas, método e correções">?</button></h2>
+    <p class="hint">Empresas (matrizes) nas 87 atividades do Panorama da Secretaria da Cultura, Economia e Indústria Criativas com a Fundação Seade, recalculadas no cadastro de CNPJ da Receita Federal (retrato de 11/01/2026) para todos os territórios do painel. É uma contagem de registros, não de empregos nem de empresas em funcionamento: leia junto com os quadros de conferência abaixo.</p>
+    <div class="helptext" id="h-emp" hidden>
+      <p><b>Fonte e unidade.</b> Cadastro Nacional da Pessoa Jurídica (Receita Federal), tabelas de estabelecimentos, empresas e Simples, via Base dos Dados (BigQuery), retrato de 11/01/2026, que fecha o ano de 2025. Conta-se a empresa (matriz) pelo município da sede e pela atividade principal (CNAE), como faz o Panorama. O Panorama original detalha a capital por distrito e CEP; aqui o mesmo cálculo foi levado a município, regiões do IBGE, GOs e unidades do Senac.</p>
+      <p><b>Total por ano.</b> O cadastro guarda a data de abertura e a data da última mudança de situação. O total em 31/12 de cada ano é reconstituído: empresas abertas até aquela data e ainda não baixadas nem declaradas inaptas até então. Criadas = início de atividade no ano. Fechadas = baixa formal no ano. Empresas declaradas inaptas, suspensas ou nulas saem do total, mas são mostradas à parte (“outras saídas”), porque não são encerramentos voluntários. Em 2018 e em 2021 a Receita fez limpezas cadastrais em massa: a queda do total em 2018 é administrativa, não econômica.</p>
+      <p><b>Mortalidade (métrica do Sebrae).</b> Taxa de mortalidade = % das empresas abertas em um ano que não estão mais ativas ao fim de um prazo; a sobrevivência é o complemento. O painel usa os dois prazos dos estudos do Sebrae com dados da Receita: até 2 anos (abertas em 2023, situação em 31/12/2025) e até 5 anos (abertas em 2020, situação em 31/12/2025). “Não ativa” soma baixa formal e inaptidão; a parcela só de baixas formais aparece ao lado. Como a medida é por ano-calendário, o prazo efetivo varia de 5 a 6 anos conforme o mês de abertura. Com menos de 30 empresas na coorte, a taxa é mostrada com alerta.</p>
+      <p><b>Distorções tratadas.</b> (1) Perímetro amplo: o Panorama inclui atividades de baixo conteúdo criativo, como organização de eventos não culturais (95 mil empresas), confecção de vestuário (81 mil), paisagismo (29 mil) e papelarias e livrarias (24 mil). Só 64% das empresas estão também no recorte FIRJAN usado no restante do painel; o quadro “Ponte entre as bases” mostra os dois recortes lado a lado. (2) Registro não é atividade: metade das empresas é MEI e muitas não têm empregados nem faturamento. O Cadastro Central de Empresas do IBGE, que só conta organizações com sinal de atividade no ano e não inclui MEI, encontra cerca de 70% das empresas não MEI do mesmo recorte. (3) Sede fiscal: o município é o do endereço de registro, que pode ser um escritório de contabilidade ou um coworking; isso infla polos e a capital. (4) Porte é autodeclarado pela receita bruta; a divisão entre MEI e microempresa depende da data da opção pelo MEI, por isso difere um pouco do Panorama, embora a soma dos dois coincida. (5) A média mensal de criadas é o total do ano dividido por 12; o Panorama divide por 6. (6) O grupo “Outro” do Panorama (5 mil empresas em atividades não criativas) não foi incluído.</p>
+      <p><b>Conferência.</b> Os totais do painel ficam de 1% a 5% acima dos publicados no Panorama, de forma estável entre anos e territórios; a diferença vem do tratamento e da validação de endereços feitos pela Fundação Seade e da data do retrato. A distribuição por grupo coincide (diferenças de até 0,5 ponto percentual). Os valores não foram ajustados para igualar o Panorama.</p>
+    </div>
+    <div class="kpis">
+      <div class="tile"><div class="lab">Total de empresas criativas (31/12/2025)</div><div class="v" data-draw="ek" data-source="empresas_resumo" data-k="estoque_2025" data-f="int">—</div><div class="s"><span data-draw="ek" data-source="empresas_resumo" data-k="part_criativas_pct" data-f="pct1">—</span> das empresas ativas do território · Estado: <span data-draw="ek" data-source="empresas_resumo" data-k="part_criativas_pct" data-f="pct1" data-cod="35">—</span></div></div>
+      <div class="tile"><div class="lab">Empresas criadas (2025)</div><div class="v" data-draw="ek" data-source="empresas_resumo" data-k="criadas_2025" data-f="int">—</div><div class="s">Taxa de natalidade: <span data-draw="ek" data-source="empresas_resumo" data-k="tx_natalidade_2025" data-f="pct1">—</span> do total no início do ano</div></div>
+      <div class="tile"><div class="lab">Empresas fechadas (2025)</div><div class="v" data-draw="ek" data-source="empresas_resumo" data-k="fechadas_2025" data-f="int">—</div><div class="s">Taxa de fechamento: <span data-draw="ek" data-source="empresas_resumo" data-k="tx_fechamento_2025" data-f="pct1">—</span> · outras saídas: <span data-draw="ek" data-source="empresas_resumo" data-k="outras_saidas_2025" data-f="int">—</span></div></div>
+      <div class="tile"><div class="lab">Mortalidade em até 5 anos (métrica Sebrae)<button class="help" type="button" aria-expanded="false" aria-controls="h-mort" aria-label="Ajuda: mortalidade">?</button></div>
+        <p class="helptext" id="h-mort" hidden>% das empresas criativas abertas em 2020 que não estavam mais ativas em 31/12/2025 (baixadas ou inaptas). Em até 2 anos: abertas em 2023. Quanto menor, melhor.</p>
+        <div class="v" data-draw="ek" data-source="empresas_resumo" data-k="mort_5a" data-f="pct1">—</div><div class="s" data-draw="emp-mort-sub" data-source="empresas_resumo"></div></div>
+      <div class="tile"><div class="lab">No recorte FIRJAN do painel (51 atividades)</div><div class="v" data-draw="ek" data-source="empresas_resumo" data-k="fj_estoque_2025" data-f="int">—</div><div class="s">Sem MEI: <span data-draw="ek" data-source="empresas_resumo" data-k="fj_sem_mei" data-f="int">—</span> · com atividade no IBGE (2024): <span data-draw="ek" data-source="empresas_resumo" data-k="cempre_ul_2024" data-f="int">—</span></div></div>
+      <div class="tile"><div class="lab">Empresas criativas por 10 mil habitantes</div><div class="v" data-draw="ek" data-source="empresas_resumo" data-k="ativas_10mil" data-f="d1">—</div><div class="s">Estado: <span data-draw="ek" data-source="empresas_resumo" data-k="ativas_10mil" data-f="d1" data-cod="35">—</span> · QL de empresas: <span data-draw="ek" data-source="empresas_resumo" data-k="ql_empresas" data-f="d2">—</span></div></div>
+    </div>
+    <p class="card-n" data-draw="emp-leitura" data-source="empresas_resumo"></p>
+    <div class="grid wide">
+      <div class="card" id="card-emp-grupo">
+        <div class="card-h"><h2 class="card-t">Distribuição por grupo de atividades criativas</h2></div>
+        <p class="card-n">Empresas ativas por grupo (retrato de janeiro de 2026) e participação no total do território. No detalhe de cada barra: participação no Estado, criadas e fechadas em 2025.</p>
+        <div class="chart" id="graf-emp-grupo" data-draw="emp-grupo" data-source="empresas_grupo" role="img" aria-label="Empresas criativas por grupo de atividade"></div>
+      </div>
+      <div class="card" id="card-emp-porte">
+        <div class="card-h"><h2 class="card-t">Porte das empresas e distribuição por setor</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-emp-porte" aria-label="Ajuda: porte">?</button></div>
+        <p class="card-n">Porte declarado à Receita Federal e grande setor da atividade principal, empresas ativas (janeiro de 2026).</p>
+        <p class="helptext" id="h-emp-porte" hidden>MEI: optante pelo Microempreendedor Individual (receita até R$ 81 mil ao ano). Microempresa: receita bruta até R$ 360 mil. Pequeno porte: de R$ 360 mil a R$ 4,8 milhões. Demais: acima de R$ 4,8 milhões ou porte não informado. Setor: indústria = divisões CNAE 10 a 33; comércio = 45 a 47; serviços = demais.</p>
+        <div class="chart" style="min-height:8rem" id="graf-emp-porte" data-draw="emp-porte" data-source="empresas_resumo" role="img" aria-label="Empresas criativas por porte"></div>
+        <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-md)">Distribuição por setor</h3>
+        <div class="chart" style="min-height:6rem" id="graf-emp-setor" data-draw="emp-setor" data-source="empresas_resumo" role="img" aria-label="Empresas criativas por setor"></div>
+      </div>
+      <div class="card" id="card-emp-ano-grupo">
+        <div class="card-h"><h2 class="card-t">Distribuição de empresas por ano e grupo de atividade criativa</h2></div>
+        <p class="card-n">Participação de cada grupo no total de empresas em 31/12 de cada ano (%), de 2014 a 2025. Passe o cursor para ver os números.</p>
+        <div class="chart tall" id="graf-emp-ano-grupo" data-draw="emp-ano-grupo" data-source="empresas_ano" role="img" aria-label="Participação dos grupos criativos por ano"></div>
+      </div>
+      <div class="card" id="card-emp-ano">
+        <div class="card-h"><h2 class="card-t">Total de empresas, criadas e fechadas por ano</h2></div>
+        <p class="card-n">Total em 31/12, variação anual, empresas criadas, fechadas (baixa formal), outras saídas (inaptas, suspensas e nulas) e média mensal de criadas (total ÷ 12).</p>
+        <div class="tbl-wrap" style="max-height:none">
+          <table data-source="empresas_ano" data-row-key="cod,ano">
+            <caption class="sr">Empresas criativas por ano</caption>
+            <thead><tr><th data-field="ano">Ano</th><th class="n" data-field="estoque">Total</th><th class="n" data-field="var_pct">Variação</th><th class="n" data-field="criadas">Criadas</th><th class="n" data-field="fechadas">Fechadas</th><th class="n" data-field="outras_saidas">Outras saídas</th><th class="n">Média mensal</th></tr></thead>
+            <tbody data-draw="emp-ano" data-source="empresas_ano"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card" id="card-emp-mes">
+      <div class="card-h"><h2 class="card-t">Geração mensal de empresas da economia criativa</h2></div>
+      <p class="card-n">Empresas criativas abertas em cada mês, pela data de início de atividade. Cores mais fortes indicam mais aberturas dentro do período mostrado.</p>
+      <div class="tbl-wrap" style="max-height:none">
+        <table class="heat" data-source="empresas_ano" data-row-key="cod,ano">
+          <caption class="sr">Empresas criativas abertas por mês</caption>
+          <thead><tr><th data-field="ano">Ano</th><th class="n" data-field="m01">jan</th><th class="n" data-field="m02">fev</th><th class="n" data-field="m03">mar</th><th class="n" data-field="m04">abr</th><th class="n" data-field="m05">mai</th><th class="n" data-field="m06">jun</th><th class="n" data-field="m07">jul</th><th class="n" data-field="m08">ago</th><th class="n" data-field="m09">set</th><th class="n" data-field="m10">out</th><th class="n" data-field="m11">nov</th><th class="n" data-field="m12">dez</th><th class="n" data-field="criadas">Ano</th></tr></thead>
+          <tbody data-draw="emp-mes" data-source="empresas_ano"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="grid wide">
+      <div class="card" id="card-emp-ponte">
+        <div class="card-h"><h2 class="card-t">Ponte entre as bases: do registro à atividade</h2></div>
+        <p class="card-n">Do número mais amplo ao mais restrito, no território selecionado: perímetro do Panorama, recorte FIRJAN do painel, o mesmo recorte sem MEI e as unidades com sinal de atividade no Cadastro Central de Empresas do IBGE (2024), que é a base dos demais quadros desta página.</p>
+        <div class="chart" style="min-height:9rem" id="graf-emp-ponte" data-draw="emp-ponte" data-source="empresas_resumo" role="img" aria-label="Ponte entre Receita Federal e IBGE"></div>
+        <p class="card-n" data-draw="emp-ponte-txt" data-source="empresas_resumo"></p>
+      </div>
+      <div class="card" id="card-emp-mort">
+        <div class="card-h"><h2 class="card-t">Estado de São Paulo: mortalidade das empresas criativas por porte</h2></div>
+        <p class="card-n">% das empresas abertas que não estavam mais ativas em 31/12/2025, em até 2 anos e em até 5 anos. Quadro do Estado, igual para qualquer território selecionado.</p>
+        <div class="chart" style="min-height:12rem" id="graf-emp-mort" data-draw="emp-mort" data-source="empresas_mortalidade_porte" role="img" aria-label="Mortalidade das empresas criativas por porte"></div>
+      </div>
+    </div>
+    <div class="card" id="card-emp-ref">
+      <div class="card-h"><h2 class="card-t">Estado de São Paulo: conferência com o Panorama publicado</h2></div>
+      <p class="card-n">Números lidos no painel da Secretaria e da Fundação Seade (atualização de 14/10/2026) e os mesmos indicadores recalculados aqui. As diferenças são mostradas, não corrigidas.</p>
+      <div class="tbl-wrap" style="max-height:none">
+        <table data-source="empresas_ref_panorama" data-row-key="indicador">
+          <caption class="sr">Conferência com o Panorama</caption>
+          <thead><tr><th data-field="indicador">Indicador</th><th class="n" data-field="panorama">Panorama (Seade)</th><th class="n" data-field="painel">Este painel</th><th class="n" data-field="dif_pct">Diferença</th><th data-field="nota">Observação</th></tr></thead>
+          <tbody data-draw="emp-ref" data-source="empresas_ref_panorama"></tbody>
+        </table>
+      </div>
+      <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-md)">Quanto do perímetro do Panorama coincide com os outros critérios do painel</h3>
+      <div class="chart" style="min-height:8rem" id="graf-emp-per" data-draw="emp-per" data-source="empresas_perimetros" role="img" aria-label="Sobreposição dos perímetros"></div>
+    </div>
+    <h2 class="sec-h" id="intensidade">Mercado de trabalho e empreendimentos criativos: intensidade criativa</h2>
+    <p class="hint">Método do Painel de Dados do Observatório Itaú Cultural (DCMS/Nesta): um setor é criativo quando ao menos 30% dos seus ocupados exercem ocupações criativas. A intensidade vem da PNAD Contínua (média de 4 trimestres até o 2º tri. de 2026) e é aplicada aos empreendimentos formais do CEMPRE 2024 de cada município.</p>
+    <div class="kpis">
+      <div class="tile"><div class="lab">Especializados criativos formais (2024, estimativa)<button class="help" type="button" aria-expanded="false" aria-controls="h-esp" aria-label="Ajuda: especializados">?</button></div>
+        <p class="helptext" id="h-esp" hidden>Pessoas em ocupações criativas dentro dos setores criativos. Estimativa: ocupados formais de cada setor no território (CEMPRE 2024) × intensidade criativa do setor em SP (PNAD Contínua). Valores sigilosos do CEMPRE foram calibrados para somar o total oficial do Estado.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="mtc_especializados" data-f="int">—</div><div class="s">Apoio nos mesmos setores: <span data-draw="kv" data-source="territorios" data-k="mtc_apoio" data-f="int">—</span></div></div>
+      <div class="tile"><div class="lab">Intensidade criativa do emprego formal (2024)<button class="help" type="button" aria-expanded="false" aria-controls="h-int" aria-label="Ajuda: intensidade">?</button></div>
+        <p class="helptext" id="h-int" hidden>Especializados criativos ÷ pessoal ocupado formal total do território × 100. Abaixo, o quociente locacional: 1,00 = mesma intensidade do Estado.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="mtc_intens_emprego_pct" data-f="pct2">—</div><div class="s">QL: <span data-draw="kv" data-source="territorios" data-k="mtc_ql_especializados" data-f="d2">—</span> · Estado: <span data-draw="kv" data-source="territorios" data-k="mtc_intens_emprego_pct" data-f="pct2" data-cod="35">—</span></div></div>
+      <div class="tile"><div class="lab">Empreendimentos nos setores criativos (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="mtc_empreend" data-f="int">—</div><div class="s"><span data-draw="kv" data-source="territorios" data-k="mtc_empreend_10mil" data-f="d1">—</span> por 10 mil habitantes</div></div>
+      <div class="tile"><div class="lab">Ocupados formais nos setores criativos (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="mtc_ocupados" data-f="int">—</div><div class="s"><span data-draw="kv" data-source="territorios" data-k="mtc_setores_part_pct" data-f="pct2">—</span> do emprego formal · 2022–2024: <span data-draw="kv" data-source="territorios" data-k="mtc_var_ocup_22_24" data-f="sig">—</span></div></div>
+      <div class="tile"><div class="lab">Remuneração média mensal nos setores criativos (R$, 2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="mtc_rem_media" data-f="brl">—</div><div class="s">Estado: <span data-draw="kv" data-source="territorios" data-k="mtc_rem_media" data-f="brl" data-cod="35">—</span></div></div>
+    </div>
+    <div class="grid wide">
+      <div class="card" id="card-tridente">
+        <div class="card-h"><h2 class="card-t">Triângulo Criativo: composição da força de trabalho criativa</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-tri" aria-label="Ajuda: Triângulo Criativo">?</button></div>
+        <p class="card-n">% de cada vértice na força de trabalho criativa: Estado de SP e território selecionado. Especializados criam nos setores criativos; incorporados criam em outros setores; apoio dá suporte nos setores criativos.</p>
+        <p class="helptext" id="h-tri" hidden>Adaptação do “creative trident” (Nesta/DCMS), usado pelo Observatório Itaú Cultural. Ocupação criativa: 40 grupos da COD (ISCO-08) do DCMS, incluindo chefs de cozinha. Estado de SP: PNAD Contínua (4 trimestres até o 2º tri. 2026), com trabalho formal e informal e renda. Território selecionado: a PNAD não tem amostra municipal, então o território é estimado no emprego formal (CEMPRE 2024): especializados e apoio = ocupados de cada setor criativo × intensidade do setor; incorporados = ocupados das demais atividades de cada seção da CNAE × taxa de ocupações criativas da seção em SP (Brasil quando a amostra paulista é pequena). Na mesma base formal, o Estado tem composição 36% / 30% / 34%, muito próxima da PNAD (37% / 29% / 34%), o que confirma a coerência das duas escalas. Compare percentuais, não totais, entre as duas bases.</p>
+        <div class="chart" id="graf-tridente" data-draw="triangulo-duplo" data-source="triangulo" role="img" aria-label="Composição da força de trabalho criativa: Estado e território"></div>
+      </div>
+      <div class="card" id="card-mtc-grupos">
+        <div class="card-h"><h2 class="card-t">Especializados, apoio e incorporados</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-mtcg" aria-label="Ajuda: grupos">?</button></div>
+        <p class="card-n">Número de pessoas no território selecionado, estimado sobre o emprego formal de 2024 (CEMPRE, IBGE) com as proporções de ocupações criativas medidas pela PNAD Contínua entre o 3º trimestre de 2025 e o 2º trimestre de 2026. Especializados e apoio estão dentro dos setores criativos; incorporados, por definição, trabalham fora deles. Por isso cada grupo é lido no seu próprio eixo: setor criativo (1), atividade onde trabalham (2) e ofício criativo que exercem (3).</p>
+        <p class="helptext" id="h-mtcg" hidden>Por que os incorporados não aparecem no gráfico 1: o Triângulo Criativo os define como profissionais criativos fora dos setores criativos. Distribuí-los entre setores criativos seria contá-los duas vezes ou zerá-los. A leitura correta é pela atividade em que trabalham (gráfico 2, município) e pela família de ocupação (gráfico 3). Método no município: ocupados formais de cada seção da CNAE, sem os setores criativos (CEMPRE 2024), × taxa de ocupações criativas da seção em SP (PNAD; Brasil se a amostra paulista tem menos de 30 casos). Limite: a taxa por seção é a mesma em todos os municípios; a diferença entre municípios vem da estrutura econômica (quanto há de indústria, finanças, comércio), não de diferenças locais na proporção de criativos. Leia como ordem de grandeza.</p>
+        <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-sm)">1. Especializados e apoio por grupo de setores criativos</h3>
+        <div class="chart tall" id="graf-mtc-grupos" data-draw="mtc-grupos" data-source="mtc" role="img" aria-label="Especializados e apoio por grupo"></div>
+        <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-md)">2. Incorporados por atividade onde trabalham</h3>
+        <div class="chart" id="graf-incorp-secao" data-draw="incorp-secao" data-source="incorp_secao" role="img" aria-label="Incorporados por atividade"></div>
+        <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-md)">3. Ofícios criativos: especializados e incorporados<button class="help" type="button" aria-expanded="false" aria-controls="h-fam" aria-label="Ajuda: ofícios" style="margin-left:6px">?</button></h3>
+        <p class="helptext" id="h-fam" hidden>Como é estimado: a PNAD não identifica ocupações por município. Para cada setor criativo, calcula-se na PNAD de SP a parcela de ocupados em cada família de ocupação criativa (por exemplo, no setor de publicidade, quantos são profissionais de marketing, designers, fotógrafos) e aplica-se essa parcela aos ocupados formais do mesmo setor no município (CEMPRE 2024); para os incorporados, o mesmo é feito em cada seção da CNAE, fora dos setores criativos. Quando a amostra paulista do setor ou seção tem menos de 30 casos criativos, usa-se a composição do Brasil. As somas por família reproduzem exatamente os especializados e incorporados do Triângulo Criativo do território (diferença zero). Leitura: o QL compara a densidade da família (por mil ocupados formais) com a do Estado; acima de 1, o território tem mais desse ofício que a média paulista. Limites: a composição ocupacional de cada setor é a do Estado (a variação entre municípios vem do tamanho de cada setor e atividade, não de diferenças locais dentro do setor); só emprego formal; famílias com menos de 60 casos na amostra estadual (†) têm baixa precisão. Para medir ocupações reais por município, o próximo passo é a RAIS por CBO.</p>
+        <div class="chart tall" id="graf-familias" data-draw="familias-mun" data-source="familias_mun" role="img" aria-label="Ofícios criativos no território"></div>
+      </div>
+      <div class="card" id="card-intens-setores">
+        <div class="card-h"><h2 class="card-t">Intensidade Criativa (% dos ocupados em ocupações criativas)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-ints" aria-label="Ajuda: intensidade criativa">?</button></div>
+        <p class="card-n">Nos 14 setores criativos (intensidade nacional de 30% ou mais), a parcela dos trabalhadores em ocupação criativa. Brasil e Estado pela PNAD Contínua, com todos os ocupados; Estado e território selecionado pela RAIS 2024, medida com os empregados formais de cada município. A primeira linha resume o conjunto dos setores.</p>
+        <p class="helptext" id="h-ints" hidden>Brasil e Estado: PNAD Contínua, 4 trimestres até o 2º tri. de 2026, trabalho formal e informal. Os setores são escolhidos pela intensidade nacional, mais estável; para SP usa-se a intensidade paulista quando a amostra tem ao menos 30 ocupados criativos, senão a nacional (rádio, joalheria e patrimônio, marcados com *). Território: medição direta na RAIS (Ministério do Trabalho, via Base dos Dados), vínculos ativos em 31/12/2024, por município do estabelecimento. Cada vínculo é classificado pelo setor (CNAE 2.0 da subclasse, mesma correspondência usada no CEMPRE) e pela ocupação (CBO 2002). As 40 ocupações criativas da PNAD (COD, base ISCO-08) foram levadas à CBO família a família, em 263 ocupações; a lista está no Glossário. Controles de qualidade: (1) no Estado, a RAIS soma 671 mil vínculos nos 14 setores, praticamente igual aos assalariados do CEMPRE 2024 (razão 1,00), e a correlação entre as duas fontes por município e setor é 0,97 (Spearman, 2.597 células sem sigilo); (2) a intensidade municipal de 2023 e de 2024 tem correlação de 0,97 (858 pares com ao menos 30 vínculos), o que mostra que a medida é estável; (3) setores com menos de 30 vínculos no território não têm a barra exibida. Por que a RAIS fica abaixo da PNAD: no Estado, a intensidade dos 14 setores é 52,6% na PNAD com todos os ocupados, 39,9% na PNAD só com empregados formais (2025) e 35,1% na RAIS. A maior parte da diferença vem de quem a RAIS não cobre: conta própria e empregadores são 76% dos ocupados em artes e espetáculos, 59% no audiovisual e 49% na publicidade, e são justamente os mais criativos. O resto vem de diferenças de classificação entre COD e CBO (por exemplo, operadores de máquinas da indústria de móveis e de artefatos têxteis, que a PNAD tende a registrar como marceneiros e artesãos) e da amostra pequena da PNAD formal em alguns setores (indicada na dica). Por isso compare território com Estado sempre na mesma fonte (RAIS com RAIS); o QL na dica é a razão entre as duas. A barra da RAIS não é uma correção da PNAD: mede outra população, o emprego formal assalariado, com precisão municipal.</p>
+        <div class="chart tall" id="graf-intens-setores" data-draw="intens-setores" data-source="setores_intens intens_setor_mun tridente intens_ponte" role="img" aria-label="Intensidade criativa por setor"></div>
+      </div>
+      <div class="card" id="card-mtc-serie">
+        <div class="card-h"><h2 class="card-t">Especializados criativos formais</h2></div>
+        <p class="card-n">Número estimado de profissionais em ocupações criativas dentro dos setores criativos do território, ano a ano de 2022 a 2024. Usa a nova série do Cadastro Central de Empresas (IBGE), iniciada em 2022, com a mesma intensidade criativa aplicada aos três anos; a variação reflete, portanto, o crescimento do emprego nos setores, não mudanças na proporção de criativos.</p>
+        <div class="chart" id="graf-mtc-serie" data-draw="mtc-serie" data-source="mtc" role="img" aria-label="Série de especializados"></div>
+      </div>
+    </div>
+
+    <h2 class="sec-h" id="gastos">Gasto público com cultura</h2>
+    <p class="hint">Despesa empenhada na função 13 (Cultura) dos balanços anuais (Siconfi/DCA). Os cartões trazem 2024 em valores correntes; a série histórica cobre 2014–2024 em reais de 2024 (IPCA). Por habitante, com a população do mesmo ano. O Estado mostra prefeituras e Governo do Estado separados.</p>
+    <div class="kpis">
+      <div class="tile"><div class="lab">Gasto das prefeituras com cultura (R$, 2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="gc_mun_2024" data-f="brlc">—</div><div class="s">2022–2024: <span data-draw="kv" data-source="territorios" data-k="gc_mun_var_22_24" data-f="sig">—</span></div></div>
+      <div class="tile"><div class="lab">Por habitante (R$, 2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="gc_mun_pc_2024" data-f="brl2">—</div><div class="s">Média das prefeituras paulistas: <span data-draw="kv" data-source="territorios" data-k="gc_mun_pc_2024" data-f="brl2" data-cod="35">—</span></div></div>
+      <div class="tile"><div class="lab">Participação no orçamento (%, 2024)<button class="help" type="button" aria-expanded="false" aria-controls="h-gco" aria-label="Ajuda: participação">?</button></div>
+        <p class="helptext" id="h-gco" hidden>Despesa em cultura ÷ despesa total (exceto intraorçamentária) × 100. 2023 e 2024 incluem a execução dos repasses da Lei Paulo Gustavo e da Política Nacional Aldir Blanc, o que eleva a série.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="gc_mun_pct_2024" data-f="pct2">—</div><div class="s">Estado (prefeituras): <span data-draw="kv" data-source="territorios" data-k="gc_mun_pct_2024" data-f="pct2" data-cod="35">—</span></div></div>
+      <div class="tile"><div class="lab">Governo do Estado com cultura (R$, 2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="gc_estado_2024" data-f="brlc" data-cod="35">—</div><div class="s">Por habitante: <span data-draw="kv" data-source="territorios" data-k="gc_estado_pc_2024" data-f="brl2" data-cod="35">—</span></div></div>
+    </div>
+    <div class="grid wide">
+      <div class="card" id="card-gasto-serie">
+        <div class="card-h"><h2 class="card-t">Gasto com cultura por habitante</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-ghist" aria-label="Ajuda: série histórica do gasto">?</button></div>
+        <p class="card-n">Quanto as prefeituras do território (e, no Estado, também o Governo do Estado) empenharam em cultura por habitante a cada ano, de 2014 a 2024, em reais de 2024: os valores de cada ano foram corrigidos pela inflação (IPCA) para que a evolução reflita esforço real, não variação de preços. As linhas tracejadas marcam as políticas federais que repassaram recursos aos municípios.</p>
+        <p class="helptext" id="h-ghist" hidden>Fonte: Declaração de Contas Anuais (Siconfi, Tesouro Nacional), Anexo I-E, despesa empenhada na função 13 – Cultura, 2014 a 2024. Correção monetária: IPCA médio de cada ano, base 2024. População: estimativas do IBGE de 2014 a 2021 ajustadas à contagem do Censo 2022 (a diferença entre a estimativa projetada e o Censo é distribuída linearmente desde 2010, porque as estimativas anteriores superestimavam a população de muitos municípios), Censo 2022, média 2022–2024 em 2023 e estimativa 2024. Em regiões e no Estado, o valor por habitante considera só os municípios que entregaram o balanço no ano, divididos pela população desses mesmos municípios; anos com balanços de menos de 95% da população aparecem com ponto vazado. Município sem balanço no ano fica sem ponto (ausência de dado, não gasto zero). Cobertura: de 2017 a 2024 praticamente todos os 645 municípios entregaram o balanço; em 2014, 2015 e 2016, entre 7% e 9% não entregaram (municípios pequenos, entre 0,7% e 2,4% da população paulista), por isso o Estado e as regiões são calculados só sobre quem declarou, sem imputar valores. Participação no orçamento: só existe a partir de 2017, porque até 2016 o Siconfi não traz a linha de despesa total exceto intraorçamentária usada no denominador; o gasto por habitante não é afetado. Leitura dos picos: 2020–2021, Lei Aldir Blanc emergencial; 2023, Lei Paulo Gustavo; 2024, Política Nacional Aldir Blanc. Parte do gasto desses anos é transferência federal executada pelo município: não some com os cartões de PNAB e Rouanet. Valores em reais correntes aparecem na dica de cada ponto.</p>
+        <div class="chart" id="graf-gasto-serie" data-draw="gasto-hist" data-source="gasto_hist" role="img" aria-label="Gasto com cultura por habitante, 2014 a 2024"></div>
+      </div>
+      <div class="card" id="card-gasto-sub">
+        <div class="card-h"><h2 class="card-t">Para onde vai o gasto com cultura (% por subfunção, 2024)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-gsub" aria-label="Ajuda: subfunções">?</button></div>
+        <p class="card-n">Prefeituras do território. Turismo aparece como referência para cadeias de serviços e turismo.</p>
+        <p class="helptext" id="h-gsub" hidden>Difusão cultural: eventos, programação, fomento a artistas. Patrimônio: museus, bens tombados, arquivos. Outras: sobretudo administração geral da secretaria. Como no eixo 3 do Observatório Itaú Cultural, a fonte é a classificação funcional do gasto.</p>
+        <div class="chart" id="graf-gasto-sub" data-draw="gasto-sub" data-source="gastocult" role="img" aria-label="Gasto por subfunção"></div>
+      </div>
+    </div>
+
+    <h2 class="sec-h" id="comex">Comércio internacional de bens criativos</h2>
+    <p class="hint">Exportações e importações de 45 posições do Sistema Harmonizado associadas a bens criativos (UNCTAD e eixo 4 do Observatório Itaú Cultural), em US$ FOB, 2023–2025 (MDIC, Comex Stat).</p>
+    <div class="kpis">
+      <div class="tile"><div class="lab">Exportações de bens criativos (US$, 2025)</div><div class="v" data-draw="kv" data-source="territorios" data-k="cx_export_cri" data-f="usd">—</div><div class="s"><span data-draw="kv" data-source="territorios" data-k="cx_part_export_pct" data-f="pct2">—</span> das exportações do território</div></div>
+      <div class="tile"><div class="lab">Importações de bens criativos (US$, 2025)</div><div class="v" data-draw="kv" data-source="territorios" data-k="cx_import_cri" data-f="usd">—</div><div class="s">Saldo: <span data-draw="kv" data-source="territorios" data-k="cx_saldo_cri" data-f="usd">—</span></div></div>
+    </div>
+    <div class="grid wide">
+      <div class="card" id="card-comex-serie">
+        <div class="card-h"><h2 class="card-t">Exportações e importações de bens criativos (US$, 2023–2025)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-cx" aria-label="Ajuda: comércio">?</button></div>
+        <p class="card-n">Para municípios, o Comex Stat registra o domicílio fiscal da empresa, não o local de produção.</p>
+        <p class="helptext" id="h-cx" hidden>Correções: no Estado, a análise desce a 8 dígitos (NCM) e exclui itens que não são bens criativos dentro das posições: assentos de aeronaves e automóveis, cartões e memórias, óculos de grau e de segurança, focos cirúrgicos, partes de móveis e luminárias, máquinas de jogos a moedas. Nos municípios, só há dado por posição (SH4): excluem-se 8523, 9004 e 9401, e as posições 9403 e 9405 são ajustadas pela fração criativa estadual. Por isso a soma dos municípios difere do total do Estado.</p>
+        <div class="chart" id="graf-comex-serie" data-draw="comex-serie" data-source="comex" role="img" aria-label="Comércio de bens criativos por ano"></div>
+      </div>
+      <div class="card" id="card-comex-grupos">
+        <div class="card-h"><h2 class="card-t">Por grupo de produtos (US$, 2025)</h2></div>
+        <p class="card-n">Grupos inspirados na classificação de bens criativos da UNCTAD.</p>
+        <div class="chart tall" id="graf-comex-grupos" data-draw="comex-grupos" data-source="comex_grupos" role="img" aria-label="Comércio por grupo de produtos"></div>
+      </div>
+      <div class="card" id="card-comex-blocos">
+        <div class="card-h"><h2 class="card-t">Estado de SP: parceiros por região do mundo (US$, 2025)</h2></div>
+        <p class="card-n">Sempre para o Estado inteiro.</p>
+        <div class="chart" id="graf-comex-blocos" data-draw="comex-blocos" data-source="comex_blocos" role="img" aria-label="Comércio por região do mundo"></div>
+      </div>
+      <div class="card" id="card-comex-blocos-mun">
+        <div class="card-h"><h2 class="card-t">Território selecionado: parceiros por região do mundo (US$, 2025)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-cxbm" aria-label="Ajuda: parceiros do território">?</button></div>
+        <p class="card-n">Para onde vendem e de onde compram bens criativos as empresas com domicílio fiscal no município ou região escolhidos, com a participação de cada região do mundo no total do território.</p>
+        <p class="helptext" id="h-cxbm" hidden>Comex Stat por município e bloco econômico, posição a posição (SH4), com o mesmo recorte do painel municipal: sem 8523, 9004 e 9401, e com 9403 e 9405 ajustadas pela fração criativa estadual. Usamos só as oito regiões continentais, que não se sobrepõem (UE e Mercosul ficam de fora para não contar duas vezes); a soma das regiões reproduz exatamente o total do território. Atenção: o município é o do domicílio fiscal da empresa exportadora ou importadora, e valores pequenos podem refletir uma única operação.</p>
+        <div class="chart" id="graf-comex-blocos-mun" data-draw="comex-blocos-mun" data-source="comex_blocos_mun" role="img" aria-label="Comércio do território por região do mundo"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="educacao" role="tabpanel" aria-label="Educação" hidden>
+    <p class="hint">IDEB da rede pública (no Estado, ensino médio da rede estadual). Fluxo, turmas, docentes, matrículas e infraestrutura: Censo Escolar 2024 (INEP).</p>
+    <div class="kpis">
+      <div class="tile"><div class="lab">IDEB anos iniciais (2023)</div><div class="v" data-draw="kv" data-source="territorios" data-k="ideb_ai" data-f="d1">—</div><div class="s">2021: <span data-draw="kv" data-source="territorios" data-k="ideb21_ai" data-f="d1">—</span> · meta <span data-draw="kv" data-source="territorios" data-k="meta21_ai" data-f="d1">—</span> · <span data-draw="kv" data-source="territorios" data-k="meta21_ok_ai" data-f="badge">—</span></div></div>
+      <div class="tile"><div class="lab">IDEB anos finais (2023)</div><div class="v" data-draw="kv" data-source="territorios" data-k="ideb_af" data-f="d1">—</div><div class="s">2021: <span data-draw="kv" data-source="territorios" data-k="ideb21_af" data-f="d1">—</span> · meta <span data-draw="kv" data-source="territorios" data-k="meta21_af" data-f="d1">—</span> · <span data-draw="kv" data-source="territorios" data-k="meta21_ok_af" data-f="badge">—</span></div></div>
+      <div class="tile"><div class="lab">IDEB ensino médio (2023)</div><div class="v" data-draw="kv" data-source="territorios" data-k="ideb_em" data-f="d1">—</div><div class="s">2021: <span data-draw="kv" data-source="territorios" data-k="ideb21_em" data-f="d1">—</span> · meta <span data-draw="kv" data-source="territorios" data-k="meta21_em" data-f="d1">—</span> · <span data-draw="kv" data-source="territorios" data-k="meta21_ok_em" data-f="badge">—</span></div></div>
+      <div class="tile"><div class="lab">Matrículas na educação básica (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="matriculas_2024" data-f="int">—</div><div class="s">em <span data-draw="kv" data-source="territorios" data-k="escolas_2024" data-f="int">—</span> escolas em atividade</div></div>
+      <div class="tile"><div class="lab">IFDM Educação (ano-base 2023)</div><div class="v" data-draw="kv" data-source="territorios" data-k="ifdm_educacao_2023" data-f="d3">—</div><div class="s">Referência comparativa FIRJAN (0 a 1)</div></div>
+    </div>
+    <p class="hint" data-show-nivel="Região intermediária|Região imediata|GO Senac|Unidade Senac" hidden>Nas regiões, fluxo, turmas e docentes são médias ponderadas pelas matrículas dos municípios; o IDEB aparece ao escolher um município.</p>
+    <div class="grid wide">
+      <div class="card" id="card-ideb">
+        <div class="card-h"><h2 class="card-t">IDEB por etapa e metas (0 a 10, 2015–2023)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-idebs" aria-label="Ajuda: IDEB série">?</button></div>
+        <p class="card-n">Linhas cheias: IDEB observado. Tracejadas: metas oficiais (até 2021).</p>
+        <p class="helptext" id="h-idebs" hidden>2021 foi afetado pela pandemia (aprovação automática em muitas redes). Pontos ausentes indicam que o município não teve IDEB divulgado naquela etapa (poucos alunos no Saeb ou sem oferta pública).</p>
+        <div class="chart" id="graf-ideb" data-draw="ideb" data-source="ideb" role="img" aria-label="Série do IDEB"></div>
+      </div>
+      <div class="card" id="card-fluxo">
+        <div class="card-h"><h2 class="card-t">Fluxo escolar, turmas e docentes (2024)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-fluxo" aria-label="Ajuda: fluxo">?</button></div>
+        <p class="card-n">Todas as redes. Taxas em % das matrículas de cada etapa.</p>
+        <p class="helptext" id="h-fluxo" hidden>Aprovação, reprovação e abandono: Indicadores de Rendimento (INEP). Alunos por turma: média de alunos por turma. Formação adequada: % de docentes do Grupo 1 do indicador AFD (licenciatura na mesma área da disciplina que lecionam).</p>
+        <div class="tbl-wrap">
+          <table data-source="educacao" data-row-key="cod,etapa">
+            <caption class="sr">Indicadores educacionais por etapa</caption>
+            <thead><tr><th data-field="etapa">Etapa</th><th class="n" data-field="matriculas">Matrículas</th><th class="n" data-field="aprovacao">Aprovação</th><th class="n" data-field="reprovacao">Reprovação</th><th class="n" data-field="abandono">Abandono</th><th class="n" data-field="alunos_turma">Alunos/turma</th><th class="n" data-field="docentes_formacao_adequada_pct">Formação adequada</th></tr></thead>
+            <tbody data-draw="fluxo" data-source="educacao"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card" id="card-infra">
+        <div class="card-h"><h2 class="card-t">Infraestrutura das escolas públicas (%, 2024)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-infra" aria-label="Ajuda: infraestrutura">?</button></div>
+        <p class="card-n">% das escolas públicas em atividade que têm cada espaço ou recurso.</p>
+        <p class="helptext" id="h-infra" hidden>Microdados do Censo Escolar 2024 (INEP), variáveis IN_*. Ateliê de artes, sala de música, estúdio de dança e auditório conectam a escola à economia criativa local.</p>
+        <div class="chart tall" id="graf-infra" data-draw="infra" data-source="infra" role="img" aria-label="Infraestrutura escolar"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="territorio" role="tabpanel" aria-label="Dados Territoriais" hidden>
+    <div class="kpis">
+      <div class="tile"><div class="lab">População (Censo 2022, hab.)</div><div class="v" data-draw="kv" data-source="territorios" data-k="pop_censo" data-f="int">—</div><div class="s">Estimativa 2025: <span data-draw="kv" data-source="territorios" data-k="pop_2025" data-f="int">—</span></div></div>
+      <div class="tile"><div class="lab">Área (km²)</div><div class="v" data-draw="kv" data-source="territorios" data-k="area_km2" data-f="d1">—</div><div class="s">Densidade: <span data-draw="kv" data-source="territorios" data-k="densidade" data-f="d1">—</span> hab./km²</div></div>
+      <div class="tile" id="tile-pib"><div class="lab">PIB (R$, 2023)</div><div class="v" data-draw="kv" data-source="territorios" data-k="pib_2023_mil" data-f="brlmil">—</div><div class="s">Per capita: <span data-draw="kv" data-source="territorios" data-k="pib_pc_2023" data-f="brl">—</span></div></div>
+      <div class="tile" id="tile-pibcri"><div class="lab">PIB criativo (R$, 2023, estimativa)<button class="help" type="button" aria-expanded="false" aria-controls="h-pibcri" aria-label="Ajuda: PIB criativo">?</button></div>
+        <p class="helptext" id="h-pibcri" hidden>Estimativa pelo método da participação salarial: PIB 2023 × (massa salarial criativa 2023 ÷ massa salarial total 2023), ambos do IBGE no mesmo ano. Mede o valor gerado pelas 51 classes CNAE criativas; a FIRJAN, que mede por ocupações, chega a percentuais menores.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="pib_criativo_2023_mil" data-f="brlmil">—</div><div class="s"><span data-draw="kv" data-source="territorios" data-k="pib_criativo_part_pct" data-f="pct2">—</span> do PIB do território · Estado: <span data-draw="kv" data-source="territorios" data-k="pib_criativo_part_pct" data-f="pct2" data-cod="35">—</span></div></div>
+      <div class="tile"><div class="lab">Porte populacional (2022)</div><div class="v" data-draw="kv" data-source="territorios" data-k="porte" data-f="porte">—</div><div class="s">Faixas do Censo 2022, para comparar municípios de tamanho parecido</div></div>
+      <div class="tile"><div class="lab">IFDM | Emprego &amp; Renda (2023)</div><div class="v" data-draw="kv" data-source="territorios" data-k="ifdm_emprego_renda_2023" data-f="d3">—</div><div class="s">IFDM Saúde: <span data-draw="kv" data-source="territorios" data-k="ifdm_saude_2023" data-f="d3">—</span></div></div>
+    </div>
+    <h2 class="sec-h" id="idpec">Índice de Desenvolvimento Potencial da Economia Criativa (IDPEC-SP)</h2>
+    <p class="hint">Adaptação municipal do IDPEC da ESPM: 9 indicadores em 3 dimensões, cada um convertido para 0 a 100 entre os 645 municípios paulistas. Dimensões e índice são médias simples (pesos iguais). Quanto maior, maior o potencial do território para desenvolver a economia criativa.</p>
+    <div class="kpis">
+      <div class="tile idpec-hero"><div class="lab">IDPEC-SP (0 a 100)<button class="help" type="button" aria-expanded="false" aria-controls="h-idpec" aria-label="Ajuda: IDPEC">?</button></div>
+        <p class="helptext" id="h-idpec" hidden>Média das três dimensões. A faixa compara com os demais municípios: cada faixa reúne um quinto dos 645 municípios. Para regiões, GOs e unidades Senac e para o Estado, os indicadores são recalculados com as somas dos municípios e lidos na mesma escala.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="idpec" data-f="d1">—</div><div class="s">Faixa: <span data-draw="kv" data-source="territorios" data-k="idpec_faixa" data-f="text">—</span> · posição: <span data-draw="kv" data-source="territorios" data-k="idpec_rank" data-f="ord">—</span></div></div>
+      <div class="tile"><div class="lab">1. Capacidades humanas</div><div class="v" data-draw="kv" data-source="territorios" data-k="d1_capacidades_humanas" data-f="d1">—</div><div class="s">Escolaridade, qualidade da educação básica e investimento em educação</div></div>
+      <div class="tile"><div class="lab">2. Atratividade e conectividade espacial</div><div class="v" data-draw="kv" data-source="territorios" data-k="d2_atratividade_conectividade" data-f="d1">—</div><div class="s">Segurança, internet fixa e acesso a aeroportos</div></div>
+      <div class="tile"><div class="lab">3. Ambiente cultural e empreendedorismo criativo</div><div class="v" data-draw="kv" data-source="territorios" data-k="d3_ambiente_cultural_empreend" data-f="d1">—</div><div class="s">Investimento em cultura, criação de empresas e governança cultural</div></div>
+      <div class="tile"><div class="lab">Concentração criativa: quociente locacional (2024)<button class="help" type="button" aria-expanded="false" aria-controls="h-ql" aria-label="Ajuda: quociente locacional">?</button></div>
+        <p class="helptext" id="h-ql" hidden>Participação criativa no emprego do território ÷ participação criativa no emprego do Estado. Acima de 1, o território é mais especializado em economia criativa que a média paulista. É a variável que o IDPEC procura explicar, como na metodologia da ESPM.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="ql_criativo_2024" data-f="d2">—</div><div class="s">1,00 = mesma concentração do Estado</div></div>
+    </div>
+    <div class="grid wide">
+      <div class="card" id="card-idpec-ind">
+        <div class="card-h"><h2 class="card-t">Os 9 indicadores do IDPEC-SP (pontuação de 0 a 100)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-idpec-ind" aria-label="Ajuda: indicadores">?</button></div>
+        <p class="card-n">Pontuação do território em cada indicador. Passe o mouse para comparar com o Estado.</p>
+        <p class="helptext" id="h-idpec-ind" hidden>0 = valor dos 2% municípios com pior resultado; 100 = valor dos 2% com melhor resultado (os extremos são cortados para que um único município atípico não distorça a escala). Em mortes violentas, a escala é invertida: menos mortes, mais pontos.</p>
+        <div class="chart tall" id="graf-idpec-ind" data-draw="idpec-barras" data-source="idpec" role="img" aria-label="Pontuação nos indicadores do IDPEC-SP"></div>
+      </div>
+      <div class="card" id="card-idpec-disp">
+        <div class="card-h"><h2 class="card-t">IDPEC-SP e concentração criativa nos municípios</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-idpec-disp" aria-label="Ajuda: dispersão">?</button></div>
+        <p class="card-n">Cada ponto é um município. Correlação de Spearman entre o IDPEC-SP e o quociente locacional criativo: <b data-draw="corr-idpec" data-source="correlacao">—</b> (0 = nenhuma relação; 1 = relação perfeita). Clique em um ponto para selecionar.</p>
+        <p class="helptext" id="h-idpec-disp" hidden>O eixo vertical usa escala comprimida para mostrar ao mesmo tempo municípios com pouca e com muita concentração criativa. Municípios acima da linha tracejada são mais especializados em economia criativa que a média do Estado.</p>
+        <div class="chart" id="graf-idpec-disp" data-draw="idpec-disp" data-source="idpec" role="img" aria-label="Dispersão entre IDPEC-SP e quociente locacional criativo"></div>
+      </div>
+    </div>
+    <div class="card" id="card-idpec-tab">
+      <div class="card-h"><h2 class="card-t">Indicadores, valores e fontes</h2></div>
+      <p class="card-n">Valor original de cada indicador no território selecionado e a pontuação usada no índice.</p>
+      <div class="tbl-wrap" style="max-height:none">
+        <table>
+          <caption class="sr">Indicadores do IDPEC-SP</caption>
+          <thead><tr><th>Dimensão</th><th>Indicador (unidade)</th><th class="n">Valor</th><th class="n">Pontuação (0–100)</th><th>Fonte e ano</th><th>Ajuste aplicado</th></tr></thead>
+          <tbody>
+            <tr><td>Capacidades humanas</td><td>Adultos de 25 anos ou mais com ensino superior completo (%)</td><td class="n"><span data-draw="ik" data-source="idpec" data-k="h1_superior_pct" data-f="pct1">—</span></td><td class="n"><span data-draw="ik" data-source="idpec" data-k="n_h1_superior_pct" data-f="d1">—</span></td><td>IBGE, Censo 2022 (SIDRA 10061)</td><td>ESPM usa PNAD, sem recorte municipal; aqui, Censo</td></tr>
+            <tr><td>Capacidades humanas</td><td>IDEB do ensino médio, rede pública (0 a 10)</td><td class="n"><span data-draw="ik" data-source="idpec" data-k="h2_ideb" data-f="d1">—</span></td><td class="n"><span data-draw="ik" data-source="idpec" data-k="n_h2_ideb" data-f="d1">—</span></td><td>INEP, 2023</td><td>Sem IDEB do ensino médio, usa anos finais (36 municípios)</td></tr>
+            <tr><td>Capacidades humanas</td><td>Gasto municipal em educação por aluno da rede municipal (mediana do porte = 100)</td><td class="n"><span data-draw="ik" data-source="idpec" data-k="h3_gasto_educ_rel_porte" data-f="d1">—</span></td><td class="n"><span data-draw="ik" data-source="idpec" data-k="n_h3_gasto_educ_rel_porte" data-f="d1">—</span></td><td>Tesouro Nacional, Siconfi/DCA 2024; INEP, Censo Escolar 2024</td><td>Por aluno e comparado a municípios do mesmo porte, para não favorecer cidades pequenas</td></tr>
+            <tr><td>Atratividade e conectividade</td><td>Mortes violentas por 100 mil hab., média 2021–2023 (menor é melhor)</td><td class="n"><span data-draw="ik" data-source="idpec" data-k="a1_mortes_viol_100mil" data-f="d1">—</span></td><td class="n"><span data-draw="ik" data-source="idpec" data-k="n_a1_mortes_viol_100mil" data-f="d1">—</span></td><td>DATASUS/SIM: agressões, intenção indeterminada e intervenções legais</td><td>Média de 3 anos para estabilizar municípios pequenos; escala invertida</td></tr>
+            <tr><td>Atratividade e conectividade</td><td>Acessos de banda larga fixa por 100 habitantes</td><td class="n"><span data-draw="ik" data-source="idpec" data-k="a2_banda_larga_100hab" data-f="d1">—</span></td><td class="n"><span data-draw="ik" data-source="idpec" data-k="n_a2_banda_larga_100hab" data-f="d1">—</span></td><td>ANATEL, setembro de 2026</td><td>Mesmo indicador da ESPM</td></tr>
+            <tr><td>Atratividade e conectividade</td><td>Atração para viagens aéreas (índice REGIC, escala log)</td><td class="n"><span data-draw="ik" data-source="idpec" data-k="a3_conect_aerea_log" data-f="d1">—</span></td><td class="n"><span data-draw="ik" data-source="idpec" data-k="n_a3_conect_aerea_log" data-f="d1">—</span></td><td>IBGE, REGIC 2018 (VAR64)</td><td>Substitui passageiros aéreos: mede o acesso de cada cidade a aeroportos</td></tr>
+            <tr><td>Ambiente cultural e empreendedorismo</td><td>Gasto municipal em cultura por habitante (mediana do porte = 100)</td><td class="n"><span data-draw="ik" data-source="idpec" data-k="c1_gasto_cult_rel_porte" data-f="d1">—</span></td><td class="n"><span data-draw="ik" data-source="idpec" data-k="n_c1_gasto_cult_rel_porte" data-f="d1">—</span></td><td>Tesouro Nacional, Siconfi/DCA 2022–2024 (função 13)</td><td>Média de 3 anos (suaviza o pico da Lei Paulo Gustavo) e comparado a municípios do mesmo porte</td></tr>
+            <tr><td>Ambiente cultural e empreendedorismo</td><td>Crescimento líquido dos estabelecimentos, 2022–2024 (%)</td><td class="n"><span data-draw="ik" data-source="idpec" data-k="c2_cresc_estab_22_24_pct" data-f="d1">—</span></td><td class="n"><span data-draw="ik" data-source="idpec" data-k="n_c2_cresc_estab_22_24_pct" data-f="d1">—</span></td><td>IBGE, CEMPRE (nova série)</td><td>Taxa sobre o estoque de empresas, dentro da mesma série</td></tr>
+            <tr><td>Ambiente cultural e empreendedorismo</td><td>Governança cultural e municipal (0 a 100): média do Sistema Nacional de Cultura e da governança MUNIC 2024</td><td class="n"><span data-draw="ik" data-source="idpec" data-k="c3_governanca_cultural" data-f="d1">—</span></td><td class="n"><span data-draw="ik" data-source="idpec" data-k="n_c3_governanca_cultural" data-f="d1">—</span></td><td>MinC, Sistema Nacional de Cultura (2026); IBGE, MUNIC 2024 e 2018</td><td>Equivale ao Índice de Governança Municipal da ESPM. SNC: 10 componentes (adesão, lei, órgão gestor, conselho, fundo, plano, formação); quando o SNC não comprova e a MUNIC 2018 declara, vale meio ponto. MUNIC: acesso à informação, transparência e controle interno</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <details class="metodo">
+        <summary>Como o índice foi construído e quais distorções foram corrigidas</summary>
+        <ul>
+          <li><b>Base:</b> IDPEC da ESPM (Capitais e DF, 2023), que usa as mesmas três dimensões, normalização mín–máx, pesos iguais e o quociente locacional do emprego criativo como variável a ser explicada.</li>
+          <li><b>Escala:</b> cada indicador é convertido para 0–100 entre os 645 municípios; os 2% de cada ponta são aparados antes da conversão para que valores atípicos não comprimam os demais.</li>
+          <li><b>Efeito de porte:</b> gastos públicos por habitante favorecem municípios muito pequenos; por isso educação é medida por aluno e os dois gastos são comparados com a mediana do mesmo porte populacional.</li>
+          <li><b>Mesmo ano, mesma base:</b> todo indicador por habitante usa a população do próprio ano; criação de empresas usa só a nova série do CEMPRE (2022–2024).</li>
+          <li><b>Dados ausentes:</b> 4 municípios sem balanço de 2024 no Siconfi recebem a mediana do seu porte no gasto em educação; no gasto em cultura entra a média dos anos de 2022–2024 com balanço, como nos demais municípios. 2 municípios sem IDEB recebem a mediana do porte.</li>
+          <li><b>Governança no lugar do fomento:</b> a captação da Lei Rouanet saiu do índice. Ela é resultado de um setor criativo já instalado (proponentes concentrados onde a economia criativa já existe), o que tornaria o índice circular. Em seu lugar entra a governança cultural, que é condição prévia e pode ser construída pelo município. A Rouanet continua no painel como fomento e aparece na tabela de correlações, fora do índice.</li>
+          <li><b>Sub-registro do SNC:</b> a plataforma só marca um componente quando o documento foi enviado e validado. Comparado à MUNIC 2018, o SNC registra conselho em 24% dos municípios e a MUNIC declara 45%. Por isso, componente declarado na MUNIC e não comprovado no SNC vale meio ponto.</li>
+          <li><b>Leitura:</b> o índice é relativo ao Estado de São Paulo e não deve ser comparado diretamente com o IDPEC publicado pela ESPM para capitais.</li>
+        </ul>
+      </details>
+    </div>
+    <div class="card" id="card-corr">
+      <div class="card-h"><h2 class="card-t">O que explica a concentração criativa nos municípios paulistas</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-corr" aria-label="Ajuda: correlações e correções">?</button></div>
+      <p class="card-n">Dois quadros: o Quadro 1 traz apenas a análise do Estado, com os 645 municípios em conjunto, e não muda com os filtros; o Quadro 2 traz apenas os dados do território selecionado nos filtros.</p>
+      <p class="helptext" id="h-corr" hidden>Distorção corrigida (efeito porte): o quociente locacional criativo cresce com o tamanho da cidade (correlação de 0,77 com a população), e o mesmo acontece com vários componentes (banda larga, governança, Rouanet). A correlação simples mistura, portanto, duas coisas: a relação do componente com a economia criativa e o fato de ambos serem maiores em cidades grandes. Por isso, a Análise | Perspectiva para o Estado, no Quadro 1, não se apoia só na correlação simples: considera também a correlação parcial de postos de Spearman, que controla o posto da população do Censo 2022, ρ(xy·z) = (ρxy − ρxz·ρyz) / √[(1 − ρxz²)(1 − ρyz²)], e mostra o que resta da associação entre municípios de tamanho comparável, com intervalo de confiança de 95% pela transformação de Fisher e erro-padrão de Bonett e Wright (2000). Correlação simples → descontado o porte, por componente: <span data-draw="corr-parcial-txt" data-source="correlacao"></span> Escala de leitura usada no painel: |ρ| abaixo de 0,10 desprezível; de 0,10 a 0,29 fraca; de 0,30 a 0,49 moderada; 0,50 ou mais forte. As oportunidades e os desafios apontados para a educação profissional técnica partem dessas regularidades entre municípios; não são efeitos causais e devem ser combinados com o conhecimento do território. Quadro 2, município: uma correlação não existe para um único município; por isso o quadro mostra (1) a posição do município em cada componente, no Estado e entre os municípios do mesmo porte, e (2) o QL esperado, que é a mediana e os quartis do QL dos 60 municípios mais parecidos em IDPEC-SP e em população (vizinhos mais próximos em postos, sem impor forma linear a uma variável muito assimétrica). Quadro 2, regiões, GOs e unidades: correlações apenas entre os seus municípios, com intervalo de confiança de 95% pela transformação de Fisher e erro-padrão de Bonett e Wright (2000); só a partir de 10 municípios, com alerta abaixo de 30. Limites: são associações transversais, não efeitos causais; o QL com menos de 30 empregos criativos formais é instável; o CEMPRE tem sigilo em municípios pequenos, o que torna o emprego criativo um piso.</p>
+      <h3 class="card-t" id="corr-estado-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-sm)">Quadro 1 · Estado de São Paulo: análise geral dos 645 municípios</h3>
+      <p class="card-n">Correlação de cada componente com o quociente locacional criativo. A análise para o Estado considera também o que resta da associação quando se comparam municípios de mesmo porte populacional (valores no ícone ?). Valores positivos indicam que municípios com mais pontos tendem a ter mais economia criativa.</p>
+      <div class="tbl-wrap" style="max-height:none">
+        <table data-source="correlacao" data-row-key="variavel">
+          <caption class="sr">Correlações com o quociente locacional criativo</caption>
+          <thead><tr><th data-field="rotulo">Componente</th><th class="n" data-field="rho">Correlação simples (Spearman)</th><th>Leitura do Estado</th><th>Análise | Perspectiva para o Estado</th></tr></thead>
+          <tbody data-draw="corr-tab" data-source="correlacao"></tbody>
+        </table>
+      </div>
+      <h3 class="card-t" id="corr-local-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-lg);padding-top:var(--cds-gap-sm);border-top:1px solid var(--color-border-line)" data-draw="corr-local-titulo" data-source="territorios">Quadro 2 · Território selecionado</h3>
+      <div id="corr-local" data-draw="corr-local" data-source="idpec correlacao territorios"></div>
+    </div>
+    <div class="card" id="card-gov">
+      <div class="card-h"><h2 class="card-t">Governança cultural: Sistema Nacional de Cultura e MUNIC 2024</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-gov" aria-label="Ajuda: governança">?</button></div>
+      <p class="card-n">Num município: 100 = componente presente (50 = só declarado na MUNIC 2018). Numa região ou no Estado: % dos municípios.</p>
+      <p class="helptext" id="h-gov" hidden>O “CPF da cultura” (Conselho, Plano e Fundo) é a base do Sistema Nacional de Cultura e condição para receber repasses fundo a fundo. A MUNIC 2024 mede a capacidade administrativa geral: Lei de Acesso à Informação, portal de transparência com dados abertos e controle interno. Nomes de prefeitos e gestores do cadastro do SNC não são usados.</p>
+      <div class="chart tall" id="graf-gov" data-draw="gov-comp" data-source="governanca" role="img" aria-label="Componentes de governança cultural"></div>
+    </div>
+
+    <div class="grid wide">
+      <div class="card" id="card-pop">
+        <div class="card-h"><h2 class="card-t">População (hab., 2019–2025)</h2></div>
+        <p class="card-n">Estimativas anuais do IBGE; 2022 é o Censo; 2023 é a média entre 2022 e 2024.</p>
+        <div class="chart" id="graf-pop" data-draw="serie-pop" data-source="serie" role="img" aria-label="Série de população"></div>
+      </div>
+      <div class="card" id="card-pib">
+        <div class="card-h"><h2 class="card-t">PIB a preços correntes (R$, 2019–2023)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-pib" aria-label="Ajuda: PIB">?</button></div>
+        <p class="card-n">Valores nominais, sem correção pela inflação.</p>
+        <p class="helptext" id="h-pib" hidden>IBGE, PIB dos Municípios (tabela SIDRA 5938). A composição por setor ainda não foi publicada por município para 2022 e 2023; o gráfico de composição usa 2021. A Conta Satélite de Cultura do IBGE é nacional, sem recorte municipal.</p>
+        <div class="chart" id="graf-pib" data-draw="serie-pib" data-source="serie" role="img" aria-label="Série do PIB"></div>
+      </div>
+      <div class="card" id="card-va">
+        <div class="card-h"><h2 class="card-t">Composição da economia (% do valor adicionado, 2021)</h2></div>
+        <p class="card-n">Participação de cada setor no valor adicionado bruto.</p>
+        <div class="chart" id="graf-va" data-draw="va" data-source="territorios" role="img" aria-label="Composição do valor adicionado"></div>
+      </div>
+      <div class="card" id="card-ifdm">
+        <div class="card-h"><h2 class="card-t">IFDM e dimensões (0 a 1, 2013–2023)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-ifdms" aria-label="Ajuda: IFDM série">?</button></div>
+        <p class="card-n">Índice FIRJAN de Desenvolvimento Municipal, por ano-base. Disponível para municípios.</p>
+        <p class="helptext" id="h-ifdms" hidden>Leitura: 0 a 0,4 baixo; 0,4 a 0,6 regular; 0,6 a 0,8 moderado; 0,8 a 1 alto. A série 2013–2023 foi recalculada pela FIRJAN na edição 2025 com a mesma metodologia.</p>
+        <div class="chart" id="graf-ifdm" data-draw="ifdm" data-source="ifdm" role="img" aria-label="Série do IFDM"></div>
+      </div>
+    </div>
+    <div class="card" id="card-municipios">
+      <div class="card-h"><h2 class="card-t">Municípios do território selecionado</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-mun" aria-label="Ajuda: lista">?</button></div>
+      <p class="card-n">Com um município selecionado, a lista mostra a sua região imediata. Clique em uma linha para selecionar; clique nos títulos para ordenar.</p>
+      <p class="helptext" id="h-mun" hidden>Use esta lista para descer de nível: Estado → região intermediária → região imediata → município.</p>
+      <div class="card-ctl"><input class="search" id="busca-mun" type="search" placeholder="Buscar município" aria-label="Buscar município na lista"></div>
+      <div class="tbl-wrap">
+        <table data-source="territorios" data-row-key="cod">
+          <caption class="sr">Municípios do território</caption>
+          <thead><tr><th data-field="nome"><button type="button" data-msort="nome">Município</button></th><th data-field="porte"><button type="button" data-msort="porte">Porte</button></th><th class="n" data-field="pop_censo"><button type="button" data-msort="pop_censo">População 2022</button></th><th class="n" data-field="pib_pc_2023"><button type="button" data-msort="pib_pc_2023">PIB per capita (R$)</button></th><th class="n" data-field="cri_part_emp"><button type="button" data-msort="cri_part_emp">Part. criativa (%)</button></th><th class="n" data-field="ideb_ai"><button type="button" data-msort="ideb_ai">IDEB AI</button></th><th class="n" data-field="ifdm_geral_2023"><button type="button" data-msort="ifdm_geral_2023">IFDM</button></th></tr></thead>
+          <tbody data-draw="municipios" data-source="territorios"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="comparar" role="tabpanel" aria-label="Comparar territórios" hidden>
+    <p class="hint">Escolha até 6 territórios (municípios, regiões ou o Estado) para comparar lado a lado. Clique em um nome para removê-lo.</p>
+    <div class="card" id="card-cmp-sel">
+      <div class="card-ctl"><select class="dash-select" data-draw="cmp-add" data-source="territorios" aria-label="Adicionar território à comparação"></select><button class="btn" id="cmp-atual" type="button">Adicionar o território selecionado</button><button class="btn" id="cmp-limpar" type="button">Limpar comparação</button></div>
+      <div class="chips" data-draw="cmp-chips" data-source="territorios"></div>
+    </div>
+    <div class="card" id="card-cmp-tab">
+      <div class="card-h"><h2 class="card-t">Indicadores lado a lado</h2></div>
+      <p class="card-n">Valores mais recentes de cada fonte. "—" indica que o indicador não existe para aquele nível territorial.</p>
+      <div class="tbl-wrap">
+        <table data-source="territorios" data-row-key="cod">
+          <caption class="sr">Comparação de territórios</caption>
+          <thead><tr><th data-field="nome">Território</th><th class="n" data-field="pop_censo">População 2022</th><th class="n" data-field="pib_pc_2023">PIB per capita 2023 (R$)</th><th class="n" data-field="cri_emp">Empregos criativos 2024</th><th class="n" data-field="cri_part_emp">Part. criativa (%)</th><th class="n" data-field="cri_ul_10mil">Estab. criativos/10 mil hab.</th><th class="n" data-field="cri_rem_media">Remun. média (R$)</th><th class="n" data-field="rou_captado">Rouanet 2019–25 (R$)</th><th class="n" data-field="ideb_ai">IDEB AI</th><th class="n" data-field="ideb_af">IDEB AF</th><th class="n" data-field="ideb_em">IDEB EM</th><th class="n" data-field="ifdm_geral_2023">IFDM</th><th class="n" data-field="idpec">IDPEC-SP</th><th class="n" data-field="ql_criativo_2024">QL criativo</th></tr></thead>
+          <tbody data-draw="cmp-tabela" data-source="territorios"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card" id="card-cmp-bar">
+      <div class="card-h"><h2 class="card-t">Comparação visual</h2></div>
+      <div class="card-ctl"><select class="dash-select" id="cmp-ind" aria-label="Indicador da comparação">
+        <option value="idpec">IDPEC-SP: potencial da economia criativa (0 a 100)</option>
+        <option value="d1_capacidades_humanas">IDPEC-SP · Capacidades humanas (0 a 100)</option>
+        <option value="d2_atratividade_conectividade">IDPEC-SP · Atratividade e conectividade (0 a 100)</option>
+        <option value="d3_ambiente_cultural_empreend">IDPEC-SP · Ambiente cultural e empreendedorismo (0 a 100)</option>
+        <option value="ql_criativo_2024">Quociente locacional do emprego criativo (2024)</option>
+        <option value="pib_criativo_part_pct">PIB criativo no PIB total (%, 2023)</option>
+        <option value="mtc_intens_emprego_pct">Intensidade criativa do emprego formal (%, 2024)</option>
+        <option value="c3_governanca_cultural">Governança cultural e municipal (0 a 100)</option>
+        <option value="gc_mun_pc_2024">Gasto municipal com cultura por habitante (R$, 2024)</option>
+        <option value="cx_part_export_pct">Bens criativos nas exportações (%, 2025)</option>
+        <option value="cri_part_emp">Participação criativa no emprego formal (%, 2024)</option>
+        <option value="cri_ul_10mil">Estabelecimentos criativos por 10 mil hab. (2024)</option>
+        <option value="cri_rem_media">Remuneração média mensal criativa (R$, 2024)</option>
+        <option value="cri_var_emp">Variação do emprego criativo (%, 2022–2024)</option>
+        <option value="rou_pc">Captação Lei Rouanet por habitante (R$, 2019–2025)</option>
+        <option value="ideb_ai">IDEB anos iniciais (2023)</option>
+        <option value="ideb_af">IDEB anos finais (2023)</option>
+        <option value="ideb_em">IDEB ensino médio (2023)</option>
+        <option value="abandono_em_2024">Abandono no ensino médio (%, 2024)</option>
+        <option value="ifdm_geral_2023">IFDM geral (2023)</option>
+        <option value="pib_pc_2023">PIB per capita (R$, 2023)</option>
+        <option value="densidade">Densidade demográfica (hab./km², 2022)</option>
+      </select></div>
+      <div class="chart" id="graf-cmp" data-draw="cmp-barras" data-source="territorios" role="img" aria-label="Barras de comparação"></div>
+    </div>
+  </section>
+
+  <section id="glossario" role="tabpanel" aria-label="Glossário e metodologia" hidden>
+    <div class="prose">
+      <h2 class="sec-h">Glossário de indicadores</h2>
+      <p>Cada número do painel vem de uma fonte pública oficial. Abra "Fontes", no topo do painel, para ver a base de cada gráfico e baixar os dados em CSV.</p>
+    </div>
+    <div class="card tbl-wrap" style="max-height:none">
+      <table class="gloss">
+        <caption class="sr">Glossário de indicadores</caption>
+        <thead><tr><th>Indicador</th><th>O que mede</th><th>Como é calculado</th><th>Fonte e periodicidade</th></tr></thead>
+        <tbody>
+          <tr><td>Estabelecimentos criativos</td><td>Quantos endereços de empresas e organizações atuam em atividades criativas.</td><td>Soma das unidades locais nas 51 classes CNAE dos 13 segmentos.</td><td>IBGE, Cadastro Central de Empresas (CEMPRE), tabelas SIDRA 6450 (até 2021) e 9528 (2022 em diante). Anual.</td></tr>
+          <tr><td>Empregos formais criativos</td><td>Pessoas com vínculo formal em atividades criativas.</td><td>Soma do pessoal ocupado assalariado em 31/12 nas classes criativas. Piso quando há sigilo.</td><td>IBGE, CEMPRE (registros administrativos). Anual.</td></tr>
+          <tr><td>Participação criativa no emprego (%)</td><td>Peso da economia criativa no mercado de trabalho formal do território.</td><td>Empregos criativos ÷ emprego formal total × 100.</td><td>IBGE, CEMPRE. Anual.</td></tr>
+          <tr><td>Remuneração média mensal criativa (R$)</td><td>Quanto ganha, em média, quem trabalha no setor criativo.</td><td>Salários e outras remunerações do ano ÷ pessoal assalariado ÷ 13.</td><td>IBGE, CEMPRE. Anual. Aproximação.</td></tr>
+          <tr><td>Massa salarial criativa (R$)</td><td>Renda do trabalho gerada pelo setor criativo.</td><td>Soma de salários e outras remunerações no ano.</td><td>IBGE, CEMPRE. Anual.</td></tr>
+          <tr><td>Variação 2022–2024 (%)</td><td>Crescimento dentro da nova série do CEMPRE.</td><td>(Valor 2024 ÷ valor 2022 − 1) × 100, para o setor criativo e para o total.</td><td>IBGE, CEMPRE.</td></tr>
+          <tr><td>Captação Lei Rouanet (R$)</td><td>Recursos de incentivo fiscal efetivamente captados por projetos culturais.</td><td>Soma do valor captado dos projetos cujo proponente está no território, pelo ano do projeto (2019–2025); por habitante = ÷ estimativa de população 2024.</td><td>Ministério da Cultura, API SALIC. Contínua.</td></tr>
+          <tr><td>PNAB – Política Nacional Aldir Blanc (R$)</td><td>Repasses anuais e obrigatórios do Ministério da Cultura a estados e municípios que aderiram, para fomento cultural.</td><td>Ciclo 1: valor do plano, recebido, gasto e % de execução (gasto ÷ recebido + rendimentos). Ciclo 2: valor do plano 2025–2028 ÷ 4 (média anual). Por habitante: ÷ população do ano.</td><td>MinC, dados abertos da PNAB (atualização de nov. 2025).</td></tr>
+          <tr><td>IDEB</td><td>Qualidade da educação básica: aprendizado e fluxo.</td><td>Nota média padronizada do Saeb (0 a 10) × indicador de rendimento (aprovação). Meta: projeção oficial do INEP (até 2021).</td><td>INEP. Bienal (anos ímpares).</td></tr>
+          <tr><td>Aprovação, reprovação e abandono (%)</td><td>Fluxo escolar: quem passa de ano, repete ou deixa a escola.</td><td>% das matrículas de cada etapa ao fim do ano letivo.</td><td>INEP, Indicadores de Rendimento. Anual.</td></tr>
+          <tr><td>Alunos por turma</td><td>Tamanho médio das turmas.</td><td>Matrículas ÷ turmas, por etapa.</td><td>INEP, Censo Escolar. Anual.</td></tr>
+          <tr><td>Docentes com formação adequada (%)</td><td>Professores com licenciatura na área em que lecionam.</td><td>% de docências no Grupo 1 do indicador de Adequação da Formação Docente (AFD).</td><td>INEP, Censo Escolar. Anual.</td></tr>
+          <tr><td>Matrículas e infraestrutura</td><td>Tamanho da rede e condições das escolas.</td><td>Soma das matrículas (QT_MAT_*) e % de escolas em atividade com cada recurso (IN_*).</td><td>INEP, microdados do Censo Escolar. Anual.</td></tr>
+          <tr><td>População e densidade</td><td>Quantas pessoas vivem no território e quão concentradas.</td><td>Censo 2022; densidade = população ÷ área (km²). Estimativas anuais para os demais anos.</td><td>IBGE, Censo 2022 (SIDRA 4714) e estimativas (SIDRA 6579).</td></tr>
+          <tr><td>PIB e PIB per capita</td><td>Tamanho da economia e renda média gerada por habitante.</td><td>PIB a preços correntes; per capita = PIB ÷ população do mesmo ano.</td><td>IBGE, PIB dos Municípios (SIDRA 5938). Anual, com defasagem de 2 anos.</td></tr>
+          <tr><td>IFDM</td><td>Desenvolvimento municipal em Educação, Saúde e Emprego &amp; Renda.</td><td>Média simples das três dimensões, cada uma de 0 a 1.</td><td>FIRJAN, IFDM edição 2025 (anos-base 2013–2023).</td></tr>
+          <tr><td>PIB criativo (R$, estimativa)</td><td>Valor gerado pelas atividades criativas no território.</td><td>PIB 2023 × (massa salarial criativa 2023 ÷ massa salarial total 2023).</td><td>IBGE, PIB dos Municípios e CEMPRE. Anual.</td></tr>
+          <tr><td>Quociente locacional criativo (QL)</td><td>Especialização do território em economia criativa.</td><td>(Empregos criativos ÷ emprego total do território) ÷ (o mesmo no Estado). Acima de 1 = mais especializado que SP.</td><td>IBGE, CEMPRE 2024.</td></tr>
+          <tr><td>IDPEC-SP (0 a 100)</td><td>Potencial de desenvolvimento da economia criativa, adaptado do IDPEC da ESPM.</td><td>Média de 3 dimensões (capacidades humanas; atratividade e conectividade espacial; ambiente cultural e empreendedorismo criativo), cada uma média de 3 indicadores em escala 0–100 (mín–máx entre os 645 municípios, pontas de 2% aparadas).</td><td>IBGE, INEP, Siconfi, DATASUS, ANATEL, REGIC, MinC (SNC), MUNIC. Anos mais recentes de cada fonte.</td></tr>
+          <tr><td>Governança cultural e municipal (0 a 100)</td><td>Capacidade institucional do município para conduzir política cultural.</td><td>Média de dois blocos: Sistema Nacional de Cultura (10 componentes, com meio ponto quando só a MUNIC 2018 declara) e governança MUNIC 2024 (acesso à informação, transparência e dados abertos, controle interno).</td><td>MinC, SNC (cadastro até fev. 2026); IBGE, MUNIC 2024 e 2018.</td></tr>
+          <tr><td>Intensidade criativa de um setor (%)</td><td>Quanto um setor depende de trabalho criativo.</td><td>Ocupados em ocupações criativas ÷ total de ocupados do setor. Setor criativo: intensidade nacional ≥ 30%.</td><td>IBGE, PNAD Contínua (4 trimestres até o 2º tri. 2026). Método DCMS/Nesta adotado pelo Observatório Itaú Cultural.</td></tr>
+          <tr><td>Triângulo Criativo (especializados, incorporados e apoio)</td><td>Os três tipos de trabalhador da economia criativa (adaptação do “creative trident” da Nesta/DCMS).</td><td>Especializados: ocupação criativa em setor criativo. Incorporados: ocupação criativa em outro setor. Apoio: outra ocupação em setor criativo. Município: especializados e apoio = ocupados formais do setor × intensidade; incorporados = ocupados formais de cada seção CNAE (sem os setores criativos) × taxa de ocupações criativas da seção em SP.</td><td>Estado: IBGE, PNAD Contínua (formal e informal). Municípios e regiões: CEMPRE 2024 (setores e seções) × PNAD, base formal.</td></tr>
+          <tr><td>Intensidade criativa do emprego formal (%)</td><td>Peso dos especializados criativos no emprego formal do território.</td><td>Σ (ocupados formais do setor × intensidade do setor) ÷ pessoal ocupado formal total. QL = valor do território ÷ valor do Estado.</td><td>IBGE, CEMPRE 2024 + PNAD Contínua. Estimativa sintética.</td></tr>
+          <tr><td>Gasto público com cultura</td><td>Quanto prefeituras e o Governo do Estado aplicam em cultura.</td><td>Despesa empenhada na função 13 (Cultura); por habitante = ÷ população do mesmo ano (estimativas IBGE de 2014–2021 compatibilizadas com o Censo 2022); valores reais = × (IPCA médio de 2024 ÷ IPCA médio do ano); participação = ÷ despesa total exceto intraorçamentária (desde 2017).</td><td>Tesouro Nacional, Siconfi/DCA Anexo I-E; IBGE, IPCA (SIDRA 1737) e estimativas de população (SIDRA 6579). Anual (2014–2024).</td></tr>
+          <tr><td>Comércio internacional de bens criativos (US$)</td><td>Quanto o território vende e compra de bens criativos no exterior.</td><td>Soma do valor FOB de 45 posições SH4 (artes visuais, artesanato, design, editorial, música, brinquedos e jogos), depuradas de itens não criativos.</td><td>MDIC, Comex Stat. Mensal; aqui, anos completos 2023–2025.</td></tr>
+          <tr><td>GO e unidade Senac (recorte Senac SP)</td><td>Território de responsabilidade de cada Gerência de Operações e de cada unidade do Senac SP.</td><td>Cada município é atribuído à unidade em cuja área de atuação está listado; GO e unidade somam ou recalculam os indicadores dos seus municípios, como as regiões do IBGE. A capital, atendida por unidades das três GOs, forma o recorte “Capital · GO1, GO2 e GO3” e não entra na soma de nenhuma GO.</td><td>Senac SP, GPG – Informações e Análises de Mercado, “Área de atuação das unidades” das GO1, GO2 e GO3 (26/6/2026).</td></tr>
+          <tr><td>Porte populacional</td><td>Grupo de tamanho, para comparar municípios parecidos.</td><td>Faixas de população no Censo 2022: até 5 mil, 5 a 10 mil, 10 a 20 mil, 20 a 50 mil, 50 a 100 mil, 100 a 500 mil, mais de 500 mil.</td><td>Derivado do Censo 2022.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <h3>Notas metodológicas</h3>
+      <ul>
+        <li><b>Chave territorial:</b> todas as bases são ligadas pelo código IBGE de 7 dígitos do município (o IFDM usa 6 dígitos e é convertido). Nunca pelo nome. Regiões imediatas e intermediárias seguem a divisão regional do IBGE (2017).</li>
+        <li><b>Regiões:</b> contagens (empregos, estabelecimentos, matrículas, PIB, população) são somas dos municípios; taxas educacionais são médias ponderadas por matrículas; razões são recalculadas. IDEB e IFDM não são somáveis e aparecem só por município (o IDEB também para o Estado).</li>
+        <li><b>Sigilo estatístico:</b> o IBGE oculta valores de emprego e salários quando poucas empresas poderiam ser identificadas. Somando os municípios, recupera-se cerca de 94% do emprego criativo do Estado; para o Estado, o painel usa o valor oficial sem sigilo.</li>
+        <li><b>Regras de supressão (evitam números enganosos):</b> remuneração média só é mostrada quando os valores sem sigilo cobrem ao menos 70% dos assalariados, há 20 ou mais assalariados e o resultado não fica abaixo do salário mínimo de 2024 (sinal de vínculos de parte do ano); variação do emprego só com 50 ou mais ocupados em 2022; variação do gasto com cultura só com base de R$ 100 mil ou mais em 2022; participação na pauta exportadora só com exportações totais de US$ 1 milhão ou mais. Município sem registro no Comex Stat aparece com comércio igual a zero. Nesses casos o painel mostra "—".</li>
+        <li><b>Quebra de série:</b> o CEMPRE adotou nova metodologia a partir de 2022. As variações são calculadas só entre 2022 e 2024.</li>
+        <li><b>Dois recortes criativos, lado a lado:</b> (1) FIRJAN, 13 segmentos medidos por 51 classes CNAE no CEMPRE; (2) intensidade criativa (DCMS/Observatório Itaú Cultural), 14 setores escolhidos pela proporção de ocupações criativas na PNAD Contínua. Os dois se sobrepõem em audiovisual, publicidade, editorial, TI e artes, mas divergem: a FIRJAN inclui biotecnologia, P&amp;D e engenharia; a intensidade inclui móveis, cerâmica, artefatos têxteis e joalheria (ofícios). A correlação entre os dois quocientes locacionais nos municípios é de 0,52.</li>
+        <li><b>Estimativa municipal por intensidade:</b> a PNAD não tem amostra por município. A intensidade de SP é aplicada ao emprego formal de cada setor no município (estimação sintética), e os valores sigilosos do CEMPRE são calibrados para somar o total oficial do Estado. Os incorporados municipais são estimados pelas taxas de ocupações criativas de cada seção da CNAE em SP aplicadas ao emprego formal da seção no município (CEMPRE 2024 por seção, sigilo calibrado ao total estadual). Trabalho informal e renda só aparecem para o Estado.</li>
+      </ul>
+      <h3>Fontes e data de coleta</h3>
+    </div>
+    <div class="card tbl-wrap" style="max-height:none">
+      <table data-source="fontes" data-row-key="fonte">
+        <caption class="sr">Fontes de dados</caption>
+        <thead><tr><th data-field="fonte">Fonte</th><th data-field="base">Base</th><th data-field="periodo">Período no painel</th><th data-field="coletado_em">Coletado em</th><th data-field="endereco">Endereço</th></tr></thead>
+        <tbody data-draw="fontes" data-source="fontes"></tbody>
+      </table>
+    </div>
+    <div class="prose"><h3>Mapeamento CNAE → segmento criativo (51 classes)</h3><p>Lista usada em todas as somas da economia criativa. No Power BI, este mapeamento é uma tabela editável: incluir ou retirar uma classe atualiza todo o painel.</p></div>
+    <div class="card tbl-wrap">
+      <table data-source="cnae" data-row-key="cnae_classe">
+        <caption class="sr">Classes CNAE por segmento</caption>
+        <thead><tr><th data-field="area_criativa">Área</th><th data-field="segmento">Segmento</th><th data-field="cnae_classe">Classe CNAE 2.0</th><th data-field="cnae_descricao">Descrição</th></tr></thead>
+        <tbody data-draw="cnae" data-source="cnae"></tbody>
+      </table>
+    </div>
+    <div class="prose"><h3>Ocupações criativas na CBO 2002 (263 ocupações)</h3><p>Correspondência usada para medir a intensidade criativa na RAIS: cada um dos 40 grupos da COD (base ISCO-08) usados na PNAD foi levado às famílias e ocupações equivalentes da CBO 2002. Arquitetura (2141), artistas visuais e designers (2624) e analistas de TI (2124) entram por família inteira; em famílias mistas, como gerentes de marketing e comunicação (1423) e artesãos (7911), entram só as ocupações criativas.</p></div>
+    <div class="card tbl-wrap">
+      <table data-source="cbo_criativas" data-row-key="cbo">
+        <caption class="sr">Ocupações criativas na CBO 2002</caption>
+        <thead><tr><th data-field="cod_isco">Grupo COD / ISCO-08</th><th data-field="familia">Família CBO</th><th data-field="cbo">Ocupação CBO</th><th data-field="ocupacao">Descrição</th></tr></thead>
+        <tbody data-draw="cbo" data-source="cbo_criativas"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="comousar" role="tabpanel" aria-label="Como usar" hidden>
+    <div class="prose"><h2 class="sec-h">Como usar o painel em 5 minutos</h2><p>Não é preciso instalar nada nem saber Power BI. Tudo se faz com cliques.</p></div>
+    <ol class="steps">
+      <li><b>Escolha o território</b>Use os filtros no topo: pelo recorte do IBGE (região intermediária → região imediata → município) ou pelo recorte Senac SP (GO → unidade → município da área de atuação), ou clique no mapa. Os dois recortes ficam sincronizados: ao escolher um município, os filtros mostram a sua região, GO e unidade. O nome do território aparece à direita dos filtros.</li>
+      <li><b>Navegue pelas páginas</b>Visão geral, Ecossistema Criativo, Educação e Dados Territoriais mostram o mesmo território escolhido. A seleção vale para todas as páginas.</li>
+      <li><b>Leia o título do indicador</b>Todo título diz a unidade (R$, %, nº) e o ano. O botão "?" explica o indicador em linguagem simples.</li>
+      <li><b>Compare</b>Na página Comparar territórios, adicione até 6 municípios ou regiões e veja tabela e gráfico lado a lado.</li>
+      <li><b>Ordene e busque</b>Nas tabelas, clique no título da coluna para ordenar e use a caixa de busca para achar um município.</li>
+      <li><b>Exporte os dados</b>Abra "Fontes", no topo do painel: cada base pode ser baixada em CSV para usar no Excel.</li>
+    </ol>
+    <div class="prose">
+      <h3>Perguntas que o painel responde rápido</h3>
+      <ul>
+        <li>Qual o peso da economia criativa no emprego da minha cidade? → Visão geral, cartão de empregos criativos.</li>
+        <li>Quais segmentos criativos são mais fortes aqui? → Ecossistema Criativo, gráfico dos 13 segmentos.</li>
+        <li>Minha rede pública atingiu a meta do IDEB? → Educação, cartões do IDEB.</li>
+        <li>Como minha cidade se compara às vizinhas? → Dados Territoriais, lista de municípios; ou Comparar territórios.</li>
+        <li>Quanto o território capta de Lei Rouanet? → Ecossistema Criativo, cartão de fomento.</li>
+      </ul>
+      <h3>Acessibilidade</h3>
+      <p>O botão "Alto contraste" reforça bordas e textos. Todas as tabelas têm títulos de coluna para leitores de tela, e os controles funcionam pelo teclado (Tab e Enter).</p>
+    </div>
+  </section>
+</div>
+</div>
+<script src="js/d3.v7.min.js"></script>
+<script src="js/dash-runtime.js" data-base="data/"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
