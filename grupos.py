@@ -1,0 +1,13 @@
+G={
+'Arquitetura e design de interiores':'81303 71197 74102 71111 71120',
+'Atividades artesanais e produtos de design':'13537 16293 22293 13529 25411 23192 15211 32124 17222 27406 28291 31012 31021 31039 17214 23499 25993 17494 32990 32116',
+'Audiovisual, multimídia e fotografia':'63917 59146 59120 59111 60101 60217 74200 59138 61418 61434 63992 60225',
+'Editorial':'47610 58191 58123 58115 58131 58298 58221 58212 58239',
+'Moda':'13405 14126 14142 13511 13596 13308 13545 13219 13235 13227',
+'Música, artes cênicas e visuais':'77217 77390 90019 59201 82300 94936 90027 85929 32205 90035 18300',
+'Patrimônio cultural e natural':'91015 91031 91023',
+'Publicidade, pesquisa e suporte à inovação cultural':'73122 73114 73190 74901 72100 72207 73203',
+'Software, videogames, serviços de computador e web':'62040 62015 62023 62031 26108 27902 26809 63194 62091 63119',
+}
+G={k:v.split() for k,v in G.items()}
+PAN={c:g for g,l in G.items() for c in l}
