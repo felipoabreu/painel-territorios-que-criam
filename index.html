@@ -18,8 +18,6 @@
 <body>
 <div id="dash-erro" hidden>Os dados não carregaram. Abra o painel por um servidor local (no VS Code: botão <b>Go Live</b> da extensão Live Server, ou <code>npm start</code>) — abrir o index.html direto do disco (file://) não funciona.</div>
 <div id="dash-root">
-<!-- AVISO DE TESTE: apague a linha abaixo quando o painel deixar de ser versão de teste -->
-<p class="aviso-teste" role="note">Versão de teste, não oficial · dados compilados de fontes públicas, carga de 16/11/2026</p>
 <div class="pg" id="painel">
   <header class="pg-head" id="topo">
     <img class="pg-logo" src="senac-logo-branco.svg" alt="Senac">
@@ -29,7 +27,8 @@
     </div>
     <div class="pg-meta">
       <div>Última carga dos dados: <b data-draw="carga" data-source="fontes">—</b></div>
-      <div class="warn">Dados públicos em atualização contínua: cada fonte tem seu próprio calendário (veja Glossário &amp; Metodologia).</div>
+      <div class="warn">Dados públicos em atualização contínua<button class="help" type="button" aria-expanded="false" aria-controls="h-atual" aria-label="Ajuda: atualização dos dados">?</button></div>
+      <p class="helptext" id="h-atual" hidden>Cada fonte tem seu próprio calendário e forma de atualização, veja Glossário &amp; Metodologia para saber mais.</p>
     </div>
   </header>
 
@@ -78,6 +77,7 @@
     <button class="tab" role="tab" type="button" data-tab="comparar" aria-selected="false" aria-controls="comparar">Comparar territórios</button>
     <button class="tab" role="tab" type="button" data-tab="boletim" aria-selected="false" aria-controls="boletim">Boletim estratégico</button>
     <button class="tab" role="tab" type="button" data-tab="glossario" aria-selected="false" aria-controls="glossario">Glossário &amp; Metodologia</button>
+    <button class="tab" role="tab" type="button" data-tab="ficha" aria-selected="false" aria-controls="ficha">Ficha técnica</button>
   </nav>
 
   <section id="visao" role="tabpanel" aria-label="Visão geral">
@@ -776,7 +776,8 @@
   <section id="glossario" role="tabpanel" aria-label="Glossário e metodologia" hidden>
     <div class="prose">
       <h2 class="sec-h">Glossário de indicadores</h2>
-      <p>Cada número do painel vem de uma fonte pública oficial. Abra "Fontes", no topo do painel, para ver a base de cada gráfico e baixar os dados em CSV.</p>
+      <p>Antes de usar um número para decidir, vale saber de onde ele vem e o que ele consegue (e não consegue) dizer. Esta aba responde a três perguntas: o que cada indicador mede, como ele é calculado e qual a fonte. Todos vêm de bases públicas oficiais; quando o painel faz uma estimativa, isso está dito aqui e no botão “?” do gráfico.</p>
+      <p>Uma dica de leitura: compare sempre coisas da mesma natureza. Empresas (Receita Federal), estabelecimentos (IBGE) e vínculos de emprego (RAIS) contam unidades diferentes, e por isso aparecem lado a lado, mas nunca somados.</p>
     </div>
     <div class="card tbl-wrap" style="max-height:none">
       <table class="gloss">
@@ -809,6 +810,13 @@
           <tr><td>Gasto público com cultura</td><td>Quanto prefeituras e o Governo do Estado aplicam em cultura.</td><td>Despesa empenhada na função 13 (Cultura); por habitante = ÷ população do mesmo ano (estimativas IBGE de 2014–2021 compatibilizadas com o Censo 2022); valores reais = × (IPCA médio de 2024 ÷ IPCA médio do ano); participação = ÷ despesa total exceto intraorçamentária (desde 2017).</td><td>Tesouro Nacional, Siconfi/DCA Anexo I-E; IBGE, IPCA (SIDRA 1737) e estimativas de população (SIDRA 6579). Anual (2014–2024).</td></tr>
           <tr><td>Comércio internacional de bens criativos (US$)</td><td>Quanto o território vende e compra de bens criativos no exterior.</td><td>Soma do valor FOB de 45 posições SH4 (artes visuais, artesanato, design, editorial, música, brinquedos e jogos), depuradas de itens não criativos.</td><td>MDIC, Comex Stat. Mensal; aqui, anos completos 2023–2025.</td></tr>
           <tr><td>GO e unidade Senac (recorte Senac SP)</td><td>Território de responsabilidade de cada Gerência de Operações e de cada unidade do Senac SP.</td><td>Cada município é atribuído à unidade em cuja área de atuação está listado; GO e unidade somam ou recalculam os indicadores dos seus municípios, como as regiões do IBGE. A capital, atendida por unidades das três GOs, forma o recorte “Capital · GO1, GO2 e GO3” e não entra na soma de nenhuma GO.</td><td>Senac SP, GPG – Informações e Análises de Mercado, “Área de atuação das unidades” das GO1, GO2 e GO3 (26/6/2026).</td></tr>
+          <tr><td>Empresas criativas (Receita Federal)</td><td>Quantos negócios formais, com CNPJ ativo, atuam em atividades criativas no território, incluindo os MEI.</td><td>Matrizes ativas nas 87 classes CNAE do Panorama Territorial da Economia Criativa Paulista, organizadas em nove grupos; série 2014–2025 reconstituída pelas datas de abertura e de baixa; porte (MEI, micro, pequeno, demais) e setor (serviços, indústria, comércio).</td><td>Receita Federal, cadastro de CNPJ (via Base dos Dados), retrato de 11/01/2026; perímetro SCEIC e Fundação Seade.</td></tr>
+          <tr><td>Mortalidade em até 2 e 5 anos (%)</td><td>Quantos negócios criativos não chegam ativos depois de dois ou cinco anos.</td><td>Empresas abertas em 2023 (2 anos) ou 2020 (5 anos) que não estavam ativas em 31/12/2025 ÷ empresas abertas no ano. Coortes com menos de 30 empresas são lidas como indicação.</td><td>Receita Federal; métrica de sobrevivência usada pelo Sebrae.</td></tr>
+          <tr><td>Intensidade criativa no território (RAIS, %)</td><td>Quanto do emprego formal de cada setor criativo, no território, está em ocupações criativas.</td><td>Vínculos em ocupações criativas (263 ocupações da CBO 2002) ÷ vínculos do setor em 31/12/2024. Setores com menos de 30 vínculos não são exibidos.</td><td>Ministério do Trabalho, RAIS 2024 (via Base dos Dados). Anual.</td></tr>
+          <tr><td>Ofícios criativos e QL do ofício</td><td>Quantos profissionais de cada família de ocupação criativa há no território e se o ofício é mais ou menos presente que na média paulista.</td><td>Composição ocupacional de cada setor e seção em SP (PNAD) aplicada ao emprego formal local (CEMPRE 2024). QL = densidade do ofício no território ÷ densidade no Estado: 1,20 quer dizer 120 profissionais para cada 100 esperados.</td><td>IBGE, PNAD Contínua e CEMPRE 2024. Estimativa.</td></tr>
+          <tr><td>Correlação de Spearman (simples e descontado o porte)</td><td>O quanto um componente do IDPEC-SP acompanha a concentração criativa (QL) entre os municípios.</td><td>Correlação de postos entre os 645 municípios (de −1 a 1). A versão descontado o porte (correlação parcial) controla a população, com intervalo de confiança de 95%. Leitura: abaixo de 0,10 desprezível; 0,10 a 0,29 fraca; 0,30 a 0,49 moderada; 0,50 ou mais forte.</td><td>Calculada pelo painel com IDPEC-SP, CEMPRE 2024 e Censo 2022.</td></tr>
+          <tr><td>QL esperado (municípios parecidos)</td><td>Se a concentração criativa do município está acima, dentro ou abaixo do que se espera para alguém do seu tamanho e potencial.</td><td>Mediana e quartis do QL dos 60 municípios mais parecidos em IDPEC-SP e população (vizinhos mais próximos em postos).</td><td>Calculado pelo painel.</td></tr>
+          <tr><td>Pontuação dos setores (Boletim estratégico)</td><td>Quais grupos de atividades criativas têm mais potencial no território e quais estão menos estruturados.</td><td>Nota de 0 a 100 = 30% concentração (intensidade e QL frente ao Estado) + 30% dinâmica (empresas, empregos e evolução da participação) + 15% estrutura (formalização e variação do emprego) + 25% aderência (ofícios que dialogam com as áreas do Senac). Amostras pequenas pesam menos; municípios com poucos registros usam a região imediata.</td><td>Calculada pelo painel com Receita Federal, CEMPRE, RAIS e PNAD.</td></tr>
           <tr><td>Porte populacional</td><td>Grupo de tamanho, para comparar municípios parecidos.</td><td>Faixas de população no Censo 2022: até 5 mil, 5 a 10 mil, 10 a 20 mil, 20 a 50 mil, 50 a 100 mil, 100 a 500 mil, mais de 500 mil.</td><td>Derivado do Censo 2022.</td></tr>
         </tbody>
       </table>
@@ -824,6 +832,10 @@
         <li><b>Dois recortes criativos, lado a lado:</b> (1) FIRJAN, 13 segmentos medidos por 51 classes CNAE no CEMPRE; (2) intensidade criativa (DCMS/Observatório Itaú Cultural), 14 setores escolhidos pela proporção de ocupações criativas na PNAD Contínua. Os dois se sobrepõem em audiovisual, publicidade, editorial, TI e artes, mas divergem: a FIRJAN inclui biotecnologia, P&amp;D e engenharia; a intensidade inclui móveis, cerâmica, artefatos têxteis e joalheria (ofícios). A correlação entre os dois quocientes locacionais nos municípios é de 0,52.</li>
         <li><b>Estimativa municipal por intensidade:</b> a PNAD não tem amostra por município. A intensidade de SP é aplicada ao emprego formal de cada setor no município (estimação sintética), e os valores sigilosos do CEMPRE são calibrados para somar o total oficial do Estado. Os incorporados municipais são estimados pelas taxas de ocupações criativas de cada seção da CNAE em SP aplicadas ao emprego formal da seção no município (CEMPRE 2024 por seção, sigilo calibrado ao total estadual). Trabalho informal e renda só aparecem para o Estado.</li>
       </ul>
+      <h3>Como o Boletim estratégico é escrito</h3>
+      <p>O boletim não é escrito por uma inteligência artificial em tempo real. Ele combina três camadas: uma ficha de números calculada para cada território, a pontuação dos nove grupos de atividades criativas e uma biblioteca de trechos de texto revisados, escolhidos conforme a situação do recorte (por exemplo, emprego criativo acima ou abaixo do Estado, mortalidade alta ou baixa). Se um dado não existe para o recorte, a frase muda ou sai: nenhum número é inventado. As áreas e os tipos de oferta sugeridos não foram conferidos no portfólio vigente e servem como ponto de partida para a conversa da equipe.</p>
+      <h3>Quando o painel é atualizado</h3>
+      <p>As bases são revistas todo mês, no dia 16 (ou no dia útil seguinte). Só entra o que tem versão nova publicada; as datas de cada fonte aparecem na tabela abaixo.</p>
       <h3>Fontes e data de coleta</h3>
     </div>
     <div class="card tbl-wrap" style="max-height:none">
@@ -851,29 +863,55 @@
     </div>
   </section>
 
-  <section id="comousar" role="tabpanel" aria-label="Como usar" hidden>
-    <div class="prose"><h2 class="sec-h">Como usar o painel em 5 minutos</h2><p>Não é preciso instalar nada nem saber Power BI. Tudo se faz com cliques.</p></div>
-    <ol class="steps">
-      <li><b>Escolha o território</b>Use os filtros no topo: pelo recorte do IBGE (região intermediária → região imediata → município) ou pelo recorte Senac SP (GO → unidade → município da área de atuação), ou clique no mapa. Os dois recortes ficam sincronizados: ao escolher um município, os filtros mostram a sua região, GO e unidade. O nome do território aparece à direita dos filtros.</li>
-      <li><b>Navegue pelas páginas</b>Visão geral, Ecossistema Criativo, Educação e Dados Territoriais mostram o mesmo território escolhido. A seleção vale para todas as páginas.</li>
-      <li><b>Leia o título do indicador</b>Todo título diz a unidade (R$, %, nº) e o ano. O botão "?" explica o indicador em linguagem simples.</li>
-      <li><b>Compare</b>Na página Comparar territórios, adicione até 6 municípios ou regiões e veja tabela e gráfico lado a lado.</li>
-      <li><b>Ordene e busque</b>Nas tabelas, clique no título da coluna para ordenar e use a caixa de busca para achar um município.</li>
-      <li><b>Exporte os dados</b>Abra "Fontes", no topo do painel: cada base pode ser baixada em CSV para usar no Excel.</li>
-    </ol>
+  <section id="ficha" role="tabpanel" aria-label="Ficha técnica" hidden>
     <div class="prose">
-      <h3>Perguntas que o painel responde rápido</h3>
-      <ul>
-        <li>Qual o peso da economia criativa no emprego da minha cidade? → Visão geral, cartão de empregos criativos.</li>
-        <li>Quais segmentos criativos são mais fortes aqui? → Ecossistema Criativo, gráfico dos 13 segmentos.</li>
-        <li>Minha rede pública atingiu a meta do IDEB? → Educação, cartões do IDEB.</li>
-        <li>Como minha cidade se compara às vizinhas? → Dados Territoriais, lista de municípios; ou Comparar territórios.</li>
-        <li>Quanto o território capta de Lei Rouanet? → Ecossistema Criativo, cartão de fomento.</li>
-      </ul>
-      <h3>Acessibilidade</h3>
-      <p>O botão "Alto contraste" reforça bordas e textos. Todas as tabelas têm títulos de coluna para leitores de tela, e os controles funcionam pelo teclado (Tab e Enter).</p>
+      <h2 class="sec-h">Ficha técnica</h2>
+      <div class="card" style="max-width:44rem">
+        <p style="font-size:var(--cds-font-size-heading);font-weight:var(--cds-font-weight-medium);margin:0 0 var(--cds-gap-md)">Painel de Dados - Programa Territórios que Criam | Senac SP</p>
+        <dl class="ficha">
+          <dt>Desenvolvimento</dt><dd>Senac Sorocaba</dd>
+          <dt>Gerente</dt><dd>Rodrigo Buzin Siqueira do Amaral</dd>
+          <dt>Técnico responsável</dt><dd>Felipo Abreu</dd>
+          <dt>Docentes mediadores</dt><dd>Giovanna Tegani e Filipe Lea Plaza</dd>
+          <dt>Apoios de área</dt><dd>Michelle Santos e Simone Gonçalves</dd>
+        </dl>
+      </div>
+      <p>O painel reúne bases públicas e oficiais (IBGE, Receita Federal, Ministério do Trabalho, INEP, Ministério da Cultura, Tesouro Nacional, MDIC, FIRJAN, entre outras) e as organiza pelo recorte territorial do Senac SP. As fontes, os períodos e os métodos estão na aba Glossário &amp; Metodologia.</p>
+      <p>Licença: Creative Commons CC BY-NC-SA 4.0. O conteúdo pode ser compartilhado e adaptado para fins não comerciais, com crédito ao Programa Territórios que Criam (Senac SP) e mantendo a mesma licença.</p>
     </div>
   </section>
+
+  <section id="comousar" role="tabpanel" aria-label="Como usar" hidden>
+    <div class="prose">
+      <h2 class="sec-h">Como usar o painel</h2>
+      <p>Este painel foi pensado para quem decide no dia a dia: gerentes, técnicos e docentes que querem entender a economia criativa do seu território antes de planejar uma oferta. Não é preciso instalar nada nem conhecer estatística. Tudo começa por uma pergunta simples: <b>de qual território você quer falar?</b></p>
+    </div>
+    <ol class="steps">
+      <li><b>Escolha o território</b>No alto da página há dois caminhos. O <i>Recorte Senac SP</i> parte da Gerência de Operações, passa pela unidade e chega aos municípios da área de atuação. O <i>Recorte geográfico (IBGE)</i> segue região intermediária, região imediata e município. Você também pode clicar direto no mapa. Os dois caminhos conversam entre si: ao escolher um município, o quadro “Território selecionado” mostra, lado a lado, o nome, o nível, a unidade e a GO. Quando você rola a página, uma barra compacta continua lembrando onde você está; é só clicar em “Alterar filtros ou aba” para voltar ao topo.</li>
+      <li><b>Percorra as abas na ordem que fizer sentido</b><i>Visão geral</i> dá o retrato rápido. <i>Dados Territoriais</i> reúne população, economia, o IDPEC-SP e os quadros de correlação. <i>Ecossistema Criativo</i> aprofunda: PIB criativo, mercado de trabalho e intensidade criativa, empresas criativas da Receita Federal, gasto público com cultura e comércio exterior. <i>Educação</i> traz IDEB, fluxo escolar e infraestrutura. A escolha feita nos filtros vale para todas elas.</li>
+      <li><b>Pergunte ao próprio painel</b>Todo título diz a unidade e o ano. Quando aparecer o botão “?”, clique: ele explica, em linguagem direta, o que o indicador mede e como ler. Passe o mouse sobre barras, pontos e linhas para ver o detalhe; nos ofícios criativos, por exemplo, o balão explica o quociente locacional (QL) de cada ofício como “quantos profissionais há para cada 100 que a média paulista levaria a esperar”.</li>
+      <li><b>Leia as relações com cuidado</b>Nos Quadros 1 e 2 de <i>Dados Territoriais</i>, a correlação de Spearman mostra o quanto cada componente do IDPEC-SP acompanha a concentração criativa entre os municípios. Ela indica regularidades, não causas. Um município sozinho não tem correlação própria: por isso o Quadro 2 repete a correlação do Estado como referência para ler a posição do município.</li>
+      <li><b>Compare territórios</b>Em <i>Comparar territórios</i>, junte até seis municípios, regiões, GOs ou unidades e veja tabela e gráfico lado a lado. É o jeito mais rápido de responder “estamos acima ou abaixo dos vizinhos?”.</li>
+      <li><b>Leve a conversa para a equipe</b>A aba <i>Boletim estratégico</i> transforma os dados do território selecionado em um documento de oito páginas: panorama, setores com mais potencial, pontos de ancoragem da oferta e caminhos para começar. O botão “Baixar PDF” gera o arquivo para levar à reunião. O boletim muda sempre que o recorte muda.</li>
+      <li><b>Confira a origem de cada número</b>No painel do Claude, o botão “Fontes”, no topo, mostra a base de cada gráfico e permite baixar os dados. Nas outras versões, a aba <i>Glossário &amp; Metodologia</i> lista fontes, períodos e datas de coleta.</li>
+    </ol>
+    <div class="prose">
+      <h3>Perguntas que o painel ajuda a responder</h3>
+      <ul>
+        <li><b>Qual o peso da economia criativa na minha cidade?</b> Comece pela Visão geral e confirme em Ecossistema Criativo, onde aparecem o emprego formal criativo e o PIB criativo.</li>
+        <li><b>Quem são os negócios criativos daqui, e eles duram?</b> Em Ecossistema Criativo, as empresas criativas mostram porte, setores, aberturas e fechamentos e a mortalidade em até cinco anos.</li>
+        <li><b>Onde estão os profissionais criativos?</b> O Triângulo Criativo separa quem cria dentro dos setores criativos (especializados), quem cria em outros setores (incorporados) e quem dá suporte (apoio).</li>
+        <li><b>Por onde a unidade pode começar?</b> O Boletim estratégico aponta os setores de maior potencial e os menos estruturados, com sugestões de público, comunicação e tipos de oferta.</li>
+        <li><b>Como estamos frente aos pares?</b> Em Dados Territoriais, o Quadro 2 compara o município com os de mesmo porte; em Comparar territórios, com quem você escolher.</li>
+      </ul>
+      <h3>Uma palavra sobre os dados</h3>
+      <p>As bases do painel são públicas e oficiais, e cada uma tem o seu tempo: o emprego formal mais recente é de 2024, o cadastro de empresas é de janeiro de 2026, o PIB é de 2023. O painel é revisto todo mês, no dia 16 (ou no dia útil seguinte), quando alguma base ganha versão nova. Empresas (Receita Federal), estabelecimentos (IBGE) e vínculos (RAIS) são unidades diferentes: o painel as mostra lado a lado, mas não as soma.</p>
+      <h3>Acessibilidade</h3>
+      <p>O botão “Alto contraste” reforça bordas e textos. As tabelas têm títulos de coluna para leitores de tela, e todos os controles funcionam pelo teclado (Tab e Enter).</p>
+    </div>
+  </section>
+  <!-- AVISO DE TESTE: apague o rodapé abaixo quando o painel deixar de ser versão de teste -->
+  <footer class="pg-foot"><p class="aviso-teste" role="note">Versão de teste, carga de 16/11/2026</p></footer>
 </div>
 </div>
 <script src="d3.v7.min.js"></script>

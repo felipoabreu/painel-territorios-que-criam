@@ -118,3 +118,13 @@
 
 /* oito indicadores em duas linhas de quatro */
 @media (min-width: 900px) { .kpis.k4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.ficha { display:grid; grid-template-columns:minmax(10rem, max-content) 1fr; gap:var(--cds-gap-xs) var(--cds-gap-md); margin:0; }
+.ficha dt { color:var(--color-fg-muted); }
+.ficha dd { margin:0; font-weight:var(--cds-font-weight-medium); }
+@media (max-width: 560px) { .ficha { grid-template-columns:1fr; } .ficha dd { margin-bottom:var(--cds-gap-sm); } }
+
+.pg-foot { margin-top: var(--cds-gap-lg); }
+.pg-foot .aviso-teste { margin: 0; text-align: center; }
+.pg-meta .warn .help { margin-left: 6px; border-color: currentColor; color: inherit; }
+.pg-meta .helptext { color: var(--color-fg); text-align: left; }
