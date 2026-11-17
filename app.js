@@ -60,6 +60,9 @@
   const enc = (s) => String(s).replace(/%/g, '%25').replace(/&/g, '%26').replace(/=/g, '%3D');
   const where = (o) => Object.entries(o).map(([k, v]) => enc(k) + '=' + enc(v)).join('&');
 
+  // paleta Senac SP para os gráficos (azul e laranja da marca primeiro; distinguíveis também para daltonismo)
+  try { if (Array.isArray(dash.colors)) dash.colors.splice(0, dash.colors.length, '#005594', '#F78B1F', '#1B9E77', '#7FB8E6', '#C7533C', '#D16BA5', '#2C2C54', '#8C564B'); } catch (e) { /* plataforma não permite trocar a paleta: segue a padrão */ }
+
   // ---------- estado e utilidades ----------
   const ui = {tab: 'visao', rankSort: {k: 'rk', dir: 1}, munSort: {k: 'pop_censo', dir: -1}, rankQ: '', munQ: ''};
   const P = () => dash.params();
@@ -149,6 +152,16 @@
     b.setAttribute('aria-expanded', String(!open));
     document.querySelectorAll('#' + b.getAttribute('aria-controls')).forEach((p) => { p.hidden = open; });
   }));
+  // barra compacta de filtros: aparece quando o bloco de filtros sai da tela ao rolar
+  document.querySelectorAll('#filtro-compacto').forEach((bar) => {
+    const f = document.getElementById('filtros');
+    if (!f || !('IntersectionObserver' in window)) return;
+    const aba = bar.querySelector('.fc-aba');
+    const nomeAba = () => { const t = document.querySelector('.tab[aria-selected="true"]'); if (aba) aba.textContent = t ? t.textContent : ''; };
+    new IntersectionObserver(([e]) => { nomeAba(); bar.hidden = e.isIntersecting || e.boundingClientRect.top > 0; }).observe(f);
+    document.querySelectorAll('.tab').forEach((b) => b.addEventListener('click', nomeAba));
+    bar.querySelector('button').addEventListener('click', () => f.scrollIntoView({behavior: 'smooth', block: 'start'}));
+  });
   document.querySelectorAll('#limpar').forEach((b) => b.addEventListener('click', () => dash.setParams({t: '35'})));
   document.querySelectorAll('#contraste').forEach((b) => b.addEventListener('click', () => {
     const on = b.getAttribute('aria-pressed') !== 'true';
@@ -330,14 +343,15 @@
       un = u.map((x) => x.nome.replace(/Senac /g, '')).join(', ') || '—';
       go = [...new Set(gos.flatMap((x) => String(x.cod) === '900' ? ['GO1', 'GO2', 'GO3'] : [x.nome]))].sort().join(', ') || '—';
     }
+    // cada informação em um bloco: título acima, valor abaixo (lidos lado a lado na barra de filtros)
     const line = (lab, val, field) => {
-      const d = document.createElement('span'); d.style.cssText = 'display:block;margin-top:4px';
-      d.append(document.createTextNode(lab));
-      const v = mark('span', 'territorios', field, where({cod: r.cod}), val); v.style.cssText = 'display:block;color:var(--color-fg);font-weight:600';
-      d.append(v); return d;
+      const d = document.createElement('div'); d.className = 'ni';
+      const l = document.createElement('span'); l.className = 'nl'; l.textContent = lab;
+      const v = mark('span', 'territorios', field, where({cod: r.cod}), val); v.className = 'nv';
+      d.append(l, v); return d;
     };
     el.replaceChildren(line('Unidade Senac', un, r.nivel === 'Município' ? 'unidade' : 'nome'), line('Gerência de Operações', go, r.nivel === 'Município' ? 'go' : 'nome'));
-    if (detail) { const d = document.createElement('span'); d.style.cssText = 'display:block;margin-top:2px'; d.textContent = detail; el.append(d); }
+    if (detail) { const d = document.createElement('span'); d.className = 'nd'; d.textContent = detail; el.append(d); }
   });
 
   dash.draw('mapa', (el) => {
@@ -841,6 +855,16 @@
     const muns = rows.filter((r) => String(r.cod).length === 7);
     const stPar = new Map(cr.map((x) => [x.variavel, x.rho_parcial]));
     const stN = new Map(cr.map((x) => [x.variavel, x.n]));
+    const stRho = new Map(cr.map((x) => [x.variavel, x.rho]));
+    // célula de correlação simples do Estado: valor e força, como no Quadro 1
+    const rhoCell = (rho) => {
+      if (!has(rho)) return ['—', 'n'];
+      const f = document.createDocumentFragment();
+      f.append(N2.format(rho));
+      const s = document.createElement('div'); s.style.cssText = 'font-size:var(--cds-font-size-caption);font-weight:normal;color:var(--color-fg-muted)'; s.textContent = (rho >= 0 ? 'positiva ' : 'negativa ') + forcaTxt(rho);
+      f.append(s);
+      return [f, 'n ' + (rho >= 0 ? 'ok' : 'bad')];
+    };
     const popOf = (c) => { const x = cur(c); return x ? x.pop_censo : null; };
     const note = (txt) => { const p = document.createElement('p'); p.className = 'card-n'; p.textContent = txt; el.append(p); return p; };
     const table = (head, body) => {
@@ -874,10 +898,10 @@
         const par = stPar.get(v);
         const leitura = leitMun(v, me[v], p, pp, par, stN.get(v), pos);
         const fmtV = v.startsWith('n_') || v.startsWith('d') || v === 'idpec' || v.endsWith('_score') ? F.d1 : (v === 'rouanet_pc' ? F.brl2 : F.pct2);
-        return {sel: HL.has(v), cells: [[lab], [fmtV(me[v]), 'n'], [has(p) ? F.int(p) : '—', 'n'], [has(pp) ? F.int(pp) : '—', 'n'], [leitura, 'leit']]};
+        return {sel: HL.has(v), cells: [[lab], rhoCell(stRho.get(v)), [fmtV(me[v]), 'n'], [has(p) ? F.int(p) : '—', 'n'], [has(pp) ? F.int(pp) : '—', 'n'], [leitura, 'leit']]};
       });
-      table([['Componente'], ['Valor no município', 1], ['Percentil em SP', 1], ['Percentil no porte', 1], ['Análise | Perspectiva para o município']], body);
-      note(`Porte de comparação: ${F.porte(tr.porte)} (${F.int(peers.length)} municípios). Percentil 50 = mediana. “Associado” descreve uma regularidade entre municípios, não um efeito causal do componente sobre o município.`);
+      table([['Componente'], ['Correlação simples (Spearman)', 1], ['Valor no município', 1], ['Percentil em SP', 1], ['Percentil no porte', 1], ['Análise | Perspectiva para o município']], body);
+      note(`Porte de comparação: ${F.porte(tr.porte)} (${F.int(peers.length)} municípios). Percentil 50 = mediana. A correlação simples é a do Estado (645 municípios), a mesma do Quadro 1: um único município não tem correlação própria, e o valor serve de referência para ler a posição do município. Quanto mais forte, mais a posição no componente tende a acompanhar a concentração criativa; perto de zero, a posição diz pouco sobre ela. “Associado” descreve uma regularidade entre municípios, não um efeito causal do componente sobre o município.`);
       return;
     }
     // território agregado: correlação entre os municípios que o compõem
@@ -893,7 +917,7 @@
       const st = stPar.get(v);
       return {sel: HL.has(v), cells: [[lab], [isFinite(rho) ? N2.format(rho) : '—', 'n'], [isFinite(par) ? N2.format(par) : '—', 'n ' + (isFinite(par) ? (par >= 0 ? 'ok' : 'bad') : '')], [isFinite(lo) ? N2.format(lo) + ' a ' + N2.format(hi) : '—', 'n'], [!isFinite(par) ? 'sem variação suficiente' : (sig ? (par >= 0 ? 'positiva ' : 'negativa ') + forcaTxt(par) : 'não distinguível de zero')], [F.int(nn), 'n']]};
     });
-    table([['Componente'], ['Correlação simples', 1], ['Descontado o porte', 1], ['IC 95% (descontado o porte)', 1], ['Leitura'], ['Municípios', 1]], body);
+    table([['Componente'], ['Correlação simples (Spearman)', 1], ['Descontado o porte', 1], ['IC 95% (descontado o porte)', 1], ['Leitura'], ['Municípios', 1]], body);
   });
 
   // Quadro 1 (Estado): análise crítica por componente — diagnóstico (correlação simples, parcial descontado o porte e IC 95%), desafios e oportunidades para a educação profissional técnica
@@ -1403,15 +1427,23 @@
     if (!r) { el.replaceChildren(); return; }
     const rows = r.filter((x) => (x.total || 0) > 0).sort((a, b) => b.total - a.total);
     if (!rows.length) return noData(el, 'Sem ofícios criativos estimados para este território.');
-    const groups = rows.map((x) => ({label: x.fam + (x.baixa_precisao ? ' †' : '') + (has(x.ql) ? ' · QL ' + N2.format(x.ql) : ''), a: x.especializados, b: x.incorporados, extra: [
-      'Total: ' + F.int(x.total) + ' (' + F.pct1(x.pct_incorporados) + ' incorporados)',
-      F.d1(x.por_mil_ocup) + ' por mil ocupados formais · QL ' + (has(x.ql) ? N2.format(x.ql) : '—') + ' (1 = média do Estado)',
-      'Oferta relacionada: ' + x.eixo_senac,
-      'Amostra estadual: ' + F.int(x.n_amostra_sp) + ' casos' + (x.baixa_precisao ? ' — baixa precisão' : '')]}));
+    const est = T() === '35';
+    const leQL = (q) => {
+      if (est) return 'Quociente locacional (QL): no Estado vale 1 por definição, porque o próprio Estado é a referência. Escolha um município ou região para comparar.';
+      if (!has(q)) return 'Quociente locacional (QL): não calculado para este ofício no território.';
+      const c = Math.round(q * 100), base = 'Quociente locacional (QL) ' + N2.format(q) + ': para cada 100 profissionais deste ofício que a média paulista levaria a esperar, considerando o tamanho do emprego formal do território, há ' + F.int(c) + '.';
+      return base + (q >= 1.2 ? ' É um ofício que se destaca aqui.' : q >= 0.8 ? ' Presença próxima à do Estado.' : ' Presença abaixo da média paulista.');
+    };
+    const groups = rows.map((x) => ({label: x.fam + (x.baixa_precisao ? ' †' : ''), a: x.especializados, b: x.incorporados, extra: [
+      'Total: ' + F.int(x.total) + ', dos quais ' + F.pct1(x.pct_incorporados) + ' trabalham fora dos setores criativos (incorporados).',
+      'Densidade: ' + F.d1(x.por_mil_ocup) + ' por mil ocupados formais.',
+      leQL(x.ql),
+      'Oferta Senac relacionada: ' + x.eixo_senac + '.',
+      'Amostra estadual: ' + F.int(x.n_amostra_sp) + ' casos' + (x.baixa_precisao ? ' (baixa precisão; leia como indicação).' : '.')]}));
     pair(el, groups, F.int, ['Especializados (em setores criativos)', 'Incorporados (em outros setores)'], [dash.colors[0], dash.colors[1]]);
     const sp = rows.filter((x) => has(x.ql) && x.ql >= 1.2).map((x) => x.fam);
     const n = document.createElement('div'); n.className = 'legend';
-    n.append(mark('span', 'familias_mun', 'ql', where({cod: T()}), (T() === '35' ? 'Estado de SP: QL = 1 por definição.' : (sp.length ? 'Ofícios com concentração acima do Estado (QL ≥ 1,2): ' + sp.join(', ') + '.' : 'Nenhum ofício com concentração 20% acima do Estado.')) + ' † menos de 60 casos na amostra estadual. Arquitetos aparecem como incorporados porque arquitetura e engenharia ficam abaixo do corte de 30% de intensidade; chefs, porque restaurantes e hotéis não são setores criativos.'));
+    n.append(mark('span', 'familias_mun', 'ql', where({cod: T()}), (T() === '35' ? 'Estado de SP: QL = 1 por definição.' : (sp.length ? 'Ofícios com concentração acima do Estado (QL ≥ 1,2): ' + sp.join(', ') + '.' : 'Nenhum ofício com concentração 20% acima do Estado.')) + ' Passe o mouse sobre a barra para ver o QL de cada ofício e como lê-lo. † menos de 60 casos na amostra estadual. Arquitetos aparecem como incorporados porque arquitetura e engenharia ficam abaixo do corte de 30% de intensidade; chefs, porque restaurantes e hotéis não são setores criativos.'));
     el.append(n);
   });
 
@@ -1522,7 +1554,7 @@
   });
   // ---------- Empresas criativas (Receita Federal/CNPJ, perímetro do Panorama Territorial da Economia Criativa Paulista) ----------
   const EG = ['Arquitetura e design de interiores', 'Atividades artesanais e produtos de design', 'Audiovisual, multimídia e fotografia', 'Editorial', 'Moda', 'Música, artes cênicas e visuais', 'Patrimônio cultural e natural', 'Publicidade, pesquisa e suporte à inovação cultural', 'Software, videogames, serviços de computador e web'];
-  const EGC = ['#2f6fd0', '#6b7a99', '#d9a400', '#d1493f', '#1f9e74', '#7fb2e5', '#8e5fb5', '#4f8fe0', '#7a86a8'];
+  const EGC = ['#005594', '#7A8AA3', '#F78B1F', '#C7533C', '#1B9E77', '#7FB8E6', '#8E5FB5', '#2E7FC4', '#2C2C54'];
   let eIdx = null, eSrc = null;
   const emp = (cod) => { const r = rowsOf('empresas_resumo'); if (!r) return null; if (eSrc !== r) { eIdx = new Map(r.map((x) => [String(x.cod), x])); eSrc = r; } return eIdx.get(String(cod ?? T())); };
   const nomeT = () => { const r = cur(); return r ? String(r.nome).replace(/^RGI(nt)? /, '') : 'Território'; };
@@ -1679,6 +1711,9 @@
       return tr;
     }));
   });
+
+  // nome do território selecionado em títulos de cartões
+  dash.draw('nome-t', (el) => { const r = cur(); el.textContent = !r ? 'Território selecionado' : r.nivel === 'Estado' ? 'Estado de São Paulo' : String(r.nome).replace(/^RGI(nt)? /, ''); });
 
   dash.draw('emp-per', (el) => {
     const r = rowsOf('empresas_perimetros');

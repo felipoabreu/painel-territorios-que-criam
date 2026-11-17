@@ -185,6 +185,11 @@
    "id": "empresas_perimetros",
    "file": "empresas_perimetros.json",
    "title": "Sobreposição dos perímetros criativos"
+  },
+  {
+   "id": "boletim_biblioteca",
+   "file": "boletim_biblioteca.json",
+   "title": "Boletim estratégico: biblioteca editorial"
   }
  ]
 }

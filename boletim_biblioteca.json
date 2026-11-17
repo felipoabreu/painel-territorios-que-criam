@@ -1,0 +1,705 @@
+[
+{
+"tipo": "grupo",
+"chave": "g1",
+"g": 1,
+"nome": "Arquitetura e design de interiores",
+"curto": "arquitetura e design de interiores",
+"aderencia": 0.7,
+"rais": "",
+"firjan": "Arquitetura|Design",
+"fam": "Arquitetura e urbanismo|Design",
+"comex": "Design de interiores e utilitário",
+"porque": "Projeto de espaços e ambientes conversa com construção civil, varejo de decoração e imóveis, cadeias que costumam estar presentes no território.",
+"oportunidade": "Design de interiores, visualização 3D e projetos para o varejo e a construção local.",
+"desafio": "Muitos escritórios individuais, com renda instável e forte dependência do ciclo imobiliário.",
+"sinal": "A maior parte de quem trabalha com arquitetura atua fora dos setores criativos, em construtoras e escritórios técnicos.",
+"op_fr": "Design de interiores e decoração para o comércio e as moradias locais.",
+"de_fr": "Escritórios pequenos e ligados ao ciclo imobiliário.",
+"atrair": "Em arquitetura e design de interiores, a porta de entrada são as ferramentas: modelagem 3D, renderização e orçamento de obra, em formatos curtos que cabem na rotina de projeto.",
+"ofertas": "cursos livres de design de interiores, desenho técnico e modelagem 3D, e formação técnica em design de interiores para quem quer estruturar a carreira",
+"ofertas_curtas": "design de interiores, decoração e visualização 3D",
+"palavras": "curso de design de interiores|modelagem 3D para projetos|decoração de ambientes",
+"ampliar": "Arquitetura e design de interiores",
+"sigla": "arquitetura e design"
+},
+{
+"tipo": "grupo",
+"chave": "g2",
+"g": 2,
+"nome": "Atividades artesanais e produtos de design",
+"curto": "artesanato e produtos de design",
+"aderencia": 0.75,
+"rais": "32001|13002|23091|31000",
+"firjan": "",
+"fam": "Artesanato e ofícios",
+"comex": "Artesanato|Brinquedos e jogos",
+"porque": "O saber-fazer local (cerâmica, têxteis, móveis, joalheria) dá identidade ao território e dialoga com turismo e comércio.",
+"oportunidade": "Design de produto, acabamento, identidade visual e venda online de produtos autorais.",
+"desafio": "Produção em pequena escala, precificação frágil e pouca presença em canais de venda além da feira.",
+"sinal": "Ofícios presentes no território, mas com pouco emprego formal e baixa formalização dos negócios.",
+"op_fr": "Design de produto, acabamento e venda online.",
+"de_fr": "Escala pequena e precificação frágil.",
+"atrair": "No artesanato e no design de produto, o público chega por resultado concreto: uma peça melhor acabada, uma foto que vende, um preço que paga o trabalho.",
+"ofertas": "cursos livres de design de produto, acabamento, fotografia de produto, precificação e venda em marketplaces",
+"ofertas_curtas": "design de produto, acabamento e venda online",
+"palavras": "artesanato e empreendedorismo|como vender artesanato online|design de produto artesanal",
+"ampliar": "Artesanato e produtos de design",
+"sigla": "artesanato"
+},
+{
+"tipo": "grupo",
+"chave": "g3",
+"g": 3,
+"nome": "Audiovisual, multimídia e fotografia",
+"curto": "audiovisual, multimídia e fotografia",
+"aderencia": 0.85,
+"rais": "60001|60002|59000|74000",
+"firjan": "Audiovisual",
+"fam": "Audiovisual e fotografia",
+"comex": "",
+"porque": "Imagem e vídeo viraram linguagem de todos os negócios: quem produz conteúdo atende comércio, serviços, eventos e marcas locais.",
+"oportunidade": "Produção de conteúdo para marcas, eventos e plataformas digitais.",
+"desafio": "Trabalho por projeto, emprego formal pequeno e equipamentos caros para quem começa.",
+"sinal": "Muitos negócios de imagem e vídeo, mas emprego formal reduzido e renda que depende de projetos.",
+"op_fr": "Produção de conteúdo para o comércio e os eventos locais.",
+"de_fr": "Trabalho por projeto e pouca formalização.",
+"atrair": "No audiovisual e na fotografia, a atração passa pela prática: estúdio, equipamento e projetos reais. A unidade pode abrir seus espaços para produções e propor desafios com empresas parceiras.",
+"ofertas": "cursos livres de fotografia de produto, edição de vídeo, motion design e produção audiovisual para marcas, e formação técnica em multimídia ou produção audiovisual para trajetórias mais longas",
+"ofertas_curtas": "fotografia, edição de vídeo e produção de conteúdo",
+"palavras": "fotografia de produto|edição de vídeo para redes sociais|curso de produção audiovisual",
+"ampliar": "Audiovisual e fotografia",
+"sigla": "audiovisual"
+},
+{
+"tipo": "grupo",
+"chave": "g4",
+"g": 4,
+"nome": "Editorial",
+"curto": "editorial",
+"aderencia": 0.55,
+"rais": "58000",
+"firjan": "Editorial",
+"fam": "Comunicação e editorial",
+"comex": "Editorial e impressos",
+"porque": "Edição, impressão e conteúdo escrito sustentam comunicação institucional, educação e comércio.",
+"oportunidade": "Conteúdo digital, revisão, diagramação e publicação independente.",
+"desafio": "Mercado impresso em retração e migração rápida para formatos digitais.",
+"sinal": "Atividade editorial presente, mas com mercado impresso em retração.",
+"op_fr": "Conteúdo digital, diagramação e publicação independente.",
+"de_fr": "Retração do impresso e migração para o digital.",
+"atrair": "No editorial, o público procura atualização para o digital: escrita para a web, diagramação, publicação independente e gestão de conteúdo.",
+"ofertas": "cursos livres de redação para web, revisão, diagramação e editoração eletrônica, e produção de conteúdo para plataformas",
+"ofertas_curtas": "redação para web, diagramação e publicação digital",
+"palavras": "curso de redação para web|diagramação e editoração|produção de conteúdo escrito",
+"ampliar": "Editorial e conteúdo",
+"sigla": "editorial"
+},
+{
+"tipo": "grupo",
+"chave": "g5",
+"g": 5,
+"nome": "Moda",
+"curto": "moda",
+"aderencia": 0.8,
+"rais": "",
+"firjan": "Moda",
+"fam": "Design",
+"comex": "Design de moda e acessórios",
+"porque": "Confecção, costura e varejo de moda empregam muito no comércio e na indústria, e marcas autorais ganham espaço no digital.",
+"oportunidade": "Marcas autorais, modelagem, costura e venda online.",
+"desafio": "Concorrência com importados, informalidade alta e margens apertadas.",
+"sinal": "Negócios de moda presentes, com pouco emprego formal no segmento criativo e concorrência de importados.",
+"op_fr": "Marcas autorais, modelagem e venda online.",
+"de_fr": "Concorrência de importados e informalidade.",
+"atrair": "Na moda, a entrada é pelo ofício e pela marca: modelagem, costura e construção de uma marca autoral que venda no digital.",
+"ofertas": "cursos livres de modelagem, costura, desenho de moda, vitrinismo e gestão de marca autoral, e formação técnica em design de moda ou modelagem do vestuário",
+"ofertas_curtas": "modelagem, costura, vitrinismo e gestão de marca autoral",
+"palavras": "curso de modelagem e costura|moda autoral|como criar uma marca de roupas",
+"ampliar": "Moda",
+"sigla": "moda"
+},
+{
+"tipo": "grupo",
+"chave": "g6",
+"g": 6,
+"nome": "Música, artes cênicas e visuais",
+"curto": "música, artes cênicas e visuais",
+"aderencia": 0.6,
+"rais": "90000",
+"firjan": "Música|Artes Cênicas",
+"fam": "Artes, música e espetáculos",
+"comex": "Artes visuais|Música (instrumentos e mídias)",
+"porque": "Artistas, grupos e produtores dão vida cultural ao território e movimentam eventos, turismo e economia da noite.",
+"oportunidade": "Produção cultural, gestão de carreira e projetos para editais.",
+"desafio": "Trabalho por conta própria, renda irregular e dependência de editais.",
+"sinal": "Muitos artistas e grupos, mas quase nenhum emprego formal e renda que depende de editais.",
+"op_fr": "Produção cultural e projetos para editais.",
+"de_fr": "Renda irregular e dependência de fomento.",
+"atrair": "Na música e nas artes, o público busca profissionalização: produção cultural, gestão de carreira, projetos para editais e técnicas de palco.",
+"ofertas": "cursos livres de produção cultural, gestão de carreira artística, elaboração de projetos para editais, técnicas de palco, iluminação e sonorização",
+"ofertas_curtas": "produção cultural, projetos para editais e gestão de carreira artística",
+"palavras": "curso de produção cultural|editais de cultura PNAB|gestão de carreira artística",
+"ampliar": "Música e artes",
+"sigla": "música e artes"
+},
+{
+"tipo": "grupo",
+"chave": "g7",
+"g": 7,
+"nome": "Patrimônio cultural e natural",
+"curto": "patrimônio cultural e natural",
+"aderencia": 0.6,
+"rais": "91000",
+"firjan": "Patrimônio e Artes",
+"fam": "Patrimônio, museus e bibliotecas",
+"comex": "Patrimônio e coleções",
+"porque": "Museus, acervos e patrimônio natural sustentam turismo cultural e educação patrimonial.",
+"oportunidade": "Turismo cultural, mediação e roteiros de patrimônio.",
+"desafio": "Poucas instituições e dependência do poder público.",
+"sinal": "Poucas organizações e forte dependência do poder público.",
+"op_fr": "Turismo cultural e roteiros de patrimônio.",
+"de_fr": "Dependência do poder público.",
+"atrair": "No patrimônio, a aproximação passa por parcerias com museus, acervos e roteiros turísticos locais.",
+"ofertas": "cursos livres de turismo cultural, condução de roteiros e mediação cultural",
+"ofertas_curtas": "turismo cultural e mediação",
+"palavras": "turismo cultural|roteiros de patrimônio|mediação cultural",
+"ampliar": "Patrimônio e turismo cultural",
+"sigla": "patrimônio"
+},
+{
+"tipo": "grupo",
+"chave": "g8",
+"g": 8,
+"nome": "Publicidade, pesquisa e suporte à inovação cultural",
+"curto": "publicidade, marketing e suporte à inovação",
+"aderencia": 0.9,
+"rais": "73010",
+"firjan": "Publicidade|P&D",
+"fam": "Publicidade e marketing",
+"comex": "",
+"porque": "Comunicação, marketing e serviços de apoio a negócios atendem todo o tecido empresarial do território.",
+"oportunidade": "Comunicação digital, produção de conteúdo e gestão de pequenos negócios de serviço.",
+"desafio": "Predomínio de MEI e microempresas, com fôlego curto e concorrência por preço.",
+"sinal": "Grupo numeroso, mas formado sobretudo por negócios muito pequenos e de vida curta.",
+"op_fr": "Comunicação digital e gestão de pequenos negócios.",
+"de_fr": "Negócios muito pequenos e de vida curta.",
+"atrair": "Na publicidade e no marketing, a porta é a gestão: aprender a precificar, vender, gerir clientes e medir campanhas digitais.",
+"ofertas": "cursos livres de marketing digital, gestão de redes sociais, produção de conteúdo e mídia paga, combinados a temas de gestão como precificação, atendimento e finanças de pequenos negócios",
+"ofertas_curtas": "marketing digital, redes sociais e gestão de pequenos negócios",
+"palavras": "curso de marketing digital|produção de conteúdo para Instagram|como precificar serviços criativos",
+"ampliar": "Publicidade e marketing",
+"sigla": "publicidade"
+},
+{
+"tipo": "grupo",
+"chave": "g9",
+"g": 9,
+"nome": "Software, videogames, serviços de computador e web",
+"curto": "tecnologia da informação e software",
+"aderencia": 0.9,
+"rais": "62000|63000",
+"firjan": "TIC",
+"fam": "Tecnologia da informação",
+"comex": "",
+"porque": "A tecnologia atravessa todos os setores criativos e emprega profissionais qualificados, muitos deles na indústria, no comércio e em serviços.",
+"oportunidade": "Qualificar quem já está no mercado e conectar a tecnologia aos demais setores criativos.",
+"desafio": "Disputar público com a formação de grandes centros e acompanhar a velocidade das ferramentas, sobretudo de IA.",
+"sinal": "Presença de negócios de tecnologia, mas pouca densidade de profissionais em relação ao Estado.",
+"op_fr": "Programação, dados e serviços digitais para o comércio local.",
+"de_fr": "Pouca densidade de profissionais e concorrência de grandes centros.",
+"atrair": "Na tecnologia, a porta de entrada é a atualização: ferramentas de IA, dados e design de interfaces, em trilhas modulares com certificação por etapa, que atraem mais que cursos longos.",
+"ofertas": "cursos livres de atualização em dados, inteligência artificial aplicada, UX/UI e desenvolvimento web, e formação técnica em informática ou desenvolvimento de sistemas para quem está entrando",
+"ofertas_curtas": "programação, dados e serviços digitais",
+"palavras": "inteligência artificial para negócios|curso de UX/UI design|análise de dados para iniciantes",
+"ampliar": "Tecnologia da informação",
+"sigla": "tecnologia"
+},
+{
+"tipo": "oficio",
+"chave": "Gastronomia (chefs)",
+"nome": "gastronomia",
+"texto": "{n} chefs em restaurantes e hotéis: terreno conhecido do Senac.",
+"ofertas": "cursos que unam cozinha, identidade local e empreendedorismo, em diálogo com a vocação histórica do Senac e com a economia da experiência",
+"palavra": "gastronomia e empreendedorismo"
+},
+{
+"tipo": "oficio",
+"chave": "Tecnologia da informação",
+"nome": "tecnologia da informação",
+"texto": "{n} profissionais de TI, muitos em empresas de outros setores.",
+"ofertas": "trilhas de atualização em tecnologia para profissionais de empresas locais",
+"palavra": "qualificação em tecnologia"
+},
+{
+"tipo": "oficio",
+"chave": "Publicidade e marketing",
+"nome": "publicidade e marketing",
+"texto": "{n} profissionais de marketing e comunicação, a maioria em empresas de outros setores.",
+"ofertas": "formações em marketing e comunicação para equipes de empresas locais",
+"palavra": "marketing para empresas"
+},
+{
+"tipo": "oficio",
+"chave": "Design",
+"nome": "design",
+"texto": "{n} designers, entre especializados e incorporados a outros setores.",
+"ofertas": "formações em design gráfico e de produto aplicadas à indústria e ao comércio",
+"palavra": "curso de design gráfico"
+},
+{
+"tipo": "oficio",
+"chave": "Audiovisual e fotografia",
+"nome": "audiovisual e fotografia",
+"texto": "{n} profissionais de imagem e vídeo.",
+"ofertas": "formações práticas em fotografia e vídeo para negócios locais",
+"palavra": "curso de fotografia"
+},
+{
+"tipo": "oficio",
+"chave": "Artesanato e ofícios",
+"nome": "artesanato e ofícios",
+"texto": "{n} artesãos e profissionais de ofícios.",
+"ofertas": "formações em acabamento, design de produto e venda",
+"palavra": "curso de artesanato"
+},
+{
+"tipo": "oficio",
+"chave": "Artes, música e espetáculos",
+"nome": "artes, música e espetáculos",
+"texto": "{n} artistas e técnicos de espetáculo.",
+"ofertas": "formações em produção cultural e técnicas de palco",
+"palavra": "curso de produção cultural"
+},
+{
+"tipo": "oficio",
+"chave": "Comunicação e editorial",
+"nome": "comunicação e editorial",
+"texto": "{n} profissionais de comunicação e conteúdo.",
+"ofertas": "formações em conteúdo e comunicação digital",
+"palavra": "redação e conteúdo digital"
+},
+{
+"tipo": "oficio",
+"chave": "Arquitetura e urbanismo",
+"nome": "arquitetura",
+"texto": "{n} arquitetos, quase todos fora dos setores criativos.",
+"ofertas": "formações em design de interiores e ferramentas de projeto",
+"palavra": "design de interiores"
+},
+{
+"tipo": "oficio",
+"chave": "Patrimônio, museus e bibliotecas",
+"nome": "patrimônio e museus",
+"texto": "{n} profissionais de museus, bibliotecas e patrimônio.",
+"ofertas": "formações em mediação e turismo cultural",
+"palavra": "turismo cultural"
+},
+{
+"tipo": "situacao",
+"chave": "emprego_abaixo",
+"texto": "Mas sua economia criativa ainda ocupa um espaço discreto nesse conjunto."
+},
+{
+"tipo": "situacao",
+"chave": "emprego_acima",
+"texto": "E a economia criativa tem peso acima da média paulista nesse conjunto."
+},
+{
+"tipo": "situacao",
+"chave": "emprego_proximo",
+"texto": "E a economia criativa tem peso próximo ao da média paulista nesse conjunto."
+},
+{
+"tipo": "situacao",
+"chave": "contraste_muitas_empresas",
+"texto": "O que esse contraste nos diz? Que o desafio {T} não é fazer surgir negócios criativos, e sim fazê-los durar, crescer e profissionalizar a gestão. Aí está um espaço natural para o Senac."
+},
+{
+"tipo": "situacao",
+"chave": "contraste_equilibrio",
+"texto": "O que isso nos diz? Que há base empresarial e emprego formal em proporções parecidas com as do Estado: o desafio é qualificar quem já trabalha e abrir espaço para novos negócios. Aí está um espaço natural para o Senac."
+},
+{
+"tipo": "situacao",
+"chave": "contraste_emprego_forte",
+"texto": "O que isso nos diz? Que {T} a economia criativa já emprega com carteira acima da média paulista: o desafio é manter os profissionais atualizados e ampliar a base de negócios próprios. Aí está um espaço natural para o Senac."
+},
+{
+"tipo": "situacao",
+"chave": "contraste_estado",
+"texto": "O que isso nos diz? Que a economia criativa paulista é ampla e se renova, mas apoiada em negócios muito pequenos e de vida curta: o desafio é ajudar esses negócios a durar e crescer, com ofertas que cheguem a cada região. Aí está um espaço natural para o Senac."
+},
+{
+"tipo": "situacao",
+"chave": "contraste_pequeno",
+"texto": "O que isso nos diz? Que a economia criativa {T} ainda é incipiente, com poucos negócios formais. O caminho mais realista passa pela região: ofertas em rede com outras unidades, formatos híbridos e formação de entrada que ajude os primeiros negócios a nascer. Aí está um espaço natural para o Senac."
+},
+{
+"tipo": "situacao",
+"chave": "contraste_abaixo",
+"texto": "O que isso nos diz? Que a economia criativa {T} ainda tem pouco peso, tanto em empresas quanto em emprego formal: o desafio é criar base, com formação de entrada e apoio aos primeiros negócios. Aí está um espaço natural para o Senac."
+},
+{
+"tipo": "situacao",
+"chave": "emprego_sem",
+"texto": "O IBGE não divulga emprego formal nos setores criativos {T} em 2024, por sigilo ou por ausência de registros."
+},
+{
+"tipo": "situacao",
+"chave": "gasto_zero",
+"texto": "A prefeitura não registrou despesa com cultura em 2024 no Siconfi (média das prefeituras paulistas: {gasto_sp} por habitante)."
+},
+{
+"tipo": "situacao",
+"chave": "mort_acima",
+"texto": "E {mort} das empresas criativas abertas em 2020 já não estavam ativas no fim de 2025, acima do Estado ({mort_sp})."
+},
+{
+"tipo": "situacao",
+"chave": "mort_abaixo",
+"texto": "E {mort} das empresas criativas abertas em 2020 já não estavam ativas no fim de 2025, abaixo do Estado ({mort_sp})."
+},
+{
+"tipo": "situacao",
+"chave": "mort_estado",
+"texto": "E {mort} das empresas criativas abertas em 2020 já não estavam ativas no fim de 2025."
+},
+{
+"tipo": "situacao",
+"chave": "mort_proximo",
+"texto": "E {mort} das empresas criativas abertas em 2020 já não estavam ativas no fim de 2025, perto do índice paulista ({mort_sp})."
+},
+{
+"tipo": "situacao",
+"chave": "atencao_abre",
+"texto": "Há também sinais de atenção."
+},
+{
+"tipo": "situacao",
+"chave": "atencao_abre_pos",
+"texto": "Os sinais de contexto ajudam a calibrar a estratégia."
+},
+{
+"tipo": "situacao",
+"chave": "gasto_abaixo",
+"texto": "O gasto municipal com cultura é de {gasto} por habitante (média das prefeituras paulistas: {gasto_sp})"
+},
+{
+"tipo": "situacao",
+"chave": "gasto_acima",
+"texto": "O gasto municipal com cultura é de {gasto} por habitante, acima da média das prefeituras paulistas ({gasto_sp})"
+},
+{
+"tipo": "situacao",
+"chave": "gasto_var_queda",
+"texto": " e caiu {var} em termos reais em dez anos."
+},
+{
+"tipo": "situacao",
+"chave": "gasto_var_alta",
+"texto": " e cresceu {var} em termos reais em dez anos."
+},
+{
+"tipo": "situacao",
+"chave": "gasto_var_sem",
+"texto": "."
+},
+{
+"tipo": "situacao",
+"chave": "infra_baixa",
+"texto": "Só {infra} das escolas públicas têm ateliê de artes ou sala de música."
+},
+{
+"tipo": "situacao",
+"chave": "infra_media",
+"texto": "{infra} das escolas públicas têm ateliê de artes ou sala de música."
+},
+{
+"tipo": "situacao",
+"chave": "export_queda",
+"texto": "E as exportações de bens criativos recuaram de {ex0} (2023) para {ex1} (2025)."
+},
+{
+"tipo": "situacao",
+"chave": "export_alta",
+"texto": "E as exportações de bens criativos subiram de {ex0} (2023) para {ex1} (2025)."
+},
+{
+"tipo": "situacao",
+"chave": "export_estavel",
+"texto": "As exportações de bens criativos ficaram em {ex1} em 2025, perto do nível de 2023 ({ex0})."
+},
+{
+"tipo": "situacao",
+"chave": "export_sem",
+"texto": "Não houve exportação registrada de bens criativos por empresas sediadas {T} em 2023–2025."
+},
+{
+"tipo": "situacao",
+"chave": "horizonte_alto",
+"texto": "O horizonte, porém, é promissor: o IDPEC-SP {D} é {idpec}, puxado pela dimensão {dim} ({dimv} pontos). O potencial existe; a tarefa é transformá-lo em emprego, renda e longevidade dos negócios."
+},
+{
+"tipo": "situacao",
+"chave": "horizonte_medio",
+"texto": "O IDPEC-SP {D} é {idpec}, com o melhor resultado na dimensão {dim} ({dimv} pontos). É desse ponto forte que a estratégia pode partir."
+},
+{
+"tipo": "situacao",
+"chave": "horizonte_baixo",
+"texto": "O IDPEC-SP {D} é {idpec}, e a dimensão mais forte é {dim} ({dimv} pontos). O potencial ainda precisa ser construído, e a formação é uma das alavancas mais diretas para isso."
+},
+{
+"tipo": "situacao",
+"chave": "atrair_mei",
+"texto": "Os dados desenham um público de pequenos empreendedores: {micro} das empresas criativas {D} são MEI ou microempresas. Para quem vive do próprio trabalho, tempo é renda. Atrair esse público começa por respeitar essa equação, com formatos curtos, noturnos ou de fim de semana, híbridos e com resultado que se aplica no dia seguinte."
+},
+{
+"tipo": "situacao",
+"chave": "atrair_misto",
+"texto": "O público criativo {D} mistura pequenos empreendedores ({micro} das empresas são MEI ou microempresas) e profissionais empregados em empresas maiores. Atrair os dois pede formatos diferentes: ofertas curtas e flexíveis para quem empreende, turmas fechadas e trilhas de atualização para quem está empregado."
+},
+{
+"tipo": "situacao",
+"chave": "atrair_mort",
+"texto": "Um ponto atravessa os três setores: {mort} das empresas criativas abertas em 2020 não chegaram ativas ao fim de 2025. Ofertas que tratam da sobrevivência do negócio (planejamento financeiro, formalização, projetos para editais como a PNAB e a Lei Rouanet) conversam com uma dor real do território."
+},
+{
+"tipo": "situacao",
+"chave": "atrair_incorp",
+"texto": "Há ainda um público menos visível: {inc} da força de trabalho criativa estimada atua fora dos setores criativos, sobretudo em {sec}. Chegar a ele passa pelas empresas onde trabalha."
+},
+{
+"tipo": "situacao",
+"chave": "comunicar",
+"texto": "Fale a língua de quem empreende: menos “curso”, mais “solução para o seu negócio”. Mostre resultados concretos, como um portfólio melhor, um cliente a mais ou uma ferramenta dominada. Esteja onde esse público já está: Instagram e LinkedIn, WhatsApp para o contato direto, e coletivos, feiras criativas, associações comerciais e polos de tecnologia. Use depoimentos de egressos e casos {D}, porque o público criativo confia em pares. Publique conteúdo útil antes de ofertar e convide para encontros abertos na unidade."
+},
+{
+"tipo": "situacao",
+"chave": "comunicar_estado",
+"texto": "Fale a língua de quem empreende: menos “curso”, mais “solução para o seu negócio”. Mostre resultados concretos, como um portfólio melhor, um cliente a mais ou uma ferramenta dominada. Esteja onde esse público já está: Instagram e LinkedIn, WhatsApp para o contato direto, e coletivos, feiras criativas, associações comerciais e polos de tecnologia de cada região. Use depoimentos de egressos e casos locais de cada unidade, porque o público criativo confia em pares. Publique conteúdo útil antes de ofertar e convide para encontros abertos nas unidades."
+},
+{
+"tipo": "situacao",
+"chave": "titulos_intro",
+"texto": "O portfólio vigente não está no painel. Por isso, as indicações abaixo descrevem áreas e tipos de oferta ligados aos setores escolhidos; a escolha dos títulos fica com a equipe da unidade."
+},
+{
+"tipo": "situacao",
+"chave": "titulos_fr",
+"texto": "Aqui a lógica é começar por ofertas curtas que fortaleçam o negócio."
+},
+{
+"tipo": "situacao",
+"chave": "dif_intro",
+"texto": "Diferenciar a oferta {T} é ir além da sala de aula e fazer parte do ecossistema."
+},
+{
+"tipo": "situacao",
+"chave": "kw_intro",
+"texto": "Nas publicações, combine setor, necessidade e território. Termos com “{N}” ajudam a aparecer em buscas locais; termos de resultado, como “precificar” ou “vender mais”, atraem quem empreende. Algumas sugestões para a comunicação da unidade e os gestores:"
+},
+{
+"tipo": "situacao",
+"chave": "p41_abre",
+"texto": "Que papel {U} quer ocupar na economia criativa {D}? Os dados sugerem uma resposta: {papel}. Um olhar estratégico pode partir de três movimentos, para serem discutidos e cocriados por gerência, área técnica e docentes."
+},
+{
+"tipo": "situacao",
+"chave": "papel_durar",
+"texto": "ser o lugar onde negócios criativos aprendem a durar e a crescer"
+},
+{
+"tipo": "situacao",
+"chave": "papel_qualificar",
+"texto": "ser o lugar onde profissionais criativos se atualizam e onde novos negócios ganham base para crescer"
+},
+{
+"tipo": "situacao",
+"chave": "papel_construir",
+"texto": "ser um dos agentes que ajudam a construir a economia criativa local, a partir das vocações que já existem"
+},
+{
+"tipo": "situacao",
+"chave": "mov_reconhecer_peq",
+"texto": "<b>Reconhecer o território como ele é.</b> {Tc} não é um território de grandes empresas criativas, e sim de milhares de pequenos empreendedores, profissionais de tecnologia e criativos incorporados à indústria e ao comércio. Partir dessa realidade evita copiar modelos de grandes centros e faz crescer o que já existe: inovar sem desenraizar."
+},
+{
+"tipo": "situacao",
+"chave": "mov_reconhecer_emp",
+"texto": "<b>Reconhecer o território como ele é.</b> {Tc} combina empresas criativas que empregam com carteira e uma base ampla de pequenos negócios e de criativos incorporados a outros setores. Partir dessa realidade ajuda a desenhar ofertas para os dois públicos e faz crescer o que já existe: inovar sem desenraizar."
+},
+{
+"tipo": "situacao",
+"chave": "mov_reconhecer_pequeno",
+"texto": "<b>Reconhecer o território como ele é.</b> {Tc} tem uma economia criativa pequena, apoiada em poucos negócios e em ofícios que circulam pela região. Partir dessa realidade evita copiar modelos de grandes centros e faz crescer o que já existe: inovar sem desenraizar."
+},
+{
+"tipo": "situacao",
+"chave": "mov_escolher",
+"texto": "<b>Escolher onde concentrar energia.</b> {top} mostram densidade e dinamismo; {fr} pedem escuta antes de grandes apostas. Assumir essa diferença ajuda a distribuir esforços: ofertas regulares onde a demanda é madura, ações-piloto e escuta qualificada onde o setor ainda se organiza."
+},
+{
+"tipo": "situacao",
+"chave": "mov_medir",
+"texto": "<b>Medir o que importa.</b> Matrículas são um começo, mas o impacto no ecossistema aparece em negócios que sobrevivem, renda que aumenta e profissionais que se formalizam. A unidade pode acompanhar seus egressos criativos e cruzar essas trajetórias com os indicadores do painel, ano a ano."
+},
+{
+"tipo": "situacao",
+"chave": "perguntas",
+"texto": "Quais ofertas da unidade já atendem, sem perceber, profissionais criativos?|Que parceiros locais podem cocriar ofertas conosco?|Como nossos espaços podem servir à produção criativa {D}?|Que histórias de egressos criativos já temos para contar?"
+},
+{
+"tipo": "situacao",
+"chave": "fecho_cresceu",
+"texto": "O número de empresas criativas {T} {cresc} desde 2014. A questão não é se o Senac participará desse movimento, mas como fará isso de forma intencional."
+},
+{
+"tipo": "situacao",
+"chave": "fecho_estavel",
+"texto": "A economia criativa {T} já existe e se renova todos os anos. A questão não é se o Senac participará desse movimento, mas como fará isso de forma intencional."
+},
+{
+"tipo": "diferenciar",
+"chave": "negocio",
+"cond": "sempre",
+"titulo": "Formação que gera negócio.",
+"texto": "Projetos integradores com demandas reais de empresas locais, para que cada turma termine com portfólio e, quando possível, cliente."
+},
+{
+"tipo": "diferenciar",
+"chave": "ponte",
+"cond": "tec",
+"titulo": "Ponte entre tecnologia e criatividade.",
+"texto": "Turmas que reúnam profissionais de TI, design e comunicação em desafios comuns, como já acontece no mercado."
+},
+{
+"tipo": "diferenciar",
+"chave": "ponte_incorp",
+"cond": "incorp",
+"titulo": "Criatividade dentro das empresas.",
+"texto": "Ofertas para os criativos que trabalham na indústria, no comércio e nos serviços, desenhadas com as empresas onde eles atuam."
+},
+{
+"tipo": "diferenciar",
+"chave": "durar",
+"cond": "mort",
+"titulo": "Gestão para durar.",
+"texto": "Módulos de gestão, finanças e formalização dentro das ofertas técnicas, enfrentando a mortalidade de {mort} em cinco anos."
+},
+{
+"tipo": "diferenciar",
+"chave": "espaco",
+"cond": "infra",
+"titulo": "Unidade como espaço criativo.",
+"texto": "Laboratórios, estúdios e cozinhas pedagógicas abertos a coletivos, feiras e produtores, algo raro num território onde só {infra} das escolas públicas têm ateliê de artes ou sala de música."
+},
+{
+"tipo": "diferenciar",
+"chave": "espaco_geral",
+"cond": "sempre_espaco",
+"titulo": "Unidade como espaço criativo.",
+"texto": "Laboratórios, estúdios e cozinhas pedagógicas abertos a coletivos, feiras e produtores, para que a unidade seja também lugar de produção."
+},
+{
+"tipo": "diferenciar",
+"chave": "etapas",
+"cond": "mei",
+"titulo": "Itinerários por etapas.",
+"texto": "Microcertificações que se somam em trajetórias longas, no ritmo de quem empreende sozinho."
+},
+{
+"tipo": "diferenciar",
+"chave": "politica",
+"cond": "sempre",
+"titulo": "Parceria com a política cultural.",
+"texto": "Apoio a agentes locais na elaboração de projetos para a PNAB e a Lei Rouanet, ampliando renda e circulação de recursos."
+},
+{
+"tipo": "tatica",
+"chave": "t1",
+"icone": "tela",
+"titulo": "Apresentar este boletim à equipe",
+"texto": "E mapear quais cursos atuais já atendem os setores potenciais."
+},
+{
+"tipo": "tatica",
+"chave": "t2",
+"icone": "grupo",
+"titulo": "Escutar o território",
+"texto": "Rodada de escuta qualificada com 10 a 15 empreendedores de {top3}, para validar o que os dados indicam."
+},
+{
+"tipo": "tatica",
+"chave": "t3",
+"icone": "moeda",
+"titulo": "Lançar um piloto de gestão criativa",
+"texto": "Oferta curta e híbrida sobre precificação, vendas e finanças para negócios criativos, em horário noturno."
+},
+{
+"tipo": "tatica",
+"chave": "t4",
+"icone": "casa",
+"titulo": "Abrir as portas da unidade",
+"texto": "Encontro aberto “Economia Criativa {T}”, com casos locais e os dados do painel."
+},
+{
+"tipo": "tatica",
+"chave": "t5",
+"icone": "fabrica",
+"titulo": "Chegar aos criativos incorporados",
+"texto": "Propor a uma empresa da indústria ou do comércio uma turma fechada em {area_inc}."
+},
+{
+"tipo": "tatica",
+"chave": "t6",
+"icone": "camera",
+"titulo": "Ceder espaço à produção local",
+"texto": "Um estúdio, laboratório ou cozinha pedagógica para uma produção ou feira criativa por semestre."
+},
+{
+"tipo": "tatica",
+"chave": "t7",
+"icone": "doc",
+"titulo": "Apoiar projetos para editais",
+"texto": "Oficina de elaboração de projetos culturais em diálogo com o Ciclo 2 da PNAB."
+},
+{
+"tipo": "tatica",
+"chave": "t8",
+"icone": "grafico",
+"titulo": "Acompanhar três indicadores",
+"texto": "Matrículas em ofertas criativas, empregabilidade de egressos e participação em ações do ecossistema, revistos a cada semestre."
+},
+{
+"tipo": "conectivo",
+"chave": "retrato_muda",
+"texto": "O retrato muda quando olhamos o cadastro de empresas."
+},
+{
+"tipo": "conectivo",
+"chave": "retrato_confirma",
+"texto": "O cadastro de empresas confirma esse retrato."
+},
+{
+"tipo": "conectivo",
+"chave": "retrato_amplia",
+"texto": "O cadastro de empresas amplia esse retrato."
+},
+{
+"tipo": "conectivo",
+"chave": "forcas",
+"texto": "Três forças sustentam o cenário:"
+},
+{
+"tipo": "conectivo",
+"chave": "forcas_alt",
+"texto": "O cenário se apoia em três frentes:"
+},
+{
+"tipo": "conectivo",
+"chave": "forcas_regiao",
+"texto": "Na região onde o município está, três frentes se destacam:"
+}
+]

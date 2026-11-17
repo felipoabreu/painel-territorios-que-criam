@@ -8,6 +8,11 @@
 <title>Painel de Dados - Programa Territórios que Criam | Senac SP</title>
 <link rel="stylesheet" href="tokens.css">
 <link rel="stylesheet" href="painel.css">
+<link rel="stylesheet" href="tema-senac.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Barlow+Condensed:wght@600;700&display=swap">
+<link rel="stylesheet" href="boletim.css">
 </head>
 <body>
 <div id="dash-erro" hidden>Os dados não carregaram. Abra o painel por um servidor local (no VS Code: botão <b>Go Live</b> da extensão Live Server, ou <code>npm start</code>) — abrir o index.html direto do disco (file://) não funciona.</div>
@@ -16,6 +21,7 @@
 <p class="aviso-teste" role="note">Versão de teste, não oficial · dados compilados de fontes públicas, carga de 16/11/2026</p>
 <div class="pg" id="painel">
   <header class="pg-head" id="topo">
+    <img class="pg-logo" src="senac-logo-branco.svg" alt="Senac">
     <div>
       <h1 class="pg-title">Painel de Dados - Programa Territórios que Criam | Senac SP</h1>
       <p class="pg-take" id="takeaway" data-draw="takeaway" data-source="territorios">—</p>
@@ -27,17 +33,7 @@
   </header>
 
   <div class="filters" id="filtros" role="region" aria-label="Filtros de território">
-    <div class="frow">Recorte geográfico (IBGE)</div>
-    <label>Região intermediária (IBGE)
-      <select class="dash-select" data-draw="sel-rgint" data-source="territorios" aria-label="Região intermediária"></select>
-    </label>
-    <label>Região imediata (IBGE)
-      <select class="dash-select" data-draw="sel-rgi" data-source="territorios" aria-label="Região imediata"></select>
-    </label>
-    <label>Município
-      <select class="dash-select" data-draw="sel-mun" data-source="territorios" aria-label="Município"></select>
-    </label>
-    <div class="frow sep">Recorte Senac SP<button class="help" type="button" aria-expanded="false" aria-controls="h-senac" aria-label="Ajuda: recorte Senac SP">?</button></div>
+    <div class="frow">Recorte Senac SP<button class="help" type="button" aria-expanded="false" aria-controls="h-senac" aria-label="Ajuda: recorte Senac SP">?</button></div>
     <p class="helptext" id="h-senac" hidden>Fonte: “Área de atuação das unidades” das GO1, GO2 e GO3 (Senac SP, GPG – Informações e Análises de Mercado, 26/6/2026). Observação: a cidade de São Paulo aparece nos três documentos (3 unidades da GO1, 6 da GO2 e 7 da GO3); por isso, forma um recorte próprio: “Capital · GO1, GO2 e GO3”.</p>
     <label>Gerência de Operações (GO)
       <select class="dash-select" data-draw="sel-go" data-source="territorios" aria-label="Gerência de Operações do Senac SP"></select>
@@ -48,9 +44,28 @@
     <label>Município (área da unidade)
       <select class="dash-select" data-draw="sel-mun-senac" data-source="territorios" aria-label="Município da área de atuação da unidade"></select>
     </label>
-    <div class="now">Território selecionado<b data-draw="kv" data-source="territorios" data-k="nome" data-f="text">—</b><span data-draw="kv" data-source="territorios" data-k="nivel" data-f="text">—</span><span data-draw="senac-info" data-source="territorios"></span></div>
+    <div class="now" aria-live="polite">
+      <div class="ni"><span class="nl">Território selecionado</span><b data-draw="kv" data-source="territorios" data-k="nome" data-f="text">—</b></div>
+      <div class="ni"><span class="nl">Nível</span><span class="nv" data-draw="kv" data-source="territorios" data-k="nivel" data-f="text">—</span></div>
+      <span class="ni-senac" data-draw="senac-info" data-source="territorios"></span>
+    </div>
+    <div class="frow sep">Recorte geográfico (IBGE)</div>
+    <label>Região intermediária (IBGE)
+      <select class="dash-select" data-draw="sel-rgint" data-source="territorios" aria-label="Região intermediária"></select>
+    </label>
+    <label>Região imediata (IBGE)
+      <select class="dash-select" data-draw="sel-rgi" data-source="territorios" aria-label="Região imediata"></select>
+    </label>
+    <label>Município
+      <select class="dash-select" data-draw="sel-mun" data-source="territorios" aria-label="Município"></select>
+    </label>
     <button class="btn" id="limpar" type="button">Limpar seleção</button>
     <button class="btn" id="contraste" type="button" aria-pressed="false">Alto contraste</button>
+  </div>
+
+  <div class="filtro-compacto" id="filtro-compacto" role="region" aria-label="Território e aba atuais" hidden>
+    <span>Território:</span><b data-draw="kv" data-source="territorios" data-k="nome" data-f="text">—</b><span class="fc-sep">·</span><span data-draw="kv" data-source="territorios" data-k="nivel" data-f="text">—</span><span class="fc-sep">·</span><span>Aba: <span class="fc-aba"></span></span>
+    <button type="button">Alterar filtros ou aba ↑</button>
   </div>
 
   <nav class="tabs" role="tablist" aria-label="Páginas do painel">
@@ -60,6 +75,7 @@
     <button class="tab" role="tab" type="button" data-tab="criativa" aria-selected="false" aria-controls="criativa">Ecossistema Criativo</button>
     <button class="tab" role="tab" type="button" data-tab="educacao" aria-selected="false" aria-controls="educacao">Educação</button>
     <button class="tab" role="tab" type="button" data-tab="comparar" aria-selected="false" aria-controls="comparar">Comparar territórios</button>
+    <button class="tab" role="tab" type="button" data-tab="boletim" aria-selected="false" aria-controls="boletim">Boletim estratégico</button>
     <button class="tab" role="tab" type="button" data-tab="glossario" aria-selected="false" aria-controls="glossario">Glossário &amp; Metodologia</button>
   </nav>
 
@@ -138,7 +154,7 @@
 
   <section id="criativa" role="tabpanel" aria-label="Ecossistema Criativo" hidden>
     <p class="hint">Classificação FIRJAN: 4 áreas e 13 segmentos, medidos aqui por 51 classes CNAE no Cadastro Central de Empresas (IBGE). Últimos dados: 2024.</p>
-    <div class="kpis">
+    <div class="kpis k4">
       <div class="tile"><div class="lab">Estabelecimentos criativos (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="cri_ul" data-f="int">—</div><div class="s">Variação 2022–2024: <span data-draw="kv" data-source="territorios" data-k="cri_var_ul" data-f="sig">—</span></div></div>
       <div class="tile"><div class="lab">Empregos formais criativos (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="cri_emp" data-f="int">—</div><div class="s">Variação 2022–2024: <span data-draw="kv" data-source="territorios" data-k="cri_var_emp" data-f="sig">—</span></div></div>
       <div class="tile"><div class="lab">Emprego formal total (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="tot_emp" data-f="int">—</div><div class="s">Variação 2022–2024: <span data-draw="kv" data-source="territorios" data-k="tot_var_emp" data-f="sig">—</span></div></div>
@@ -147,6 +163,10 @@
         <p class="helptext" id="h-rem" hidden>Aproximação: salários e outras remunerações do ano ÷ pessoal assalariado ÷ 13 (inclui 13º salário). O IBGE usa o pessoal assalariado médio do ano, por isso o valor oficial pode diferir.</p>
         <div class="v" data-draw="kv" data-source="territorios" data-k="cri_rem_media" data-f="brl">—</div><div class="s">Estado de SP: <span data-draw="kv" data-source="territorios" data-k="cri_rem_media" data-f="brl" data-cod="35">—</span></div></div>
       <div class="tile"><div class="lab">Massa salarial criativa (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="cri_sal_mil" data-f="brlmil">—</div><div class="s">Salários e outras remunerações no ano</div></div>
+      <div class="tile"><div class="lab">PIB (R$, 2023)</div><div class="v" data-draw="kv" data-source="territorios" data-k="pib_2023_mil" data-f="brlmil">—</div><div class="s">Per capita: <span data-draw="kv" data-source="territorios" data-k="pib_pc_2023" data-f="brl">—</span></div></div>
+      <div class="tile"><div class="lab">PIB criativo no PIB (2023, estimativa)<button class="help" type="button" aria-expanded="false" aria-controls="h-pibcri2" aria-label="Ajuda: PIB criativo">?</button></div>
+        <p class="helptext" id="h-pibcri2" hidden>Estimativa pelo método da participação salarial: PIB 2023 × (massa salarial criativa 2023 ÷ massa salarial total 2023), ambos do IBGE. Mede o valor gerado pelas 51 classes CNAE criativas; a FIRJAN, que mede por ocupações, chega a percentuais menores.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="pib_criativo_part_pct" data-f="pct2">—</div><div class="s">PIB criativo: <span data-draw="kv" data-source="territorios" data-k="pib_criativo_2023_mil" data-f="brlmil">—</span> · Estado: <span data-draw="kv" data-source="territorios" data-k="pib_criativo_part_pct" data-f="pct2" data-cod="35">—</span></div></div>
     </div>
 
     <div class="grid wide">
@@ -179,9 +199,55 @@
         <div class="chart" id="graf-pnab" data-draw="pnab-tempo" data-source="pnab_tempo" role="img" aria-label="PNAB por ano: repasse, aplicação e previsto"></div>
       </div>
     </div>
-    <h2 class="sec-h" id="empresas">Empresas criativas: cadastro da Receita Federal, no recorte do Panorama Territorial da Economia Criativa Paulista <button class="help" type="button" aria-expanded="false" aria-controls="h-emp" aria-label="Ajuda: empresas criativas, método e correções">?</button></h2>
+    <h2 class="sec-h" id="intensidade">Mercado de trabalho e empreendimentos criativos: intensidade criativa</h2>
+    <p class="hint">Método do Painel de Dados do Observatório Itaú Cultural (DCMS/Nesta): um setor é criativo quando ao menos 30% dos seus ocupados exercem ocupações criativas. A intensidade vem da PNAD Contínua (média de 4 trimestres até o 2º tri. de 2026) e é aplicada aos empreendimentos formais do CEMPRE 2024 de cada município.</p>
+    <div class="kpis">
+      <div class="tile"><div class="lab">Especializados criativos formais (2024, estimativa)<button class="help" type="button" aria-expanded="false" aria-controls="h-esp" aria-label="Ajuda: especializados">?</button></div>
+        <p class="helptext" id="h-esp" hidden>Pessoas em ocupações criativas dentro dos setores criativos. Estimativa: ocupados formais de cada setor no território (CEMPRE 2024) × intensidade criativa do setor em SP (PNAD Contínua). Valores sigilosos do CEMPRE foram calibrados para somar o total oficial do Estado.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="mtc_especializados" data-f="int">—</div><div class="s">Apoio nos mesmos setores: <span data-draw="kv" data-source="territorios" data-k="mtc_apoio" data-f="int">—</span></div></div>
+      <div class="tile"><div class="lab">Intensidade criativa do emprego formal (2024)<button class="help" type="button" aria-expanded="false" aria-controls="h-int" aria-label="Ajuda: intensidade">?</button></div>
+        <p class="helptext" id="h-int" hidden>Especializados criativos ÷ pessoal ocupado formal total do território × 100. Abaixo, o quociente locacional: 1,00 = mesma intensidade do Estado.</p>
+        <div class="v" data-draw="kv" data-source="territorios" data-k="mtc_intens_emprego_pct" data-f="pct2">—</div><div class="s">QL: <span data-draw="kv" data-source="territorios" data-k="mtc_ql_especializados" data-f="d2">—</span> · Estado: <span data-draw="kv" data-source="territorios" data-k="mtc_intens_emprego_pct" data-f="pct2" data-cod="35">—</span></div></div>
+      <div class="tile"><div class="lab">Empreendimentos nos setores criativos (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="mtc_empreend" data-f="int">—</div><div class="s"><span data-draw="kv" data-source="territorios" data-k="mtc_empreend_10mil" data-f="d1">—</span> por 10 mil habitantes</div></div>
+      <div class="tile"><div class="lab">Ocupados formais nos setores criativos (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="mtc_ocupados" data-f="int">—</div><div class="s"><span data-draw="kv" data-source="territorios" data-k="mtc_setores_part_pct" data-f="pct2">—</span> do emprego formal · 2022–2024: <span data-draw="kv" data-source="territorios" data-k="mtc_var_ocup_22_24" data-f="sig">—</span></div></div>
+      <div class="tile"><div class="lab">Remuneração média mensal nos setores criativos (R$, 2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="mtc_rem_media" data-f="brl">—</div><div class="s">Estado: <span data-draw="kv" data-source="territorios" data-k="mtc_rem_media" data-f="brl" data-cod="35">—</span></div></div>
+    </div>
+    <div class="grid wide">
+      <div class="card" id="card-tridente">
+        <div class="card-h"><h2 class="card-t">Triângulo Criativo: composição da força de trabalho criativa</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-tri" aria-label="Ajuda: Triângulo Criativo">?</button></div>
+        <p class="card-n">% de cada vértice na força de trabalho criativa: Estado de SP e território selecionado. Especializados criam nos setores criativos; incorporados criam em outros setores; apoio dá suporte nos setores criativos.</p>
+        <p class="helptext" id="h-tri" hidden>Adaptação do “creative trident” (Nesta/DCMS), usado pelo Observatório Itaú Cultural. Ocupação criativa: 40 grupos da COD (ISCO-08) do DCMS, incluindo chefs de cozinha. Estado de SP: PNAD Contínua (4 trimestres até o 2º tri. 2026), com trabalho formal e informal e renda. Território selecionado: a PNAD não tem amostra municipal, então o território é estimado no emprego formal (CEMPRE 2024): especializados e apoio = ocupados de cada setor criativo × intensidade do setor; incorporados = ocupados das demais atividades de cada seção da CNAE × taxa de ocupações criativas da seção em SP (Brasil quando a amostra paulista é pequena). Na mesma base formal, o Estado tem composição 36% / 30% / 34%, muito próxima da PNAD (37% / 29% / 34%), o que confirma a coerência das duas escalas. Compare percentuais, não totais, entre as duas bases.</p>
+        <div class="chart" id="graf-tridente" data-draw="triangulo-duplo" data-source="triangulo" role="img" aria-label="Composição da força de trabalho criativa: Estado e território"></div>
+      </div>
+      <div class="card" id="card-mtc-grupos">
+        <div class="card-h"><h2 class="card-t">Especializados, apoio e incorporados</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-mtcg" aria-label="Ajuda: grupos">?</button></div>
+        <p class="card-n">Número de pessoas no território selecionado, estimado sobre o emprego formal de 2024 (CEMPRE, IBGE) com as proporções de ocupações criativas medidas pela PNAD Contínua entre o 3º trimestre de 2025 e o 2º trimestre de 2026. Especializados e apoio estão dentro dos setores criativos; incorporados, por definição, trabalham fora deles. Por isso cada grupo é lido no seu próprio eixo: setor criativo (1), atividade onde trabalham (2) e ofício criativo que exercem (3).</p>
+        <p class="helptext" id="h-mtcg" hidden>Por que os incorporados não aparecem no gráfico 1: o Triângulo Criativo os define como profissionais criativos fora dos setores criativos. Distribuí-los entre setores criativos seria contá-los duas vezes ou zerá-los. A leitura correta é pela atividade em que trabalham (gráfico 2, município) e pela família de ocupação (gráfico 3). Método no município: ocupados formais de cada seção da CNAE, sem os setores criativos (CEMPRE 2024), × taxa de ocupações criativas da seção em SP (PNAD; Brasil se a amostra paulista tem menos de 30 casos). Limite: a taxa por seção é a mesma em todos os municípios; a diferença entre municípios vem da estrutura econômica (quanto há de indústria, finanças, comércio), não de diferenças locais na proporção de criativos. Leia como ordem de grandeza.</p>
+        <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-sm)">1. Especializados e apoio por grupo de setores criativos</h3>
+        <div class="chart tall" id="graf-mtc-grupos" data-draw="mtc-grupos" data-source="mtc" role="img" aria-label="Especializados e apoio por grupo"></div>
+        <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-md)">2. Incorporados por atividade onde trabalham</h3>
+        <div class="chart" id="graf-incorp-secao" data-draw="incorp-secao" data-source="incorp_secao" role="img" aria-label="Incorporados por atividade"></div>
+        <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-md)">3. Ofícios criativos: especializados e incorporados<button class="help" type="button" aria-expanded="false" aria-controls="h-fam" aria-label="Ajuda: ofícios" style="margin-left:6px">?</button></h3>
+        <p class="helptext" id="h-fam" hidden>Como é estimado: a PNAD não identifica ocupações por município. Para cada setor criativo, calcula-se na PNAD de SP a parcela de ocupados em cada família de ocupação criativa (por exemplo, no setor de publicidade, quantos são profissionais de marketing, designers, fotógrafos) e aplica-se essa parcela aos ocupados formais do mesmo setor no município (CEMPRE 2024); para os incorporados, o mesmo é feito em cada seção da CNAE, fora dos setores criativos. Quando a amostra paulista do setor ou seção tem menos de 30 casos criativos, usa-se a composição do Brasil. As somas por família reproduzem exatamente os especializados e incorporados do Triângulo Criativo do território (diferença zero). Leitura: o QL compara a densidade da família (por mil ocupados formais) com a do Estado; acima de 1, o território tem mais desse ofício que a média paulista. Limites: a composição ocupacional de cada setor é a do Estado (a variação entre municípios vem do tamanho de cada setor e atividade, não de diferenças locais dentro do setor); só emprego formal; famílias com menos de 60 casos na amostra estadual (†) têm baixa precisão. Para medir ocupações reais por município, o próximo passo é a RAIS por CBO.</p>
+        <div class="chart tall" id="graf-familias" data-draw="familias-mun" data-source="familias_mun" role="img" aria-label="Ofícios criativos no território"></div>
+      </div>
+      <div class="card" id="card-intens-setores">
+        <div class="card-h"><h2 class="card-t">Intensidade Criativa (% dos ocupados em ocupações criativas)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-ints" aria-label="Ajuda: intensidade criativa">?</button></div>
+        <p class="card-n">Nos 14 setores criativos (intensidade nacional de 30% ou mais), a parcela dos trabalhadores em ocupação criativa. Brasil e Estado pela PNAD Contínua, com todos os ocupados; Estado e território selecionado pela RAIS 2024, medida com os empregados formais de cada município. A primeira linha resume o conjunto dos setores.</p>
+        <p class="helptext" id="h-ints" hidden>Brasil e Estado: PNAD Contínua, 4 trimestres até o 2º tri. de 2026, trabalho formal e informal. Os setores são escolhidos pela intensidade nacional, mais estável; para SP usa-se a intensidade paulista quando a amostra tem ao menos 30 ocupados criativos, senão a nacional (rádio, joalheria e patrimônio, marcados com *). Território: medição direta na RAIS (Ministério do Trabalho, via Base dos Dados), vínculos ativos em 31/12/2024, por município do estabelecimento. Cada vínculo é classificado pelo setor (CNAE 2.0 da subclasse, mesma correspondência usada no CEMPRE) e pela ocupação (CBO 2002). As 40 ocupações criativas da PNAD (COD, base ISCO-08) foram levadas à CBO família a família, em 263 ocupações; a lista está no Glossário. Controles de qualidade: (1) no Estado, a RAIS soma 671 mil vínculos nos 14 setores, praticamente igual aos assalariados do CEMPRE 2024 (razão 1,00), e a correlação entre as duas fontes por município e setor é 0,97 (Spearman, 2.597 células sem sigilo); (2) a intensidade municipal de 2023 e de 2024 tem correlação de 0,97 (858 pares com ao menos 30 vínculos), o que mostra que a medida é estável; (3) setores com menos de 30 vínculos no território não têm a barra exibida. Por que a RAIS fica abaixo da PNAD: no Estado, a intensidade dos 14 setores é 52,6% na PNAD com todos os ocupados, 39,9% na PNAD só com empregados formais (2025) e 35,1% na RAIS. A maior parte da diferença vem de quem a RAIS não cobre: conta própria e empregadores são 76% dos ocupados em artes e espetáculos, 59% no audiovisual e 49% na publicidade, e são justamente os mais criativos. O resto vem de diferenças de classificação entre COD e CBO (por exemplo, operadores de máquinas da indústria de móveis e de artefatos têxteis, que a PNAD tende a registrar como marceneiros e artesãos) e da amostra pequena da PNAD formal em alguns setores (indicada na dica). Por isso compare território com Estado sempre na mesma fonte (RAIS com RAIS); o QL na dica é a razão entre as duas. A barra da RAIS não é uma correção da PNAD: mede outra população, o emprego formal assalariado, com precisão municipal.</p>
+        <div class="chart tall" id="graf-intens-setores" data-draw="intens-setores" data-source="setores_intens intens_setor_mun tridente intens_ponte" role="img" aria-label="Intensidade criativa por setor"></div>
+      </div>
+      <div class="card" id="card-mtc-serie">
+        <div class="card-h"><h2 class="card-t">Especializados criativos formais</h2></div>
+        <p class="card-n">Número estimado de profissionais em ocupações criativas dentro dos setores criativos do território, ano a ano de 2022 a 2024. Usa a nova série do Cadastro Central de Empresas (IBGE), iniciada em 2022, com a mesma intensidade criativa aplicada aos três anos; a variação reflete, portanto, o crescimento do emprego nos setores, não mudanças na proporção de criativos.</p>
+        <div class="chart" id="graf-mtc-serie" data-draw="mtc-serie" data-source="mtc" role="img" aria-label="Série de especializados"></div>
+      </div>
+    </div>
+
+    <h2 class="sec-h" id="empresas">Empresas criativas <button class="help" type="button" aria-expanded="false" aria-controls="h-emp" aria-label="Ajuda: empresas criativas, método e correções">?</button></h2>
     <p class="hint">Empresas (matrizes) nas 87 atividades do Panorama da Secretaria da Cultura, Economia e Indústria Criativas com a Fundação Seade, recalculadas no cadastro de CNPJ da Receita Federal (retrato de 11/01/2026) para todos os territórios do painel. É uma contagem de registros, não de empregos nem de empresas em funcionamento: leia junto com os quadros de conferência abaixo.</p>
     <div class="helptext" id="h-emp" hidden>
+      <p>As empresas criativas são contadas no cadastro de CNPJ da Receita Federal, no recorte do Panorama Territorial da Economia Criativa Paulista, da Secretaria da Cultura, Economia e Indústria Criativas com a Fundação Seade: as mesmas 87 atividades econômicas, organizadas nos mesmos nove grupos.</p>
       <p><b>Fonte e unidade.</b> Cadastro Nacional da Pessoa Jurídica (Receita Federal), tabelas de estabelecimentos, empresas e Simples, via Base dos Dados (BigQuery), retrato de 11/01/2026, que fecha o ano de 2025. Conta-se a empresa (matriz) pelo município da sede e pela atividade principal (CNAE), como faz o Panorama. O Panorama original detalha a capital por distrito e CEP; aqui o mesmo cálculo foi levado a município, regiões do IBGE, GOs e unidades do Senac.</p>
       <p><b>Total por ano.</b> O cadastro guarda a data de abertura e a data da última mudança de situação. O total em 31/12 de cada ano é reconstituído: empresas abertas até aquela data e ainda não baixadas nem declaradas inaptas até então. Criadas = início de atividade no ano. Fechadas = baixa formal no ano. Empresas declaradas inaptas, suspensas ou nulas saem do total, mas são mostradas à parte (“outras saídas”), porque não são encerramentos voluntários. Em 2018 e em 2021 a Receita fez limpezas cadastrais em massa: a queda do total em 2018 é administrativa, não econômica.</p>
       <p><b>Mortalidade (métrica do Sebrae).</b> Taxa de mortalidade = % das empresas abertas em um ano que não estão mais ativas ao fim de um prazo; a sobrevivência é o complemento. O painel usa os dois prazos dos estudos do Sebrae com dados da Receita: até 2 anos (abertas em 2023, situação em 31/12/2025) e até 5 anos (abertas em 2020, situação em 31/12/2025). “Não ativa” soma baixa formal e inaptidão; a parcela só de baixas formais aparece ao lado. Como a medida é por ano-calendário, o prazo efetivo varia de 5 a 6 anos conforme o mês de abertura. Com menos de 30 empresas na coorte, a taxa é mostrada com alerta.</p>
@@ -267,51 +333,6 @@
       <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-md)">Quanto do perímetro do Panorama coincide com os outros critérios do painel</h3>
       <div class="chart" style="min-height:8rem" id="graf-emp-per" data-draw="emp-per" data-source="empresas_perimetros" role="img" aria-label="Sobreposição dos perímetros"></div>
     </div>
-    <h2 class="sec-h" id="intensidade">Mercado de trabalho e empreendimentos criativos: intensidade criativa</h2>
-    <p class="hint">Método do Painel de Dados do Observatório Itaú Cultural (DCMS/Nesta): um setor é criativo quando ao menos 30% dos seus ocupados exercem ocupações criativas. A intensidade vem da PNAD Contínua (média de 4 trimestres até o 2º tri. de 2026) e é aplicada aos empreendimentos formais do CEMPRE 2024 de cada município.</p>
-    <div class="kpis">
-      <div class="tile"><div class="lab">Especializados criativos formais (2024, estimativa)<button class="help" type="button" aria-expanded="false" aria-controls="h-esp" aria-label="Ajuda: especializados">?</button></div>
-        <p class="helptext" id="h-esp" hidden>Pessoas em ocupações criativas dentro dos setores criativos. Estimativa: ocupados formais de cada setor no território (CEMPRE 2024) × intensidade criativa do setor em SP (PNAD Contínua). Valores sigilosos do CEMPRE foram calibrados para somar o total oficial do Estado.</p>
-        <div class="v" data-draw="kv" data-source="territorios" data-k="mtc_especializados" data-f="int">—</div><div class="s">Apoio nos mesmos setores: <span data-draw="kv" data-source="territorios" data-k="mtc_apoio" data-f="int">—</span></div></div>
-      <div class="tile"><div class="lab">Intensidade criativa do emprego formal (2024)<button class="help" type="button" aria-expanded="false" aria-controls="h-int" aria-label="Ajuda: intensidade">?</button></div>
-        <p class="helptext" id="h-int" hidden>Especializados criativos ÷ pessoal ocupado formal total do território × 100. Abaixo, o quociente locacional: 1,00 = mesma intensidade do Estado.</p>
-        <div class="v" data-draw="kv" data-source="territorios" data-k="mtc_intens_emprego_pct" data-f="pct2">—</div><div class="s">QL: <span data-draw="kv" data-source="territorios" data-k="mtc_ql_especializados" data-f="d2">—</span> · Estado: <span data-draw="kv" data-source="territorios" data-k="mtc_intens_emprego_pct" data-f="pct2" data-cod="35">—</span></div></div>
-      <div class="tile"><div class="lab">Empreendimentos nos setores criativos (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="mtc_empreend" data-f="int">—</div><div class="s"><span data-draw="kv" data-source="territorios" data-k="mtc_empreend_10mil" data-f="d1">—</span> por 10 mil habitantes</div></div>
-      <div class="tile"><div class="lab">Ocupados formais nos setores criativos (2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="mtc_ocupados" data-f="int">—</div><div class="s"><span data-draw="kv" data-source="territorios" data-k="mtc_setores_part_pct" data-f="pct2">—</span> do emprego formal · 2022–2024: <span data-draw="kv" data-source="territorios" data-k="mtc_var_ocup_22_24" data-f="sig">—</span></div></div>
-      <div class="tile"><div class="lab">Remuneração média mensal nos setores criativos (R$, 2024)</div><div class="v" data-draw="kv" data-source="territorios" data-k="mtc_rem_media" data-f="brl">—</div><div class="s">Estado: <span data-draw="kv" data-source="territorios" data-k="mtc_rem_media" data-f="brl" data-cod="35">—</span></div></div>
-    </div>
-    <div class="grid wide">
-      <div class="card" id="card-tridente">
-        <div class="card-h"><h2 class="card-t">Triângulo Criativo: composição da força de trabalho criativa</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-tri" aria-label="Ajuda: Triângulo Criativo">?</button></div>
-        <p class="card-n">% de cada vértice na força de trabalho criativa: Estado de SP e território selecionado. Especializados criam nos setores criativos; incorporados criam em outros setores; apoio dá suporte nos setores criativos.</p>
-        <p class="helptext" id="h-tri" hidden>Adaptação do “creative trident” (Nesta/DCMS), usado pelo Observatório Itaú Cultural. Ocupação criativa: 40 grupos da COD (ISCO-08) do DCMS, incluindo chefs de cozinha. Estado de SP: PNAD Contínua (4 trimestres até o 2º tri. 2026), com trabalho formal e informal e renda. Território selecionado: a PNAD não tem amostra municipal, então o território é estimado no emprego formal (CEMPRE 2024): especializados e apoio = ocupados de cada setor criativo × intensidade do setor; incorporados = ocupados das demais atividades de cada seção da CNAE × taxa de ocupações criativas da seção em SP (Brasil quando a amostra paulista é pequena). Na mesma base formal, o Estado tem composição 36% / 30% / 34%, muito próxima da PNAD (37% / 29% / 34%), o que confirma a coerência das duas escalas. Compare percentuais, não totais, entre as duas bases.</p>
-        <div class="chart" id="graf-tridente" data-draw="triangulo-duplo" data-source="triangulo" role="img" aria-label="Composição da força de trabalho criativa: Estado e território"></div>
-      </div>
-      <div class="card" id="card-mtc-grupos">
-        <div class="card-h"><h2 class="card-t">Especializados, apoio e incorporados</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-mtcg" aria-label="Ajuda: grupos">?</button></div>
-        <p class="card-n">Número de pessoas no território selecionado, estimado sobre o emprego formal de 2024 (CEMPRE, IBGE) com as proporções de ocupações criativas medidas pela PNAD Contínua entre o 3º trimestre de 2025 e o 2º trimestre de 2026. Especializados e apoio estão dentro dos setores criativos; incorporados, por definição, trabalham fora deles. Por isso cada grupo é lido no seu próprio eixo: setor criativo (1), atividade onde trabalham (2) e ofício criativo que exercem (3).</p>
-        <p class="helptext" id="h-mtcg" hidden>Por que os incorporados não aparecem no gráfico 1: o Triângulo Criativo os define como profissionais criativos fora dos setores criativos. Distribuí-los entre setores criativos seria contá-los duas vezes ou zerá-los. A leitura correta é pela atividade em que trabalham (gráfico 2, município) e pela família de ocupação (gráfico 3). Método no município: ocupados formais de cada seção da CNAE, sem os setores criativos (CEMPRE 2024), × taxa de ocupações criativas da seção em SP (PNAD; Brasil se a amostra paulista tem menos de 30 casos). Limite: a taxa por seção é a mesma em todos os municípios; a diferença entre municípios vem da estrutura econômica (quanto há de indústria, finanças, comércio), não de diferenças locais na proporção de criativos. Leia como ordem de grandeza.</p>
-        <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-sm)">1. Especializados e apoio por grupo de setores criativos</h3>
-        <div class="chart tall" id="graf-mtc-grupos" data-draw="mtc-grupos" data-source="mtc" role="img" aria-label="Especializados e apoio por grupo"></div>
-        <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-md)">2. Incorporados por atividade onde trabalham</h3>
-        <div class="chart" id="graf-incorp-secao" data-draw="incorp-secao" data-source="incorp_secao" role="img" aria-label="Incorporados por atividade"></div>
-        <h3 class="card-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-md)">3. Ofícios criativos: especializados e incorporados<button class="help" type="button" aria-expanded="false" aria-controls="h-fam" aria-label="Ajuda: ofícios" style="margin-left:6px">?</button></h3>
-        <p class="helptext" id="h-fam" hidden>Como é estimado: a PNAD não identifica ocupações por município. Para cada setor criativo, calcula-se na PNAD de SP a parcela de ocupados em cada família de ocupação criativa (por exemplo, no setor de publicidade, quantos são profissionais de marketing, designers, fotógrafos) e aplica-se essa parcela aos ocupados formais do mesmo setor no município (CEMPRE 2024); para os incorporados, o mesmo é feito em cada seção da CNAE, fora dos setores criativos. Quando a amostra paulista do setor ou seção tem menos de 30 casos criativos, usa-se a composição do Brasil. As somas por família reproduzem exatamente os especializados e incorporados do Triângulo Criativo do território (diferença zero). Leitura: o QL compara a densidade da família (por mil ocupados formais) com a do Estado; acima de 1, o território tem mais desse ofício que a média paulista. Limites: a composição ocupacional de cada setor é a do Estado (a variação entre municípios vem do tamanho de cada setor e atividade, não de diferenças locais dentro do setor); só emprego formal; famílias com menos de 60 casos na amostra estadual (†) têm baixa precisão. Para medir ocupações reais por município, o próximo passo é a RAIS por CBO.</p>
-        <div class="chart tall" id="graf-familias" data-draw="familias-mun" data-source="familias_mun" role="img" aria-label="Ofícios criativos no território"></div>
-      </div>
-      <div class="card" id="card-intens-setores">
-        <div class="card-h"><h2 class="card-t">Intensidade Criativa (% dos ocupados em ocupações criativas)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-ints" aria-label="Ajuda: intensidade criativa">?</button></div>
-        <p class="card-n">Nos 14 setores criativos (intensidade nacional de 30% ou mais), a parcela dos trabalhadores em ocupação criativa. Brasil e Estado pela PNAD Contínua, com todos os ocupados; Estado e território selecionado pela RAIS 2024, medida com os empregados formais de cada município. A primeira linha resume o conjunto dos setores.</p>
-        <p class="helptext" id="h-ints" hidden>Brasil e Estado: PNAD Contínua, 4 trimestres até o 2º tri. de 2026, trabalho formal e informal. Os setores são escolhidos pela intensidade nacional, mais estável; para SP usa-se a intensidade paulista quando a amostra tem ao menos 30 ocupados criativos, senão a nacional (rádio, joalheria e patrimônio, marcados com *). Território: medição direta na RAIS (Ministério do Trabalho, via Base dos Dados), vínculos ativos em 31/12/2024, por município do estabelecimento. Cada vínculo é classificado pelo setor (CNAE 2.0 da subclasse, mesma correspondência usada no CEMPRE) e pela ocupação (CBO 2002). As 40 ocupações criativas da PNAD (COD, base ISCO-08) foram levadas à CBO família a família, em 263 ocupações; a lista está no Glossário. Controles de qualidade: (1) no Estado, a RAIS soma 671 mil vínculos nos 14 setores, praticamente igual aos assalariados do CEMPRE 2024 (razão 1,00), e a correlação entre as duas fontes por município e setor é 0,97 (Spearman, 2.597 células sem sigilo); (2) a intensidade municipal de 2023 e de 2024 tem correlação de 0,97 (858 pares com ao menos 30 vínculos), o que mostra que a medida é estável; (3) setores com menos de 30 vínculos no território não têm a barra exibida. Por que a RAIS fica abaixo da PNAD: no Estado, a intensidade dos 14 setores é 52,6% na PNAD com todos os ocupados, 39,9% na PNAD só com empregados formais (2025) e 35,1% na RAIS. A maior parte da diferença vem de quem a RAIS não cobre: conta própria e empregadores são 76% dos ocupados em artes e espetáculos, 59% no audiovisual e 49% na publicidade, e são justamente os mais criativos. O resto vem de diferenças de classificação entre COD e CBO (por exemplo, operadores de máquinas da indústria de móveis e de artefatos têxteis, que a PNAD tende a registrar como marceneiros e artesãos) e da amostra pequena da PNAD formal em alguns setores (indicada na dica). Por isso compare território com Estado sempre na mesma fonte (RAIS com RAIS); o QL na dica é a razão entre as duas. A barra da RAIS não é uma correção da PNAD: mede outra população, o emprego formal assalariado, com precisão municipal.</p>
-        <div class="chart tall" id="graf-intens-setores" data-draw="intens-setores" data-source="setores_intens intens_setor_mun tridente intens_ponte" role="img" aria-label="Intensidade criativa por setor"></div>
-      </div>
-      <div class="card" id="card-mtc-serie">
-        <div class="card-h"><h2 class="card-t">Especializados criativos formais</h2></div>
-        <p class="card-n">Número estimado de profissionais em ocupações criativas dentro dos setores criativos do território, ano a ano de 2022 a 2024. Usa a nova série do Cadastro Central de Empresas (IBGE), iniciada em 2022, com a mesma intensidade criativa aplicada aos três anos; a variação reflete, portanto, o crescimento do emprego nos setores, não mudanças na proporção de criativos.</p>
-        <div class="chart" id="graf-mtc-serie" data-draw="mtc-serie" data-source="mtc" role="img" aria-label="Série de especializados"></div>
-      </div>
-    </div>
-
     <h2 class="sec-h" id="gastos">Gasto público com cultura</h2>
     <p class="hint">Despesa empenhada na função 13 (Cultura) dos balanços anuais (Siconfi/DCA). Os cartões trazem 2024 em valores correntes; a série histórica cobre 2014–2024 em reais de 2024 (IPCA). Por habitante, com a população do mesmo ano. O Estado mostra prefeituras e Governo do Estado separados.</p>
     <div class="kpis">
@@ -361,7 +382,7 @@
         <div class="chart" id="graf-comex-blocos" data-draw="comex-blocos" data-source="comex_blocos" role="img" aria-label="Comércio por região do mundo"></div>
       </div>
       <div class="card" id="card-comex-blocos-mun">
-        <div class="card-h"><h2 class="card-t">Território selecionado: parceiros por região do mundo (US$, 2025)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-cxbm" aria-label="Ajuda: parceiros do território">?</button></div>
+        <div class="card-h"><h2 class="card-t"><span data-draw="nome-t" data-source="territorios">Território selecionado</span>: parceiros por região do mundo (US$, 2025)</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-cxbm" aria-label="Ajuda: parceiros do território">?</button></div>
         <p class="card-n">Para onde vendem e de onde compram bens criativos as empresas com domicílio fiscal no município ou região escolhidos, com a participação de cada região do mundo no total do território.</p>
         <p class="helptext" id="h-cxbm" hidden>Comex Stat por município e bloco econômico, posição a posição (SH4), com o mesmo recorte do painel municipal: sem 8523, 9004 e 9401, e com 9403 e 9405 ajustadas pela fração criativa estadual. Usamos só as oito regiões continentais, que não se sobrepõem (UE e Mercosul ficam de fora para não contar duas vezes); a soma das regiões reproduz exatamente o total do território. Atenção: o município é o do domicílio fiscal da empresa exportadora ou importadora, e valores pequenos podem refletir uma única operação.</p>
         <div class="chart" id="graf-comex-blocos-mun" data-draw="comex-blocos-mun" data-source="comex_blocos_mun" role="img" aria-label="Comércio do território por região do mundo"></div>
@@ -482,7 +503,7 @@
     <div class="card" id="card-corr">
       <div class="card-h"><h2 class="card-t">O que explica a concentração criativa nos municípios paulistas</h2><button class="help" type="button" aria-expanded="false" aria-controls="h-corr" aria-label="Ajuda: correlações e correções">?</button></div>
       <p class="card-n">Dois quadros: o Quadro 1 traz apenas a análise do Estado, com os 645 municípios em conjunto, e não muda com os filtros; o Quadro 2 traz apenas os dados do território selecionado nos filtros.</p>
-      <p class="helptext" id="h-corr" hidden>Distorção corrigida (efeito porte): o quociente locacional criativo cresce com o tamanho da cidade (correlação de 0,77 com a população), e o mesmo acontece com vários componentes (banda larga, governança, Rouanet). A correlação simples mistura, portanto, duas coisas: a relação do componente com a economia criativa e o fato de ambos serem maiores em cidades grandes. Por isso, a Análise | Perspectiva para o Estado, no Quadro 1, não se apoia só na correlação simples: considera também a correlação parcial de postos de Spearman, que controla o posto da população do Censo 2022, ρ(xy·z) = (ρxy − ρxz·ρyz) / √[(1 − ρxz²)(1 − ρyz²)], e mostra o que resta da associação entre municípios de tamanho comparável, com intervalo de confiança de 95% pela transformação de Fisher e erro-padrão de Bonett e Wright (2000). Correlação simples → descontado o porte, por componente: <span data-draw="corr-parcial-txt" data-source="correlacao"></span> Escala de leitura usada no painel: |ρ| abaixo de 0,10 desprezível; de 0,10 a 0,29 fraca; de 0,30 a 0,49 moderada; 0,50 ou mais forte. As oportunidades e os desafios apontados para a educação profissional técnica partem dessas regularidades entre municípios; não são efeitos causais e devem ser combinados com o conhecimento do território. Quadro 2, município: uma correlação não existe para um único município; por isso o quadro mostra (1) a posição do município em cada componente, no Estado e entre os municípios do mesmo porte, e (2) o QL esperado, que é a mediana e os quartis do QL dos 60 municípios mais parecidos em IDPEC-SP e em população (vizinhos mais próximos em postos, sem impor forma linear a uma variável muito assimétrica). Quadro 2, regiões, GOs e unidades: correlações apenas entre os seus municípios, com intervalo de confiança de 95% pela transformação de Fisher e erro-padrão de Bonett e Wright (2000); só a partir de 10 municípios, com alerta abaixo de 30. Limites: são associações transversais, não efeitos causais; o QL com menos de 30 empregos criativos formais é instável; o CEMPRE tem sigilo em municípios pequenos, o que torna o emprego criativo um piso.</p>
+      <p class="helptext" id="h-corr" hidden>Distorção corrigida (efeito porte): o quociente locacional criativo cresce com o tamanho da cidade (correlação de 0,77 com a população), e o mesmo acontece com vários componentes (banda larga, governança, Rouanet). A correlação simples mistura, portanto, duas coisas: a relação do componente com a economia criativa e o fato de ambos serem maiores em cidades grandes. Por isso, a Análise | Perspectiva para o Estado, no Quadro 1, não se apoia só na correlação simples: considera também a correlação parcial de postos de Spearman, que controla o posto da população do Censo 2022, ρ(xy·z) = (ρxy − ρxz·ρyz) / √[(1 − ρxz²)(1 − ρyz²)], e mostra o que resta da associação entre municípios de tamanho comparável, com intervalo de confiança de 95% pela transformação de Fisher e erro-padrão de Bonett e Wright (2000). Correlação simples → descontado o porte, por componente: <span data-draw="corr-parcial-txt" data-source="correlacao"></span> Escala de leitura usada no painel: |ρ| abaixo de 0,10 desprezível; de 0,10 a 0,29 fraca; de 0,30 a 0,49 moderada; 0,50 ou mais forte. As oportunidades e os desafios apontados para a educação profissional técnica partem dessas regularidades entre municípios; não são efeitos causais e devem ser combinados com o conhecimento do território. Quadro 2, município: uma correlação não existe para um único município; por isso o quadro repete, ao lado de cada componente, a correlação simples do Estado como referência de leitura e mostra (1) a posição do município em cada componente, no Estado e entre os municípios do mesmo porte, e (2) o QL esperado, que é a mediana e os quartis do QL dos 60 municípios mais parecidos em IDPEC-SP e em população (vizinhos mais próximos em postos, sem impor forma linear a uma variável muito assimétrica). Quadro 2, regiões, GOs e unidades: correlações apenas entre os seus municípios, com intervalo de confiança de 95% pela transformação de Fisher e erro-padrão de Bonett e Wright (2000); só a partir de 10 municípios, com alerta abaixo de 30. Limites: são associações transversais, não efeitos causais; o QL com menos de 30 empregos criativos formais é instável; o CEMPRE tem sigilo em municípios pequenos, o que torna o emprego criativo um piso.</p>
       <h3 class="card-t" id="corr-estado-t" style="font-size:var(--cds-font-size-body);margin-top:var(--cds-gap-sm)">Quadro 1 · Estado de São Paulo: análise geral dos 645 municípios</h3>
       <p class="card-n">Correlação de cada componente com o quociente locacional criativo. A análise para o Estado considera também o que resta da associação quando se comparam municípios de mesmo porte populacional (valores no ícone ?). Valores positivos indicam que municípios com mais pontos tendem a ter mais economia criativa.</p>
       <div class="tbl-wrap" style="max-height:none">
@@ -587,6 +608,169 @@
       <div class="chart" id="graf-cmp" data-draw="cmp-barras" data-source="territorios" role="img" aria-label="Barras de comparação"></div>
     </div>
   </section>
+
+  <!-- BOLETIM INICIO -->
+  <section id="boletim" role="tabpanel" aria-label="Boletim estratégico" hidden>
+    <div class="bol-wrap">
+    <div class="bol-bar">
+      <div class="bol-tt"><span class="k">Boletim estratégico do recorte selecionado nos filtros</span><b data-draw="bol-titulo" data-source="bol_ficha">—</b></div>
+      <button class="bol-btn" id="bol-pdf" type="button" aria-label="Baixar o boletim em PDF"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>Baixar PDF</button>
+      <button class="bol-btn sec" id="bol-print" type="button">Imprimir</button>
+      <p class="bol-nota">O boletim é refeito a cada troca de recorte nos filtros. Arquivo: <span data-draw="bol-pdf-nome" data-source="bol_ficha">—</span>. Se o navegador abrir a janela de impressão, escolha “Salvar como PDF”, papel A4, sem margens e com gráficos de fundo.</p>
+      <p class="bol-nota" id="bol-pdf-status" role="status" hidden></p>
+    </div>
+
+    <div class="bol-doc" id="bol-doc">
+      <!-- capa -->
+      <section class="bol-page capa" id="bol-p1">
+        <div class="hero">
+          <svg viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <g transform="translate(800 0) scale(-1 1)">
+              <g fill="none" stroke="#fff" stroke-opacity=".13" stroke-width="1.4"><circle cx="610" cy="170" r="70"/><circle cx="610" cy="170" r="120"/><circle cx="610" cy="170" r="175"/><circle cx="610" cy="170" r="235"/></g>
+              <g fill="#F39200"><circle cx="610" cy="170" r="12"/></g>
+              <g fill="#fff" fill-opacity=".9"><circle cx="690" cy="110" r="5"/><circle cx="540" cy="260" r="5"/><circle cx="700" cy="250" r="4"/><circle cx="520" cy="95" r="4"/><circle cx="455" cy="190" r="3.5"/><circle cx="745" cy="185" r="3.5"/></g>
+              <g stroke="#fff" stroke-opacity=".35" stroke-width="1.2"><line x1="610" y1="170" x2="690" y2="110"/><line x1="610" y1="170" x2="540" y2="260"/><line x1="610" y1="170" x2="700" y2="250"/><line x1="610" y1="170" x2="520" y2="95"/><line x1="540" y1="260" x2="455" y2="190"/><line x1="690" y1="110" x2="745" y2="185"/></g>
+            </g>
+            <polygon points="0,450 800,330 800,450" fill="#002E5D" fill-opacity=".55"/>
+          </svg>
+          <div class="logo-plate"><div class="bol-logo" role="img" aria-label="Senac"></div></div>
+          <div class="marca">Boletim Estratégico</div>
+          <div class="territorio">
+            <div class="k">Economia criativa local</div>
+            <div class="v" data-draw="bol-capa-nome" data-source="bol_ficha">—</div>
+            <div class="m" data-draw="bol-capa-sub" data-source="bol_ficha">—</div>
+          </div>
+        </div>
+        <div class="titulo"><span class="tt">Caminhos para a economia criativa<br>e a oferta formativa da unidade</span></div>
+        <div class="corpo">
+          <p data-draw="bol-apresentacao" data-source="bol_ficha">—</p>
+          <p>Use-o para:</p>
+          <div class="bol-pills">
+            <div>ler o cenário criativo do território</div>
+            <div>priorizar setores com mais potencial</div>
+            <div>planejar ofertas técnicas e livres</div>
+            <div class="dark">atrair e se comunicar com o público criativo</div>
+            <div class="dark">diferenciar a oferta da unidade</div>
+            <div class="dark">cocriar estratégias com a equipe</div>
+          </div>
+          <div class="bol-meta">
+            <div><b>Território</b><span data-draw="bol-meta-territorio" data-source="bol_ficha">—</span></div>
+            <div><b>Unidade / GO</b><span data-draw="bol-meta-unidade" data-source="bol_ficha">—</span></div>
+            <div><b>Dados principais</b>IBGE CEMPRE 2024 · Receita Federal jan/2026</div>
+            <div><b>Dados de</b><span data-draw="bol-carga" data-source="fontes">—</span></div>
+          </div>
+          <div class="bol-tag small" style="margin-top:5mm">Destaques</div>
+          <div class="bol-dest"><ul data-draw="bol-destaques" data-source="bol_ficha bol_setores"></ul></div>
+        </div>
+        <div class="bol-folio"><span>Programa Territórios que Criam · Senac SP</span><span>1</span></div>
+      </section>
+
+      <!-- 1 · panorama -->
+      <section class="bol-page" id="bol-p2">
+        <div class="bol-logo" role="img" aria-label="Senac"></div>
+        <div class="bol-sec"><span class="bol-tag">1 · Panorama para atuação no ecossistema criativo local</span></div>
+        <div class="bol-stats" data-draw="bol-stats" data-source="bol_ficha"></div>
+        <div class="bol-grid2">
+          <div class="bol-txt" id="bol-sec1" data-draw="bol-s1" data-source="bol_ficha bol_setores" data-max="3000"></div>
+          <aside class="bol-evid"><div class="h">Dados que sustentam</div><div data-draw="bol-evid1" data-source="bol_ficha"></div></aside>
+        </div>
+        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>2</span></div>
+      </section>
+
+      <!-- 2 · setores -->
+      <section class="bol-page" id="bol-p3">
+        <div class="bol-logo" role="img" aria-label="Senac"></div>
+        <div class="bol-sec"><span class="bol-tag">2 · Setores criativos potenciais</span></div>
+        <div class="bol-apoio" data-draw="bol-apoio" data-source="bol_ficha"></div>
+        <div class="bol-grid2">
+          <div>
+            <h3 style="margin-top:0" data-draw="bol-barras-tit" data-source="bol_ficha">—</h3>
+            <div class="bol-bars" data-draw="bol-barras" data-source="bol_setores"></div>
+            <div class="bol-cap">Azul escuro: todos os grupos; laranja: setores menos estruturados apontados neste boletim. Fonte: Receita Federal (CNPJ), perímetro do Panorama SCEIC/Seade.</div>
+          </div>
+          <aside class="bol-evid">
+            <div class="h">Critérios de escolha</div>
+            <div class="i"><span class="n crit">Concentração · 30%</span><span class="s">intensidade criativa e QL frente ao Estado</span></div>
+            <div class="i"><span class="n crit">Dinâmica · 30%</span><span class="s">volume e evolução de empresas e empregos</span></div>
+            <div class="i"><span class="n crit">Estrutura · 15%</span><span class="s">formalização e variação do emprego</span></div>
+            <div class="i"><span class="n crit">Aderência · 25%</span><span class="s">ofícios que dialogam com a oferta do Senac</span></div>
+            <div class="i"><span class="s">Cada setor recebe de 0 a 100 pontos; a pontuação aparece no cartão. Nos menos estruturados, ela mede a fragilidade.</span></div>
+          </aside>
+        </div>
+        <h3 style="margin-top:2mm">Maior potencial</h3>
+        <div data-draw="bol-cards-pot" data-source="bol_setores"></div>
+        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>3</span></div>
+      </section>
+
+      <section class="bol-page" id="bol-p4">
+        <div class="bol-logo" role="img" aria-label="Senac"></div>
+        <div class="bol-sec"><span class="bol-tag">2 · Setores criativos potenciais</span><span class="sub">continuação</span></div>
+        <h3 style="margin-top:0">Menos estruturados, para trabalhar no médio prazo</h3>
+        <div data-draw="bol-cards-fr" data-source="bol_setores"></div>
+        <h3>Onde trabalham os criativos incorporados</h3>
+        <p class="bol-cap" style="margin:0 0 2mm">Profissionais em ocupações criativas fora dos setores criativos, por atividade (estimativa sobre o emprego formal, 2024). Em laranja, atividades das áreas do Senac (comércio, serviços e turismo).</p>
+        <div class="bol-bars" data-draw="bol-incorp" data-source="incorp_secao"></div>
+        <p class="bol-cap">Fonte: IBGE CEMPRE 2024 e PNAD Contínua, estimativa do painel.</p>
+        <div class="bol-oficio" data-draw="bol-oficio" data-source="familias_mun"></div>
+        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>4</span></div>
+      </section>
+
+      <!-- 3 · ancoragem -->
+      <section class="bol-page" id="bol-p5">
+        <div class="bol-logo" role="img" aria-label="Senac"></div>
+        <div class="bol-sec"><span class="bol-tag">3 · Pontos de ancoragem estratégica local</span></div>
+        <p style="font-size:9pt;color:var(--cinza)">Como transformar os setores potenciais em público, oferta e presença da unidade no ecossistema.</p>
+        <div class="bol-anc">
+          <div class="row"><div class="lab">Como atrair esse público</div><div class="txt" id="bol-sec31" data-draw="bol-s31" data-source="bol_ficha" data-max="2000"></div></div>
+          <div class="row"><div class="lab">Como se comunicar com esse público</div><div class="txt" id="bol-sec32" data-draw="bol-s32" data-source="bol_ficha" data-max="1000"></div></div>
+          <div class="row"><div class="lab">Estratégias para diferenciar a oferta local</div><div class="txt" id="bol-sec34" data-draw="bol-s34" data-source="bol_ficha" data-max="2000"></div></div>
+        </div>
+        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>5</span></div>
+      </section>
+
+      <section class="bol-page" id="bol-p6">
+        <div class="bol-logo" role="img" aria-label="Senac"></div>
+        <div class="bol-sec"><span class="bol-tag">3 · Pontos de ancoragem estratégica local</span><span class="sub">continuação</span></div>
+        <div class="bol-anc">
+          <div class="row"><div class="lab">Títulos que podem fortalecer o ecossistema</div><div class="txt" id="bol-sec33" data-draw="bol-s33" data-source="bol_setores" data-max="3000"></div></div>
+          <div class="row"><div class="lab">Palavras-chave para lead</div><div class="txt" id="bol-sec35" data-max="1500"><p data-draw="bol-kw-intro" data-source="bol_ficha">—</p><ul class="bol-kw" data-draw="bol-kw" data-source="bol_setores"></ul></div></div>
+        </div>
+        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>6</span></div>
+      </section>
+
+      <!-- 4 · caminhos -->
+      <section class="bol-page" id="bol-p7">
+        <div class="bol-logo" role="img" aria-label="Senac"></div>
+        <div class="bol-sec"><span class="bol-tag">4 · Caminhos possíveis para iniciar a atuação</span></div>
+        <div class="bol-tag small laranja">Perspectivas estratégicas</div>
+        <div id="bol-sec41" data-max="3000">
+          <div data-draw="bol-s41" data-source="bol_ficha bol_setores"></div>
+          <div class="bol-dois">
+            <div class="amp"><div class="h">Onde ampliar</div><div class="d">ofertas regulares e escaláveis</div><div class="l" data-draw="bol-ampliar" data-source="bol_setores"></div></div>
+            <div class="esc"><div class="h">Onde escutar</div><div class="d">pilotos e escuta qualificada</div><div class="l" data-draw="bol-escutar" data-source="bol_setores"></div></div>
+          </div>
+          <div class="bol-perg" data-draw="bol-perguntas" data-source="bol_ficha"></div>
+          <p data-draw="bol-fecho41" data-source="bol_ficha">—</p>
+        </div>
+        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>7</span></div>
+      </section>
+
+      <section class="bol-page" id="bol-p8">
+        <div class="bol-logo" role="img" aria-label="Senac"></div>
+        <div class="bol-sec"><span class="bol-tag">4 · Caminhos possíveis para iniciar a atuação</span><span class="sub">continuação</span></div>
+        <div class="bol-tag small laranja">Táticas possíveis</div>
+        <ul class="bol-acoes" id="bol-sec42" data-draw="bol-taticas" data-source="bol_setores" data-max="2000"></ul>
+        <div class="bol-tag small" style="margin-top:3mm">Fontes e notas de leitura</div>
+        <div class="bol-fontes" data-draw="bol-fontes" data-source="fontes bol_ficha"></div>
+        <div class="bol-fecho"><b>Boletim Estratégico - Territórios que Criam | Ecossistema Criativo Local.</b> Gerado a partir do Painel de Dados do Programa Territórios que Criam (Senac SP) com os dados disponíveis em <span data-draw="bol-carga" data-source="fontes">—</span>. Revise-o sempre que as bases do painel forem atualizadas.
+          <div class="fio"><div><b>Painel de dados | Programa Territórios que Criam - SENAC SP</b><br>Elaboração: Senac Sorocaba&nbsp;&nbsp;|&nbsp;&nbsp;TDP responsável: Felipo Abreu</div><span class="bol-cc" role="img" aria-label="Licença Creative Commons CC BY-NC-SA"></span></div>
+        </div>
+        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>8</span></div>
+      </section>
+    </div>
+    </div>
+  </section>
+  <!-- BOLETIM FIM -->
 
   <section id="glossario" role="tabpanel" aria-label="Glossário e metodologia" hidden>
     <div class="prose">
@@ -694,5 +878,8 @@
 <script src="d3.v7.min.js"></script>
 <script src="dash-runtime.js" data-base="./"></script>
 <script src="app.js"></script>
+<script>window.BOL_PDF_DIRETO = true; window.BOL_PDF_LIBS = {html2canvas: "html2canvas.min.js", jspdf: "jspdf.umd.min.js"};</script>
+<script src="boletim-dados.js"></script>
+<script src="boletim.js"></script>
 </body>
 </html>
