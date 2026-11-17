@@ -40,27 +40,10 @@
 
   --cds-dur-slow: 300ms;
   --cds-ease-out: cubic-bezier(.2, .8, .2, 1);
-  color-scheme: light dark;
+  color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-fg: #ecebe7;
-    --color-fg-muted: #a9a69e;
-    --color-bg: #1c1b19;
-    --color-panel: #262522;
-    --color-border-line: #3a3935;
-    --color-ok: #4cc27f;
-    --color-warn: #e3a640;
-    --color-bad: #ee6b5d;
-    --cds-surface-popover: #2c2b28;
-    --cds-shadow-popover: 0 4px 16px rgba(0, 0, 0, .5);
-    --cds-chart-grid: #34332f;
-    --cds-chart-reference: #8f8c84;
-    --cds-chart-muted: #5b5953;
-    --cds-chart-axis: #a3a098;
-  }
-}
+
 
 html, body { margin: 0; background: var(--color-bg); color: var(--color-fg); }
 #dash-root { padding: var(--dash-gutter, 1.5rem); max-width: 1440px; margin: 0 auto; }

@@ -1,0 +1,75 @@
+/* Tema Senac SP — cores da marca (azul #005594, laranja #F78B1F) aplicadas à estrutura do painel.
+   Para voltar ao visual neutro, basta retirar a linha deste arquivo no index.html. */
+:root {
+  --senac-azul: #005594;
+  --senac-azul-escuro: #003F6E;
+  --senac-azul-claro: #E7EFF8;
+  --senac-laranja: #F78B1F;
+  --senac-laranja-texto: #A85600;   /* laranja escurecido para texto: contraste 4,9:1 sobre branco */
+  --senac-laranja-claro: #FDEBD9;
+  --color-fg: #13263B;
+  --color-fg-muted: #4D5D70;
+  --color-bg: #F4F7FB;
+  --color-panel: #FFFFFF;
+  --color-border-line: #D3DDE9;
+  --color-warn: var(--senac-laranja-texto);
+  --cds-chart-grid: #E3E9F1;
+  --cds-surface-popover: #FFFFFF;
+}
+
+
+/* cabeçalho: faixa azul com a marca */
+.pg-head { background: var(--senac-azul); color: #fff; border-radius: var(--cds-radius); padding: var(--cds-pad-lg) calc(var(--cds-pad-lg) * 1.4); border-bottom: 5px solid var(--senac-laranja); align-items: center; }
+.pg-head > div:first-of-type { flex: 1 1 28rem; }
+.pg-logo { height: 3.4rem; width: auto; flex: none; }
+.pg-title { color: #fff; }
+.pg-take, .pg .pg-take { color: #D8E5F3; }
+.pg .pg-take b { color: #fff; }
+.pg-meta { color: #C9D9EA; }
+.pg-meta b { color: #fff; }
+.pg-meta .warn { color: #FFC98F; }
+
+/* faixa de versão de teste */
+.aviso-teste { background: var(--senac-laranja-claro); border-color: var(--senac-laranja); }
+
+/* filtros */
+.filters { background: var(--senac-azul-claro); border-color: transparent; border-left: 5px solid var(--senac-azul); }
+.filters .frow { color: var(--senac-azul); }
+.filters .now b { color: var(--senac-azul); }
+
+.dash-select:focus-visible, .tab:focus-visible, .help:focus-visible { outline: 2px solid var(--senac-laranja); outline-offset: 2px; }
+
+/* abas */
+.tabs { border-bottom: 2px solid var(--color-border-line); }
+.tab:hover { color: var(--senac-azul); }
+.tab[aria-selected="true"] { color: var(--senac-azul); border-bottom-color: var(--senac-laranja); }
+
+
+/* títulos de seção com marcador laranja */
+.sec-h { color: var(--senac-azul); display: flex; align-items: center; gap: var(--cds-gap-sm); }
+.sec-h::before { content: ""; flex: none; width: 0.4rem; height: 1.15em; border-radius: 2px; background: var(--senac-laranja); }
+
+
+/* cartões e indicadores */
+.card, .tile { background: var(--color-panel); border-color: var(--color-border-line); box-shadow: 0 1px 2px rgba(16, 38, 64, .06); }
+.card-t { color: var(--senac-azul-escuro); }
+.tile { border-top: 3px solid var(--senac-azul); }
+.tile .v { color: var(--senac-azul); }
+
+.help { border-color: var(--senac-azul); color: var(--senac-azul); background: transparent; }
+.help[aria-expanded="true"] { background: var(--senac-azul); color: #fff; }
+.helptext { background: var(--senac-azul-claro); border-color: transparent; border-left: 3px solid var(--senac-azul); }
+
+/* tabelas: linhas em destaque com fundo azul-claro */
+.pg tr.sel td { background: var(--senac-azul-claro); }
+.pg th { color: var(--senac-azul-escuro); }
+
+
+/* celular: logo menor */
+@media (max-width: 700px) { .pg-logo { height: 2.4rem; } .pg-head { padding: var(--cds-pad-md); } }
+
+
+/* barra compacta de filtros no tema Senac */
+.filtro-compacto { background: var(--senac-azul); color: #D8E5F3; border-bottom: 3px solid var(--senac-laranja); }
+.filtro-compacto b, .filtro-compacto button { color: #fff; }
+.filtro-compacto button:hover { background: rgba(255, 255, 255, .14); }
