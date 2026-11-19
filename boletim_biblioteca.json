@@ -21,6 +21,8 @@
 "ofertas_curtas": "design de interiores, decoração e visualização 3D",
 "palavras": "curso de design de interiores|modelagem 3D para projetos|decoração de ambientes",
 "ampliar": "Arquitetura e design de interiores",
+"dif_titulo": "Projeto aplicado ao varejo e à moradia.",
+"dif_texto": "Com {ativas} empresas de arquitetura e design de interiores {T}, o diferencial está em levar projeto ao comércio local: vitrines, layout de lojas, ambientação de bares e hospedagens. Isso aproxima um grupo de escritórios pequenos de clientes recorrentes e qualifica a experiência de compra do território.",
 "sigla": "arquitetura e design"
 },
 {
@@ -45,6 +47,8 @@
 "ofertas_curtas": "design de produto, acabamento e venda online",
 "palavras": "artesanato e empreendedorismo|como vender artesanato online|design de produto artesanal",
 "ampliar": "Artesanato e produtos de design",
+"dif_titulo": "Identidade local como valor de mercado.",
+"dif_texto": "As {ativas} empresas de artesanato e produtos de design {T} ganham preço quando a origem vira atributo: acabamento, embalagem, narrativa e presença em lojas de turismo e plataformas online. A formação em design de produto e venda transforma produção pequena em marca reconhecível.",
 "sigla": "artesanato"
 },
 {
@@ -69,6 +73,8 @@
 "ofertas_curtas": "fotografia, edição de vídeo e produção de conteúdo",
 "palavras": "fotografia de produto|edição de vídeo para redes sociais|curso de produção audiovisual",
 "ampliar": "Audiovisual e fotografia",
+"dif_titulo": "Imagem a serviço dos negócios locais.",
+"dif_texto": "As {ativas} empresas de audiovisual e fotografia {T} têm um mercado próximo e pouco explorado: comércio, eventos, gastronomia e turismo que precisam de imagem profissional. Ofertas que unam técnica e atendimento a marcas ajudam a converter trabalho por projeto em contratos recorrentes.",
 "sigla": "audiovisual"
 },
 {
@@ -93,6 +99,8 @@
 "ofertas_curtas": "redação para web, diagramação e publicação digital",
 "palavras": "curso de redação para web|diagramação e editoração|produção de conteúdo escrito",
 "ampliar": "Editorial e conteúdo",
+"dif_titulo": "Do impresso ao conteúdo de marca.",
+"dif_texto": "O editorial {T} reúne {ativas} empresas em um mercado que migra para o digital. Redação para web, diagramação e publicação independente permitem atender empresas e instituições locais que precisam comunicar melhor, abrindo uma frente de serviços além do livro e da gráfica.",
 "sigla": "editorial"
 },
 {
@@ -117,6 +125,8 @@
 "ofertas_curtas": "modelagem, costura, vitrinismo e gestão de marca autoral",
 "palavras": "curso de modelagem e costura|moda autoral|como criar uma marca de roupas",
 "ampliar": "Moda",
+"dif_titulo": "Moda autoral com origem.",
+"dif_texto": "As {ativas} empresas de moda {T} disputam espaço com produtos importados. A saída mais consistente é a diferenciação por modelagem, acabamento e marca autoral, vendida no digital e no varejo local, o que retém valor no território e reduz a dependência de preço.",
 "sigla": "moda"
 },
 {
@@ -141,6 +151,8 @@
 "ofertas_curtas": "produção cultural, projetos para editais e gestão de carreira artística",
 "palavras": "curso de produção cultural|editais de cultura PNAB|gestão de carreira artística",
 "ampliar": "Música e artes",
+"dif_titulo": "Cultura que gera agenda e renda.",
+"dif_texto": "As {ativas} empresas de música, artes cênicas e visuais {T} dependem de editais e de agenda. Produção cultural, gestão de carreira e eventos ligados ao turismo e ao comércio transformam essa base em programação regular, com renda mais previsível para artistas e técnicos.",
 "sigla": "música e artes"
 },
 {
@@ -165,6 +177,8 @@
 "ofertas_curtas": "turismo cultural e mediação",
 "palavras": "turismo cultural|roteiros de patrimônio|mediação cultural",
 "ampliar": "Patrimônio e turismo cultural",
+"dif_titulo": "Patrimônio como experiência.",
+"dif_texto": "O patrimônio cultural e natural {T} pode ser convertido em roteiros e experiências, conectando acervos e paisagens ao turismo e à gastronomia. A mediação e a condução qualificadas criam serviço onde hoje há apenas atrativo.",
 "sigla": "patrimônio"
 },
 {
@@ -189,6 +203,8 @@
 "ofertas_curtas": "marketing digital, redes sociais e gestão de pequenos negócios",
 "palavras": "curso de marketing digital|produção de conteúdo para Instagram|como precificar serviços criativos",
 "ampliar": "Publicidade e marketing",
+"dif_titulo": "Serviços criativos para o comércio local.",
+"dif_texto": "Com {ativas} empresas, publicidade, marketing e suporte à inovação formam {fatia} do tecido criativo {D}. O diferencial está em especializar esse grupo no atendimento ao comércio e aos serviços do território, com marketing de resultado, conteúdo e gestão de pequenos clientes, o que dá escala a negócios hoje muito pequenos.",
 "sigla": "publicidade"
 },
 {
@@ -213,6 +229,8 @@
 "ofertas_curtas": "programação, dados e serviços digitais",
 "palavras": "inteligência artificial para negócios|curso de UX/UI design|análise de dados para iniciantes",
 "ampliar": "Tecnologia da informação",
+"dif_titulo": "Tecnologia que moderniza os outros setores.",
+"dif_texto": "As {ativas} empresas de software e serviços digitais {T} podem atuar como fornecedoras de transformação digital para o comércio, a indústria e o turismo locais: sites, dados, automação e comércio eletrônico. A formação em ferramentas atuais, incluindo IA aplicada, amplia o mercado dessas empresas e a produtividade dos clientes.",
 "sigla": "tecnologia"
 },
 {
@@ -561,6 +579,121 @@
 "texto": "A economia criativa {T} já existe e se renova todos os anos. A questão não é se o Senac participará desse movimento, mas como fará isso de forma intencional."
 },
 {
+"tipo": "situacao",
+"chave": "oficios_intro",
+"texto": "Os ofícios criativos estimados para o território ajudam a ver vocações que os números de empresas não mostram."
+},
+{
+"tipo": "situacao",
+"chave": "oficio_consolidado",
+"texto": "{n} profissionais estimados e concentração igual ou acima da média paulista (QL {ql}): presença econômica identificável, com escala para ofertas regulares."
+},
+{
+"tipo": "situacao",
+"chave": "oficio_emergente",
+"texto": "Densidade ainda próxima à do Estado (QL {ql}), mas o grupo ligado ao ofício ganhou participação nas empresas criativas desde 2014 ({f14} → {f25})."
+},
+{
+"tipo": "situacao",
+"chave": "oficio_potencial",
+"texto": "Presença ainda abaixo da média (QL {ql}), com {inc} profissionais estimados atuando em outros setores: oportunidade a construir, não vocação já instalada."
+},
+{
+"tipo": "situacao",
+"chave": "oficios_nenhum",
+"texto": "Nenhum ofício criativo apresenta, nas estimativas do painel, concentração acima da média paulista neste recorte; as vocações devem ser confirmadas na escuta do território."
+},
+{
+"tipo": "situacao",
+"chave": "ader_alta",
+"texto": "Aderência alta ao Programa."
+},
+{
+"tipo": "situacao",
+"chave": "ader_media",
+"texto": "Aderência intermediária ao Programa."
+},
+{
+"tipo": "situacao",
+"chave": "ader_baixa",
+"texto": "Aderência a construir."
+},
+{
+"tipo": "situacao",
+"chave": "mov_reconhecer_dados",
+"texto": "<b>Reconhecer o território como ele é.</b> {Tc} combina {mei} de empresas MEI ou micro, {inc} da força de trabalho criativa fora dos setores criativos e {top1} como grupo mais dinâmico. {leitura} Partir dessa realidade evita copiar modelos de grandes centros: inovar sem desenraizar."
+},
+{
+"tipo": "situacao",
+"chave": "leitura_peq",
+"texto": "É um ecossistema de muitos pequenos negócios, em que a formação precisa caber na rotina de quem empreende."
+},
+{
+"tipo": "situacao",
+"chave": "leitura_emp",
+"texto": "É um ecossistema em que empresas que empregam convivem com uma base ampla de autônomos, o que pede ofertas para os dois públicos."
+},
+{
+"tipo": "situacao",
+"chave": "leitura_pequeno",
+"texto": "É uma economia criativa ainda pequena, que se apoia na região para ganhar escala."
+},
+{
+"tipo": "situacao",
+"chave": "mov_escolher_v2",
+"texto": "<b>Escolher onde concentrar energia.</b> {top} reúnem os sinais mais fortes de concentração e dinâmica e podem receber ofertas regulares, desenhadas com empresas e profissionais do setor. {fr} mostram fragilidade de estrutura e pedem escuta, pilotos curtos e formação de base antes de apostas maiores."
+},
+{
+"tipo": "situacao",
+"chave": "mov_conectar",
+"texto": "<b>Conectar o que já existe.</b> {conexao}"
+},
+{
+"tipo": "situacao",
+"chave": "conexao_incorp2",
+"texto": "Como esses criativos estão sobretudo em {sec}, a ponte entre essas empresas e os profissionais criativos é uma frente natural para a unidade, que já atende comércio, serviços e turismo."
+},
+{
+"tipo": "situacao",
+"chave": "conexao_incorp",
+"texto": "Como {inc} dos criativos trabalham fora dos setores criativos, sobretudo em {sec}, a ponte entre empresas desses setores e profissionais criativos é uma frente natural para a unidade, que já atende comércio, serviços e turismo."
+},
+{
+"tipo": "situacao",
+"chave": "conexao_politica",
+"texto": "O fomento público é uma alavanca: aproximar produtores, prefeitura e editais como a PNAB amplia a circulação de recursos e de público para os negócios criativos."
+},
+{
+"tipo": "situacao",
+"chave": "conexao_regiao",
+"texto": "Com poucos negócios no município, a articulação com a região de {R} e com outras unidades do Senac é o caminho para dar escala às ofertas."
+},
+{
+"tipo": "situacao",
+"chave": "mov_medir_v2",
+"texto": "<b>Medir o que importa.</b> O ponto de partida está nos próprios dados: {base}. Acompanhar esses números, junto com a trajetória de egressos e a participação em ações do ecossistema, mostra se a atuação está ajudando os negócios a durar, crescer e formalizar."
+},
+{
+"tipo": "situacao",
+"chave": "fecho_reflexao_durar",
+"texto": "O papel do Senac aqui é ajudar esses negócios a durar: formação que une técnica e gestão, conexão com clientes locais e acompanhamento de quem empreende."
+},
+{
+"tipo": "situacao",
+"chave": "fecho_reflexao_qualificar",
+"texto": "O papel do Senac aqui é manter esse mercado qualificado e ampliar a base de negócios próprios, conectando profissionais empregados e novos empreendedores."
+},
+{
+"tipo": "situacao",
+"chave": "fecho_reflexao_construir",
+"texto": "O papel do Senac aqui é ajudar a construir base: formação de entrada, ofertas em rede com a região e apoio aos primeiros negócios."
+},
+{
+"tipo": "situacao",
+"chave": "fecho_pergunta",
+"texto": "A questão não é se o Senac participará desse movimento, mas com que intenção e em quais frentes."
+},
+{
 "tipo": "diferenciar",
 "chave": "negocio",
 "cond": "sempre",
@@ -615,6 +748,48 @@
 "cond": "sempre",
 "titulo": "Parceria com a política cultural.",
 "texto": "Apoio a agentes locais na elaboração de projetos para a PNAB e a Lei Rouanet, ampliando renda e circulação de recursos."
+},
+{
+"tipo": "diferenciar2",
+"chave": "durar",
+"cond": "mort",
+"titulo": "Gestão para durar.",
+"texto": "{mort} das empresas criativas abertas em 2020 não chegaram ativas a 2025. Incluir gestão, precificação e formalização nas ofertas técnicas responde a essa fragilidade e aumenta a chance de os negócios sobreviverem e crescerem."
+},
+{
+"tipo": "diferenciar2",
+"chave": "ponte_incorp",
+"cond": "incorp",
+"titulo": "Criatividade dentro das empresas.",
+"texto": "{inc} dos criativos trabalham em outros setores, sobretudo em {sec}. Turmas desenhadas com essas empresas qualificam quem já cria dentro delas e ampliam a produtividade de setores atendidos pelo Senac."
+},
+{
+"tipo": "diferenciar2",
+"chave": "espaco",
+"cond": "infra",
+"titulo": "Unidade como espaço criativo.",
+"texto": "Só {infra} das escolas públicas têm ateliê de artes. Laboratórios, estúdios e cozinhas pedagógicas abertos a coletivos e feiras suprem essa lacuna e fazem da unidade um ponto de produção e encontro do ecossistema."
+},
+{
+"tipo": "diferenciar2",
+"chave": "etapas",
+"cond": "mei",
+"titulo": "Itinerários por etapas.",
+"texto": "Com {mei} das empresas criativas registradas como MEI, microcertificações que se somam em trajetórias longas respeitam o ritmo de quem empreende sozinho e criam caminho para a formalização e o crescimento."
+},
+{
+"tipo": "diferenciar2",
+"chave": "mercado",
+"cond": "export",
+"titulo": "Mercado além do território.",
+"texto": "As exportações de bens criativos {T} somaram {ex} em 2025. Qualificar produto, embalagem e comercialização internacional ajuda as empresas que já exportam a ganhar valor e abre caminho para outras."
+},
+{
+"tipo": "diferenciar2",
+"chave": "politica",
+"cond": "gasto_baixo",
+"titulo": "Fomento como alavanca.",
+"texto": "O gasto municipal com cultura é de {gasto} por habitante, abaixo da média paulista. Apoiar agentes locais na elaboração de projetos para a PNAB e a Lei Rouanet traz recursos externos e amplia a renda dos produtores."
 },
 {
 "tipo": "tatica",

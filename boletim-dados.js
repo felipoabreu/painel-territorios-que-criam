@@ -19,6 +19,7 @@
       else if (r.tipo === 'oficio') L.oficios.set(r.chave, r);
       else if (r.tipo === 'situacao') L.sit[r.chave] = r.texto;
       else if (r.tipo === 'diferenciar') L.dif.push(r);
+      else if (r.tipo === 'diferenciar2') (L.dif2 = L.dif2 || []).push(r);
       else if (r.tipo === 'tatica') L.tat.push(r);
       else if (r.tipo === 'conectivo') L.con[r.chave] = r.texto;
     });
@@ -29,7 +30,7 @@
   dash.calc('bol_setores', {
     inputs: ['territorios', 'empresas_grupo', 'empresas_ano', 'intens_setor_mun', 'familias_mun', 'segmentos', 'comex_grupos', 'boletim_biblioteca'],
     title: 'Boletim: pontuação dos grupos de atividades criativas',
-    description: 'Para cada território e cada um dos nove grupos do Panorama, reúne empresas (Receita Federal), emprego formal (CEMPRE, recorte FIRJAN), intensidade criativa (RAIS) e ofícios (QL), e calcula concentração, dinâmica, estrutura e aderência (0 a 1). Potencial = 0,30 concentração + 0,30 dinâmica + 0,15 estrutura + 0,25 aderência. Setores com menos de 30 vínculos RAIS não entram na comparação de intensidade.',
+    description: 'Para cada território e cada um dos nove grupos do Panorama, reúne empresas (Receita Federal), emprego formal (CEMPRE, recorte FIRJAN), intensidade criativa (RAIS) e ofícios (QL), e calcula concentração, dinâmica, estrutura e aderência (0 a 1). Aderência = 0,40 diálogo com as áreas do Senac + 0,35 QL dos ofícios do grupo + 0,25 parcela dos profissionais do grupo que atua em outros setores. Potencial = 0,30 concentração + 0,30 dinâmica + 0,15 estrutura + 0,25 aderência. Setores com menos de 30 vínculos RAIS não entram na comparação de intensidade.',
     fn: (territorios, empresas_grupo, empresas_ano, intens_setor_mun, familias_mun, segmentos, comex_grupos, boletim_biblioteca) => {
       const L = libParse(boletim_biblioteca);
       const grp = [...L.grupos.values()].sort((a, b) => a.g - b.g);
@@ -79,7 +80,10 @@
           const formSp = has(s.e24) && s.ativas > 0 ? s.e24 / s.ativas * 100 : null;
           const varEmp = has(b.e22) && b.e22 >= 50 && !b.sig ? (b.e24 / b.e22 - 1) * 100 : null;
           const sEst = mean([has(form) && formT > 0 ? clamp(form / formT / 2) : null, has(varEmp) ? clamp(0.5 + varEmp / 60) : null]);
-          const sAder = 0.5 * G.aderencia + 0.5 * (has(b.fql) ? shrink(clamp(b.fql / 2), Math.min(1, b.ft / 200)) : 0.4);
+          // aderência ao Programa: diálogo com as áreas do Senac (biblioteca), ofícios presentes (QL) e alcance fora dos setores criativos
+          // (parcela dos profissionais do grupo incorporada a outros setores, onde estão comércio, serviços e turismo)
+          const incSh = b.ft >= 30 ? b.fi / b.ft : null;
+          const sAder = 0.40 * G.aderencia + 0.35 * (has(b.fql) ? shrink(clamp(b.fql / 2), Math.min(1, b.ft / 200)) : 0.4) + 0.25 * (has(incSh) ? clamp(incSh) : 0.4);
           const c0 = has(sConc) ? sConc : 0.4, e0 = has(sEst) ? sEst : 0.3;
           const pot = 0.30 * c0 + 0.30 * sDin + 0.15 * e0 + 0.25 * sAder;
           const fr = 1 - (0.45 * e0 + 0.25 * c0 + 0.30 * (has(dpp) ? clamp(0.5 + dpp / 8) : 0.5));
@@ -88,7 +92,7 @@
             rais_vinc: b.rv, rais_cri: b.rc, intens_pct: has(b.int) ? +b.int.toFixed(1) : null, intens_sp_pct: has(s.int) ? +s.int.toFixed(1) : null,
             emp_2024: b.e24, emp_2022: b.e22, emp_sigilo: b.sig, emp_var_pct: has(varEmp) ? +varEmp.toFixed(1) : null, ql_emp: has(qlEmp) ? +qlEmp.toFixed(2) : null,
             emp_100_empresas: has(form) ? +form.toFixed(1) : null, emp_100_empresas_sp: has(formSp) ? +formSp.toFixed(1) : null, emp_100_empresas_terr: has(formT) ? +formT.toFixed(1) : null,
-            oficios_total: b.ft, oficios_esp: b.fe, oficios_inc: b.fi, oficios_ql: has(b.fql) ? +b.fql.toFixed(2) : null, export_2025: b.ex, import_2025: b.im,
+            oficios_total: b.ft, oficios_esp: b.fe, oficios_inc: b.fi, oficios_inc_pct: b.ft >= 30 ? +(b.fi / b.ft * 100).toFixed(1) : null, oficios_ql: has(b.fql) ? +b.fql.toFixed(2) : null, export_2025: b.ex, import_2025: b.im,
             s_conc: has(sConc) ? +sConc.toFixed(2) : null, s_din: +sDin.toFixed(2), s_est: has(sEst) ? +sEst.toFixed(2) : null, s_ader: +sAder.toFixed(2),
             potencial: Math.round(pot * 100), fragilidade: Math.round(fr * 100), total_empresas: tot});
         });

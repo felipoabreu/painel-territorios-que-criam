@@ -682,6 +682,7 @@
       <section class="bol-page" id="bol-p3">
         <div class="bol-logo" role="img" aria-label="Senac"></div>
         <div class="bol-sec"><span class="bol-tag">2 · Setores criativos potenciais</span></div>
+        <p class="bol-lead">Antes de escolher onde atuar, vale olhar o conjunto: como as empresas criativas se distribuem entre os nove grupos de atividade, quanto o território dialoga com a missão do Senac e quais ofícios já mostram vocação.</p>
         <div class="bol-apoio" data-draw="bol-apoio" data-source="bol_ficha"></div>
         <div class="bol-grid2">
           <div>
@@ -698,75 +699,97 @@
             <div class="i"><span class="s">Cada setor recebe de 0 a 100 pontos; a pontuação aparece no cartão. Nos menos estruturados, ela mede a fragilidade.</span></div>
           </aside>
         </div>
-        <h3 style="margin-top:2mm">Maior potencial</h3>
-        <div data-draw="bol-cards-pot" data-source="bol_setores"></div>
+        <div class="bol-ader" data-draw="bol-aderencia" data-source="bol_ficha bol_setores familias_mun"></div>
+        <h3>Placar dos grupos de atividade</h3>
+        <table class="bol-placar" data-draw="bol-placar" data-source="bol_setores"></table>
+        <p class="bol-cap">Potencial e fragilidade de 0 a 100. Os três primeiros, em azul, abrem a página seguinte; os grupos “a estruturar” estão na página 5. Grupos sem empresas ativas não aparecem.</p>
         <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>3</span></div>
       </section>
 
       <section class="bol-page" id="bol-p4">
         <div class="bol-logo" role="img" aria-label="Senac"></div>
-        <div class="bol-sec"><span class="bol-tag">2 · Setores criativos potenciais</span><span class="sub">continuação</span></div>
-        <h3 style="margin-top:0">Menos estruturados, para trabalhar no médio prazo</h3>
+        <div class="bol-sec"><span class="bol-tag">2 · Setores criativos potenciais</span><span class="sub">maior potencial</span></div>
+        <h3 style="margin-top:0">Onde o território já tem força</h3>
+        <p class="bol-lead">Nestes grupos, concentração, dinâmica, estrutura e aderência se somam a favor. São os candidatos naturais a ofertas regulares: há mercado, há gente trabalhando e há diálogo com as áreas do Senac.</p>
+        <div data-draw="bol-cards-pot" data-source="bol_setores"></div>
+        <p class="bol-cap">A pontuação combina os quatro critérios da página anterior. Amostras pequenas pesam menos; municípios com poucos registros usam a região imediata.</p>
+        <div class="bol-oficio" data-draw="bol-oficio" data-source="familias_mun"></div>
+        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>4</span></div>
+      </section>
+
+      <section class="bol-page" id="bol-p5">
+        <div class="bol-logo" role="img" aria-label="Senac"></div>
+        <div class="bol-sec"><span class="bol-tag">2 · Setores criativos potenciais</span><span class="sub">menos estruturados</span></div>
+        <h3 style="margin-top:0">Onde vale construir, no médio prazo</h3>
+        <p class="bol-lead">Estes grupos têm presença real, mas sinais de fragilidade: fatia em queda, pouco emprego formal ou intensidade criativa abaixo do Estado. Pedem pilotos e escuta antes de ofertas regulares.</p>
         <div data-draw="bol-cards-fr" data-source="bol_setores"></div>
         <h3>Onde trabalham os criativos incorporados</h3>
         <p class="bol-cap" style="margin:0 0 2mm">Profissionais em ocupações criativas fora dos setores criativos, por atividade (estimativa sobre o emprego formal, 2024). Em laranja, atividades das áreas do Senac (comércio, serviços e turismo).</p>
         <div class="bol-bars" data-draw="bol-incorp" data-source="incorp_secao"></div>
         <p class="bol-cap">Fonte: IBGE CEMPRE 2024 e PNAD Contínua, estimativa do painel.</p>
-        <div class="bol-oficio" data-draw="bol-oficio" data-source="familias_mun"></div>
-        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>4</span></div>
-      </section>
-
-      <!-- 3 · ancoragem -->
-      <section class="bol-page" id="bol-p5">
-        <div class="bol-logo" role="img" aria-label="Senac"></div>
-        <div class="bol-sec"><span class="bol-tag">3 · Pontos de ancoragem estratégica local</span></div>
-        <p style="font-size:9pt;color:var(--cinza)">Como transformar os setores potenciais em público, oferta e presença da unidade no ecossistema.</p>
-        <div class="bol-anc">
-          <div class="row"><div class="lab">Como atrair esse público</div><div class="txt" id="bol-sec31" data-draw="bol-s31" data-source="bol_ficha" data-max="2000"></div></div>
-          <div class="row"><div class="lab">Como se comunicar com esse público</div><div class="txt" id="bol-sec32" data-draw="bol-s32" data-source="bol_ficha" data-max="1000"></div></div>
-          <div class="row"><div class="lab">Estratégias para diferenciar a oferta local</div><div class="txt" id="bol-sec34" data-draw="bol-s34" data-source="bol_ficha" data-max="2000"></div></div>
-        </div>
         <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>5</span></div>
       </section>
 
+      <!-- 3 · ancoragem -->
       <section class="bol-page" id="bol-p6">
         <div class="bol-logo" role="img" aria-label="Senac"></div>
-        <div class="bol-sec"><span class="bol-tag">3 · Pontos de ancoragem estratégica local</span><span class="sub">continuação</span></div>
+        <div class="bol-sec"><span class="bol-tag">3 · Pontos de ancoragem estratégica local</span></div>
+        <p class="bol-lead">Conhecidos os setores, a pergunta muda: quem é esse público e como chegar até ele? Esta página e as duas seguintes transformam os dados em público, oferta e presença da unidade no ecossistema.</p>
         <div class="bol-anc">
-          <div class="row"><div class="lab">Títulos que podem fortalecer o ecossistema</div><div class="txt" id="bol-sec33" data-draw="bol-s33" data-source="bol_setores" data-max="3000"></div></div>
-          <div class="row"><div class="lab">Palavras-chave para lead</div><div class="txt" id="bol-sec35" data-max="1500"><p data-draw="bol-kw-intro" data-source="bol_ficha">—</p><ul class="bol-kw" data-draw="bol-kw" data-source="bol_setores"></ul></div></div>
+          <div class="row"><div class="lab">Como atrair esse público</div><div class="txt" id="bol-sec31" data-draw="bol-s31" data-source="bol_ficha" data-max="2400"></div></div>
+          <div class="row"><div class="lab">Como se comunicar com esse público</div><div class="txt" id="bol-sec32" data-draw="bol-s32" data-source="bol_ficha" data-max="1000"></div></div>
         </div>
         <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>6</span></div>
       </section>
 
-      <!-- 4 · caminhos -->
       <section class="bol-page" id="bol-p7">
         <div class="bol-logo" role="img" aria-label="Senac"></div>
-        <div class="bol-sec"><span class="bol-tag">4 · Caminhos possíveis para iniciar a atuação</span></div>
-        <div class="bol-tag small laranja">Perspectivas estratégicas</div>
-        <div id="bol-sec41" data-max="3000">
-          <div data-draw="bol-s41" data-source="bol_ficha bol_setores"></div>
-          <div class="bol-dois">
-            <div class="amp"><div class="h">Onde ampliar</div><div class="d">ofertas regulares e escaláveis</div><div class="l" data-draw="bol-ampliar" data-source="bol_setores"></div></div>
-            <div class="esc"><div class="h">Onde escutar</div><div class="d">pilotos e escuta qualificada</div><div class="l" data-draw="bol-escutar" data-source="bol_setores"></div></div>
-          </div>
-          <div class="bol-perg" data-draw="bol-perguntas" data-source="bol_ficha"></div>
-          <p data-draw="bol-fecho41" data-source="bol_ficha">—</p>
+        <div class="bol-sec"><span class="bol-tag">3 · Pontos de ancoragem estratégica local</span><span class="sub">oferta</span></div>
+        <p class="bol-lead">Com o público em vista, estes são os formatos de oferta que conversam com os setores escolhidos. São pontos de partida para a conversa da equipe.</p>
+        <div class="bol-anc">
+          <div class="row"><div class="lab">Títulos que podem fortalecer o ecossistema</div><div class="txt" id="bol-sec33" data-draw="bol-s33" data-source="bol_setores" data-max="3200"></div></div>
+          <div class="row"><div class="lab">Palavras-chave para lead</div><div class="txt" id="bol-sec35" data-max="1500"><p data-draw="bol-kw-intro" data-source="bol_ficha">—</p><ul class="bol-kw" data-draw="bol-kw" data-source="bol_setores"></ul></div></div>
         </div>
         <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>7</span></div>
       </section>
 
       <section class="bol-page" id="bol-p8">
         <div class="bol-logo" role="img" aria-label="Senac"></div>
-        <div class="bol-sec"><span class="bol-tag">4 · Caminhos possíveis para iniciar a atuação</span><span class="sub">continuação</span></div>
+        <div class="bol-sec"><span class="bol-tag">3 · Pontos de ancoragem estratégica local</span><span class="sub">diferenciação</span></div>
+        <h3 style="margin-top:0">Estratégias para diferenciar a oferta local</h3>
+        <p class="bol-lead">Diferenciar é o que faz a unidade ser lembrada pelo ecossistema, e não apenas procurada. Cada estratégia parte de uma característica do território, aponta a oportunidade e indica o que desenvolver.</p>
+        <div class="bol-difs" id="bol-sec34" data-draw="bol-s34" data-source="bol_ficha" data-max="2800"></div>
+        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>8</span></div>
+      </section>
+
+      <!-- 4 · caminhos -->
+      <section class="bol-page" id="bol-p9">
+        <div class="bol-logo" role="img" aria-label="Senac"></div>
+        <div class="bol-sec"><span class="bol-tag">4 · Caminhos possíveis para iniciar a atuação</span></div>
+        <div class="bol-tag small laranja">Perspectivas estratégicas</div>
+        <div id="bol-sec41" data-max="3600">
+          <div data-draw="bol-s41" data-source="bol_ficha bol_setores"></div>
+          <div class="bol-dois">
+            <div class="amp"><div class="h">Onde ampliar</div><div class="d">ofertas regulares e escaláveis</div><div class="l" data-draw="bol-ampliar" data-source="bol_setores"></div></div>
+            <div class="esc"><div class="h">Onde escutar</div><div class="d">pilotos e escuta qualificada</div><div class="l" data-draw="bol-escutar" data-source="bol_setores"></div></div>
+          </div>
+          <div class="bol-perg" data-draw="bol-perguntas" data-source="bol_ficha"></div>
+          <div class="bol-sintese"><div class="h">Síntese</div><p data-draw="bol-fecho41" data-source="bol_ficha">—</p></div>
+        </div>
+        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>9</span></div>
+      </section>
+
+      <section class="bol-page" id="bol-p10">
+        <div class="bol-logo" role="img" aria-label="Senac"></div>
+        <div class="bol-sec"><span class="bol-tag">4 · Caminhos possíveis para iniciar a atuação</span><span class="sub">primeiros passos</span></div>
         <div class="bol-tag small laranja">Táticas possíveis</div>
         <ul class="bol-acoes" id="bol-sec42" data-draw="bol-taticas" data-source="bol_setores" data-max="2000"></ul>
         <div class="bol-tag small" style="margin-top:3mm">Fontes e notas de leitura</div>
         <div class="bol-fontes" data-draw="bol-fontes" data-source="fontes bol_ficha"></div>
-        <div class="bol-fecho"><b>Boletim Estratégico - Territórios que Criam | Ecossistema Criativo Local.</b> Gerado a partir do Painel de Dados do Programa Territórios que Criam (Senac SP) com os dados disponíveis em <span data-draw="bol-carga" data-source="fontes">—</span>. Revise-o sempre que as bases do painel forem atualizadas.
+        <div class="bol-fecho"><b>Boletim Estratégico - Territórios que Criam | Ecossistema Criativo Local.</b><br>Gerado a partir do Painel de Dados do Programa Territórios que Criam | Senac SP com os dados disponíveis em <span data-draw="bol-carga" data-source="fontes">—</span>. Revise-o sempre que as bases do painel forem atualizadas.
           <div class="fio"><div><b>Painel de dados | Programa Territórios que Criam - SENAC SP</b><br>Elaboração: Senac Sorocaba&nbsp;&nbsp;|&nbsp;&nbsp;TDP responsável: Felipo Abreu</div><span class="bol-cc" role="img" aria-label="Licença Creative Commons CC BY-NC-SA"></span></div>
         </div>
-        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>8</span></div>
+        <div class="bol-folio"><span data-draw="bol-folio-nome" data-source="bol_ficha">—</span><span>10</span></div>
       </section>
     </div>
     </div>
@@ -892,7 +915,7 @@
       <li><b>Pergunte ao próprio painel</b>Todo título diz a unidade e o ano. Quando aparecer o botão “?”, clique: ele explica, em linguagem direta, o que o indicador mede e como ler. Passe o mouse sobre barras, pontos e linhas para ver o detalhe; nos ofícios criativos, por exemplo, o balão explica o quociente locacional (QL) de cada ofício como “quantos profissionais há para cada 100 que a média paulista levaria a esperar”.</li>
       <li><b>Leia as relações com cuidado</b>Nos Quadros 1 e 2 de <i>Dados Territoriais</i>, a correlação de Spearman mostra o quanto cada componente do IDPEC-SP acompanha a concentração criativa entre os municípios. Ela indica regularidades, não causas. Um município sozinho não tem correlação própria: por isso o Quadro 2 repete a correlação do Estado como referência para ler a posição do município.</li>
       <li><b>Compare territórios</b>Em <i>Comparar territórios</i>, junte até seis municípios, regiões, GOs ou unidades e veja tabela e gráfico lado a lado. É o jeito mais rápido de responder “estamos acima ou abaixo dos vizinhos?”.</li>
-      <li><b>Leve a conversa para a equipe</b>A aba <i>Boletim estratégico</i> transforma os dados do território selecionado em um documento de oito páginas: panorama, setores com mais potencial, pontos de ancoragem da oferta e caminhos para começar. O botão “Baixar PDF” gera o arquivo para levar à reunião. O boletim muda sempre que o recorte muda.</li>
+      <li><b>Leve a conversa para a equipe</b>A aba <i>Boletim estratégico</i> transforma os dados do território selecionado em um documento de dez páginas: panorama, setores com mais potencial, pontos de ancoragem da oferta e caminhos para começar. O botão “Baixar PDF” gera o arquivo para levar à reunião. O boletim muda sempre que o recorte muda.</li>
       <li><b>Confira a origem de cada número</b>No painel do Claude, o botão “Fontes”, no topo, mostra a base de cada gráfico e permite baixar os dados. Nas outras versões, a aba <i>Glossário &amp; Metodologia</i> lista fontes, períodos e datas de coleta.</li>
     </ol>
     <div class="prose">

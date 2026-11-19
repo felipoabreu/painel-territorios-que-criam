@@ -27,7 +27,7 @@
   const T = () => String(dash.params().t ?? '35');
   const split = (s) => (has(s) ? String(s).split('|').map((x) => x.trim()).filter(Boolean) : []);
   const SENAC_SEC = new Set(['G', 'I', 'H', 'N', 'S']);
-  const LIMITES = {s1: 3000, s2: 3000, s31: 2000, s32: 1000, s33: 3000, s34: 2000, s35: 1500, s41: 3000, s42: 2000};
+  const LIMITES = {s1: 3000, s2: 3000, s31: 2400, s32: 1000, s33: 3200, s34: 2800, s35: 1500, s41: 3600, s42: 2000};
   window.BOL_LIMITES = LIMITES;
 
   // ---------- biblioteca editorial ----------
@@ -38,6 +38,7 @@
       else if (r.tipo === 'oficio') L.oficios.set(r.chave, r);
       else if (r.tipo === 'situacao') L.sit[r.chave] = r.texto;
       else if (r.tipo === 'diferenciar') L.dif.push(r);
+      else if (r.tipo === 'diferenciar2') (L.dif2 = L.dif2 || []).push(r);
       else if (r.tipo === 'tatica') L.tat.push(r);
       else if (r.tipo === 'conectivo') L.con[r.chave] = r.texto;
     });
@@ -78,6 +79,9 @@
   };
 
   let memo = {key: null, model: null};
+  let libAtual = null;
+  const L0 = () => libAtual || {sit: {}};
+  const fillRaw = (s) => fill(s || '', {});
   const modelo = () => {
     const ficha = rowsOf('bol_ficha'), set = rowsOf('bol_setores'), libr = rowsOf('boletim_biblioteca'), inc = rowsOf('incorp_secao'), fam = rowsOf('familias_mun'), fontes = rowsOf('fontes');
     if (!ficha || !set || !libr || !inc || !fam || !fontes) return null;
@@ -88,6 +92,7 @@
     const fx = ficha.find((r) => r.cod === t);
     if (!fx) return null;
     const m = construir(t, fx, ficha, set, L, inc, fam, fontes);
+    libAtual = L;
     memo = {key, src: ficha, model: m};
     return m;
   };
@@ -110,7 +115,7 @@
     const sit = (k, vars) => fill(L.sit[k] || '', vars);
     const V = {T: lg.em, D: lg.de, N: lg.N, Tc: lg.suj};
     const unid = est ? 'o Senac São Paulo' : f.nivel === 'Unidade Senac' ? (f.nome.startsWith('Senac') ? 'o ' + f.nome : 'as unidades ' + f.nome) : f.nivel === 'GO Senac' ? (f.cod === '900' ? 'o Senac na capital' : 'a ' + f.nome) : f.unidade && f.cod_go !== '900' ? 'o ' + f.unidade : 'o Senac';
-    const nomes = (arr, k = 'curto') => { const n = arr.map((r) => G(r)[k] || G(r).curto); return n.length > 1 ? n.slice(0, -1).join(', ') + ' e ' + n[n.length - 1] : (n[0] || ''); };
+    const nomes = (arr, k = 'curto') => { const n = arr.map((r) => G(r)[k] || G(r).curto); return n.length > 1 ? n.slice(0, -1).join(', ') + (n.length > 2 && n.slice(-2).some((x) => x.includes(' e ')) ? ', e ' : ' e ') + n[n.length - 1] : (n[0] || ''); };
     const M = {t, f, lg, est, scod, slg, apoio: scod !== t, top, fr, secoes: {}};
 
     // ---------- capa ----------
@@ -268,6 +273,7 @@
 
     // ---------- 2 · setores ----------
     const tot = rows.reduce((s, r) => s + (r.ativas || 0), 0);
+    M.placar = [...rows].filter((r) => r.ativas > 0).sort((x, y) => (y.papel === 'potencial') - (x.papel === 'potencial') || y.potencial - x.potencial).map((r) => ({r, nome: G(r).curto, papel: r.papel}));
     M.barras = [...rows].sort((a, b) => b.ativas - a.ativas).map((r) => ({nome: G(r).nome.replace('Publicidade, pesquisa e suporte à inovação cultural', 'Publicidade, pesquisa e inovação').replace('Software, videogames, serviços de computador e web', 'Software, games e web').replace('Atividades artesanais e produtos de design', 'Artesanato e produtos de design').replace('Música, artes cênicas e visuais', 'Música, artes cênicas e visuais'), r, pct: tot ? r.ativas / tot * 100 : 0, lj: r.papel === 'menos estruturado', destaque: r.papel === 'potencial'}));
     M.barrasMax = Math.max(1, ...rows.map((r) => r.ativas));
     M.barrasTit = M.apoio ? 'Empresas criativas por grupo (jan/2026) · região' : 'Empresas criativas por grupo de atividade (jan/2026)';
@@ -309,14 +315,44 @@
     M.incorp = icr.slice(0, 8).map((x) => ({nome: x.secao.replace(/ \(fora dos setores criativos\)/, ''), v: x.incorporados, pct: icTot ? x.incorporados / icTot * 100 : 0, lj: SENAC_SEC.has(x.sec), x}));
     if (icr.length > 8) { const rest = icr.slice(8); const v = rest.reduce((s, x) => s + x.incorporados, 0); M.incorp.push({nome: 'Demais atividades (' + rest.length + ')', v, pct: icTot ? v / icTot * 100 : 0, cinza: true}); }
     M.incorpMax = Math.max(1, ...M.incorp.map((x) => x.v));
-    // ofício de destaque
-    const ofs = fam.filter((x) => S(x.cod) === scod && has(x.ql) && x.ql > 1 && x.total >= 30 && !x.baixa_precisao && L.oficios.has(x.fam)).sort((a, b) => (b.fam === 'Gastronomia (chefs)') - (a.fam === 'Gastronomia (chefs)') || b.ql - a.ql);
-    const nOf = fam.filter((x) => S(x.cod) === scod && has(x.ql) && x.ql > 1 && x.total >= 30).length;
-    if (ofs[0] && !est) {
-      const o = ofs[0], lo = L.oficios.get(o.fam);
-      const ofm = (field, fmt) => ({v: fmt(o[field]), s: 'familias_mun', f: field, w: where({cod: scod, fam: o.fam})});
-      M.oficio = {fam: o.fam, nome: lo.nome, lib: lo, p: [{b: ['Fique de olho ' + (/^[aeiouáé]/i.test(lo.nome) ? 'no ofício de ' : 'no ofício de ') + lo.nome + '.']}, nOf === 1 ? ' É o único ofício criativo com concentração acima da paulista (QL ' : ' É um dos ' + nOf + ' ofícios criativos com concentração acima da paulista (QL ', ofm('ql', F.d2), '), com ', ...fill(lo.texto, {n: ofm('total', F.int)})]};
-    } else M.oficio = null;
+    // ofícios no radar: consolidados (escala e concentração), emergentes (grupo ganhando espaço) e potenciais (oportunidade a construir)
+    const famRows = fam.filter((x) => S(x.cod) === scod && has(x.ql) && x.total >= 30 && L.oficios.has(x.fam));
+    const famGrupo = (nm) => [...L.grupos.values()].find((g) => g.fam.includes(nm));
+    const rowG = (g) => (g ? rows.find((r) => Number(r.g) === g.g) : null);
+    const ofm = (o, field, fmt) => ({v: fmt(o[field]), s: 'familias_mun', f: field, w: where({cod: scod, fam: o.fam})});
+    const consol = famRows.filter((x) => x.ql >= 1 && x.total >= 100 && !x.baixa_precisao).sort((a, b) => b.ql - a.ql);
+    const emerg = famRows.filter((x) => x.ql >= 0.8 && !consol.includes(x)).map((x) => ({x, r: rowG(famGrupo(x.fam))})).filter((o) => o.r && has(o.r.fatia_var_pp) && o.r.fatia_var_pp >= 1).sort((a, b) => b.r.fatia_var_pp - a.r.fatia_var_pp);
+    const topG = new Set(top.map((r) => Number(r.g)));
+    const poten = famRows.filter((x) => x.ql < 0.8 && x.incorporados >= 30).sort((a, b) => (topG.has((famGrupo(b.fam) || {}).g) - topG.has((famGrupo(a.fam) || {}).g)) || b.incorporados - a.incorporados);
+    const radar = [];
+    if (!est) {
+      consol.slice(0, emerg.length || poten.length ? 1 : 2).forEach((o) => radar.push({tipo: 'consolidado', o, p: [{b: ['Consolidado · ' + L.oficios.get(o.fam).nome + '.']}, ' '].concat(sit('oficio_consolidado', {nome: L.oficios.get(o.fam).nome, n: ofm(o, 'total', F.int), ql: ofm(o, 'ql', F.d2)}))}));
+      if (emerg[0]) { const {x: o, r} = emerg[0]; radar.push({tipo: 'emergente', o, p: [{b: ['Emergente · ' + L.oficios.get(o.fam).nome + '.']}, ' '].concat(sit('oficio_emergente', {ql: ofm(o, 'ql', F.d2), f14: sc(r, 'fatia_2014', F.pct), f25: sc(r, 'fatia_2025', F.pct)}))}); }
+      if (poten[0] && radar.length < 3) { const o = poten[0]; radar.push({tipo: 'potencial', o, p: [{b: ['Potencial · ' + L.oficios.get(o.fam).nome + '.']}, ' '].concat(sit('oficio_potencial', {ql: ofm(o, 'ql', F.d2), inc: ofm(o, 'incorporados', F.int)}))}); }
+    }
+    M.radar = radar;
+    M.radarVazio = !est && !radar.length;
+    const oc = consol[0];
+    M.oficio = oc && !est ? {fam: oc.fam, nome: L.oficios.get(oc.fam).nome, lib: L.oficios.get(oc.fam)} : null;
+    // aderência do recorte ao Programa: diversidade, ponte com o terciário, ofícios, dinâmica e base empreendedora
+    const nDiv = rows.filter((r) => r.part_pct >= 5).length;
+    const nOf = famRows.filter((x) => x.ql > 1).length;
+    const comp = [
+      {k: 'div', s: Math.min(1, nDiv / 7), bom: [String(nDiv) + ' grupos de atividade com ao menos 5% das empresas criativas, o que permite conectar segmentos'], mau: ['atividade criativa concentrada em poucos grupos (', String(nDiv), ' com ao menos 5% das empresas)']},
+      has(f.incorp_senac_pct) && !f.pequeno ? {k: 'terc', s: Math.min(1, f.incorp_senac_pct / 50), bom: [fc('incorp_senac_pct', F.pct), ' dos criativos incorporados atuam em comércio, serviços e turismo, áreas do Senac'], mau: ['só ', fc('incorp_senac_pct', F.pct), ' dos criativos incorporados atuam em comércio, serviços e turismo']} : null,
+      est ? null : {k: 'ofi', s: Math.min(1, nOf / 3), bom: [String(nOf) + (nOf === 1 ? ' ofício criativo' : ' ofícios criativos') + ' acima da média paulista'], mau: [nOf ? 'só ' + nOf + ' ofício acima da média paulista' : 'nenhum ofício criativo acima da média paulista']},
+      has(f.empresas_cresc_pct) && !poucas ? {k: 'dyn', s: clamp(f.empresas_cresc_pct / 100), bom: ['empresas criativas ', f.empresas_cresc_pct >= 100 ? 'mais que dobraram' : ['cresceram ', fc('empresas_cresc_pct', F.pct)], ' desde 2014'].flat(), mau: ['pouco crescimento das empresas criativas desde 2014 (', fc('empresas_cresc_pct', F.pct), ')']} : null,
+      has(f.mei_micro_pct) && !poucas ? {k: 'base', s: f.mei_micro_pct >= 80 ? 0.75 : 0.45, bom: [fc('mei_micro_pct', F.pct), ' de MEI e microempresas, público para inclusão produtiva'], mau: ['base empreendedora menos numerosa (', fc('mei_micro_pct', F.pct), ' de MEI e micro)']} : null,
+    ].filter(Boolean);
+    const aderScore = Math.round(comp.reduce((s, c) => s + c.s, 0) / Math.max(1, comp.length) * 100);
+    const fortes = comp.filter((c) => c.s >= 0.6).sort((a, b) => b.s - a.s).slice(0, 2);
+    const lac = comp.filter((c) => c.s < 0.5).sort((a, b) => a.s - b.s)[0];
+    const ap = [{b: [L.sit[aderScore >= 60 ? 'ader_alta' : aderScore >= 40 ? 'ader_media' : 'ader_baixa']]}, ' '];
+    if (fortes.length) { ap.push('A favor: '); fortes.forEach((c, i) => ap.push(...c.bom, i < fortes.length - 1 ? '; ' : '.')); }
+    if (lac) ap.push(fortes.length ? ' Lacuna: ' : 'Lacuna: ', ...lac.mau, '.');
+    if (M.apoio) ap.push(' Leitura dos setores apoiada na região de ' + slg.curto + '.');
+    M.aderencia = ap;
+    M.aderScore = aderScore;
 
     // ---------- 3 · ancoragem ----------
     const s31 = [];
@@ -339,11 +375,22 @@
       p.push('.');
       s33.push(p);
     }
-    if (M.oficio) s33.push([{b: [cap(M.oficio.nome) + '.']}, ' Ofício criativo com concentração acima da média paulista, pede ' + M.oficio.lib.ofertas + '.']);
+    if (M.oficio) s33.push([{b: [cap(M.oficio.nome) + '.']}, (consol[0].ql >= 1.2 ? ' Ofício criativo com concentração acima da média paulista' : ' Ofício criativo com presença equivalente à média paulista e escala para turmas regulares') + ', pede ' + M.oficio.lib.ofertas + '.']);
     M.s33 = trim(s33, LIMITES.s33);
+    // 3.4 · diferenciação: característica identificada → oportunidade → desenvolvimento, primeiro nos setores de maior potencial, depois nos traços do território
     const s34 = [sit('dif_intro', V)];
-    const conds = {sempre: true, tec: top.some((r) => r.g === 9), incorp: !top.some((r) => r.g === 9) && has(f.incorp_pct) && f.incorp_pct >= 35, mort: has(f.mort_5a) && f.coorte_5a >= 30 && f.mort_5a >= 35, infra: has(f.atelie_pct) && f.atelie_pct < 10 && f.escolas >= 5, sempre_espaco: !(has(f.atelie_pct) && f.atelie_pct < 10 && f.escolas >= 5), mei: has(f.mei_pct) && f.mei_pct >= 35};
-    L.dif.filter((x) => conds[x.cond]).forEach((x) => s34.push([{b: [x.titulo]}, ' ', ...fill(x.texto, {mort: fc('mort_5a', F.pct), infra: fc('atelie_pct', F.pct)})]));
+    top.slice(0, 2).forEach((r) => { const g = G(r); if (g.dif_texto) s34.push([{b: [g.dif_titulo]}, ' ', ...fill(g.dif_texto, {...V, ...(M.apoio ? {T: 'na região de ' + slg.curto, D: 'da região de ' + slg.curto} : {}), ativas: sc(r, 'ativas', F.int), fatia: sc(r, 'part_pct', F.pct)})]); });
+    const secInc = f.incorp_sec1 ? f.incorp_sec1.toLowerCase().replace(/ \(fora.*\)/, '') + (f.incorp_sec2 ? ' e ' + f.incorp_sec2.toLowerCase().replace(/ \(fora.*\)/, '') : '') : '';
+    const conds = [
+      ['mort', has(f.mort_5a) && f.coorte_5a >= 30 && f.mort_5a >= 40, f.mort_5a || 0],
+      ['ponte_incorp', has(f.incorp_pct) && f.incorp_pct >= 35 && !f.pequeno && !!secInc, (f.incorp_pct || 0) - 5],
+      ['espaco', has(f.atelie_pct) && f.atelie_pct < 10 && f.escolas >= 5, 30],
+      ['mercado', (f.export_2025 || 0) >= 100000, 25],
+      ['politica', !est && has(f.gasto_pc) && f.gasto_pc > 0 && has(f.gasto_pc_sp) && f.gasto_pc < f.gasto_pc_sp * 0.8, 20],
+      ['etapas', has(f.mei_pct) && f.mei_pct >= 45, 15],
+    ].filter((c) => c[1]).sort((a, b) => b[2] - a[2]);
+    const D2 = new Map((L.dif2 || []).map((x) => [x.chave === 'durar' ? 'mort' : x.chave, x]));
+    conds.forEach(([k]) => { const x = D2.get(k); if (x) s34.push([{b: [x.titulo]}, ' ', ...fill(x.texto, {...V, mort: fc('mort_5a', F.pct), inc: fc('incorp_pct', F.pct), sec: secInc, infra: fc('atelie_pct', F.pct), mei: fc('mei_pct', F.pct), ex: fc('export_2025', F.usd), gasto: fc('gasto_pc', F.brl2)})]); });
     M.s34 = trim(s34, LIMITES.s34);
     // palavras-chave
     const kw = [];
@@ -365,16 +412,37 @@
     // ---------- 4 · caminhos ----------
     const s41 = [];
     s41.push(sit('p41_abre', {...V, U: unid, papel: L.sit['papel_' + papel]}).map((x, i) => (i === 0 && typeof x === 'string' ? cap(x.replace(/^Que papel o /, 'Que papel o ')) : x)));
-    s41.push(sit(f.pequeno ? 'mov_reconhecer_pequeno' : f.mei_micro_pct >= 85 && !(empCmp === 'acima') ? 'mov_reconhecer_peq' : 'mov_reconhecer_emp', V));
-    if (top.length && fr.length) s41.push(fill(L.sit.mov_escolher, {top: cap(nomes(top, 'sigla')), fr: nomes(fr, 'sigla')}));
-    s41.push(sit('mov_medir', V));
-    M.s41 = trim(s41, LIMITES.s41 - 520);
+    // perspectivas: mesmos três movimentos, agora ancorados nos dados do recorte e marcados pelos pilares do Programa quando pertinentes
+    const conexaoInc = has(f.incorp_pct) && f.incorp_pct >= 35 && secInc ? fill(L.sit.conexao_incorp, {inc: fc('incorp_pct', F.pct), sec: secInc}) : null;
+    const conexao = M.apoio ? fill(L.sit.conexao_regiao, {R: slg.curto}) : conexaoInc ? conexaoInc : [L.sit.conexao_politica];
+    if (!poucas && has(f.mei_micro_pct) && has(f.incorp_pct) && top[0] && !f.pequeno) {
+      const rec = fill(L.sit.mov_reconhecer_dados, {...V, mei: fc('mei_micro_pct', F.pct), inc: fc('incorp_pct', F.pct), top1: G(top[0]).curto, leitura: L.sit[f.mei_micro_pct >= 85 && empCmp !== 'acima' ? 'leitura_peq' : 'leitura_emp']});
+      s41.push([...rec, ' ', ...(conexao === conexaoInc ? fill(L.sit.conexao_incorp2, {sec: secInc}) : conexao)]);
+    } else s41.push([...sit(f.pequeno ? 'mov_reconhecer_pequeno' : 'mov_reconhecer_emp', V), ' ', ...conexao]);
+    if (top.length && fr.length) s41.push(fill(L.sit.mov_escolher_v2, {top: cap(nomes(top, 'sigla')), fr: cap(nomes(fr, 'sigla'))}));
+    const base = [];
+    if (has(f.mort_5a) && f.coorte_5a >= 30) base.push([fc('mort_5a', F.pct), ' de mortalidade em cinco anos']);
+    if (hasEmp) base.push([fc('cri_part', F.pct2), ' do emprego formal nos setores criativos']);
+    if (has(f.empresas)) base.push([fc('empresas', F.int), ' empresas criativas ativas']);
+    s41.push(fill(L.sit.mov_medir_v2, {base: '\u0000'}).flatMap((x) => (x === '\u0000' ? base.flatMap((b, i) => [...b, i === base.length - 1 ? '' : i === base.length - 2 ? ' e ' : ', ']) : [x])));
+    M.s41 = trim(s41, LIMITES.s41 - 900);
     M.ampliar = top.map((r) => G(r).ampliar);
     M.escutar = fr.map((r) => G(r).ampliar);
     M.ampliarExtra = M.oficio ? '+ ' + M.oficio.nome + ' como ponte' : '+ ofertas de gestão para negócios criativos';
     M.perguntas = split(L.sit.perguntas).map((q) => fill(q, V));
-    M.fecho41 = !poucas && has(f.empresas_cresc_pct) && f.empresas_cresc_pct >= 20 ? sit('fecho_cresceu', {...V, cresc: f.empresas_cresc_pct >= 100 ? 'mais que dobrou' : 'cresceu ' + N1.format(f.empresas_cresc_pct) + '%'}) : sit('fecho_estavel', V);
+    // encerramento: destaque do recorte → vocação → oportunidade → papel do Senac
+    const fe = [];
+    if (!poucas && has(f.empresas_cresc_pct) && f.empresas_cresc_pct >= 20) fe.push('O número de empresas criativas ' + lg.em + ' ' + (f.empresas_cresc_pct >= 100 ? 'mais que dobrou' : 'cresceu ' + N1.format(f.empresas_cresc_pct) + '%') + ' desde 2014 (', fc('empresas_2014', F.int), ' → ', fc('empresas_2025', F.int), '). ');
+    else if (top[0] && has(top[0].fatia_var_pp) && top[0].fatia_var_pp >= 3) fe.push(cap(G(top[0]).curto) + ' passou de ', sc(top[0], 'fatia_2014', F.pct), ' para ', sc(top[0], 'fatia_2025', F.pct), ' das empresas criativas ' + slg.de + ' desde 2014. ');
+    else if (empCmp === 'acima') fe.push(cap(lg.em) + ', ', fc('cri_part', F.pct2), ' do emprego formal está nos setores criativos, acima da média paulista. ');
+    else if (has(f.empresas)) fe.push(cap(lg.em) + ' há ', fc('empresas', F.int), f.empresas < 50 ? ' empresas criativas ativas, uma base ainda pequena. ' : ' empresas criativas ativas, uma base que se renova todos os anos. ');
+    if (M.oficio && consol[0].ql >= 1.2) fe.push('A vocação mais nítida está no ofício de ' + M.oficio.nome + ', com concentração acima da média paulista' + (top[0] ? ', e ' + G(top[0]).sigla + ' reúne os sinais mais fortes de potencial. ' : '. '));
+    else if (top[0]) fe.push((M.apoio ? 'Na região de ' + slg.curto + ', ' + G(top[0]).sigla : cap(G(top[0]).sigla)) + ' reúne os sinais mais fortes de potencial' + (top[1] ? ', seguida de ' + G(top[1]).sigla : '') + '. ');
+    if (fr[0]) fe.push('A oportunidade menos óbvia está em ' + G(fr[0]).sigla + ', hoje pouco estruturada, que pode ganhar fôlego com formação de base e acesso a mercado. ');
+    fe.push(L.sit['fecho_reflexao_' + papel] + ' ', L.sit.fecho_pergunta);
+    M.fecho41 = fe;
     M.s41len = M.s41.reduce((s, p) => s + len(p), 0) + len(M.fecho41) + M.perguntas.reduce((s, p) => s + len(p), 0) + 'Onde ampliarofertas regulares e escaláveisOnde escutarpilotos e escuta qualificada'.length + M.ampliar.join('').length + M.escutar.join('').length + M.ampliarExtra.length + '+ parceria com a política cultural'.length;
+    while (M.s41len > LIMITES.s41 - 150 && M.perguntas.length > 3) { M.s41len -= len(M.perguntas.pop()); }
     const vT = {T: lg.em, top3: nomes(top, 'sigla'), area_inc: top.some((r) => r.g === 9) ? 'tecnologia ou design' : 'design ou comunicação'};
     M.taticas = L.tat.map((x) => ({icone: x.icone, titulo: x.titulo, texto: fill(x.texto, vT)}));
     M.s42len = M.taticas.reduce((s, x) => s + x.titulo.length + len(x.texto), 0);
@@ -440,6 +508,16 @@
     const fl = el('div', 'fl' + (x.lj ? ' lj' : '') + (x.cinza ? ' cz' : '')); fl.style.width = Math.max(0.4, x.v / max * 100).toFixed(1) + '%';
     return el('div', 'bar', [el('span', 'nm', [x.nome]), el('div', 'tr', [fl]), el('span', 'v', parts(fmt(x)))]);
   });
+  draw('bol-placar', (e, M) => {
+    const th = el('tr', null, ['Grupo', 'Empresas', 'Fatia 2014 → 2025', 'Potencial', 'Fragilidade', 'Leitura'].map((t, i) => el('th', i && i < 5 ? 'n' : null, [t])));
+    const sv = (r, f, fmt) => parts([{v: fmt(r[f]), s: 'bol_setores', f, w: where({cod: r.cod, g: r.g})}]);
+    const rows = M.placar.map(({r, nome, papel}) => el('tr', papel === 'potencial' ? 'pot' : papel ? 'fr' : null, [
+      el('td', null, [(M.barras.find((x) => x.r.g === r.g) || {nome: cap(nome)}).nome]), el('td', 'n', sv(r, 'ativas', F.int)),
+      el('td', 'n', has(r.fatia_2014) ? [...sv(r, 'fatia_2014', F.pct), ' → ', ...sv(r, 'fatia_2025', F.pct)] : ['—']),
+      el('td', 'n', sv(r, 'potencial', String)), el('td', 'n', sv(r, 'fragilidade', String)),
+      el('td', null, [papel === 'potencial' ? 'maior potencial' : papel ? 'a estruturar' : 'acompanhar'])]));
+    e.replaceChildren(el('thead', null, [th]), el('tbody', null, rows));
+  });
   draw('bol-barras', (e, M) => { e.replaceChildren(...bars(M.barras.map((b) => ({...b, v: b.r.ativas})), M.barrasMax, (b) => [{v: F.int(b.r.ativas), s: 'bol_setores', f: 'ativas', w: where({cod: b.r.cod, g: b.r.g})}, ' · ' + N1.format(b.pct) + '%'])); });
   draw('bol-barras-tit', (e, M) => { e.textContent = M.barrasTit; });
   draw('bol-apoio', (e, M) => { e.replaceChildren(...(M.apoioTxt ? parts(M.apoioTxt) : [])); });
@@ -450,7 +528,12 @@
   draw('bol-cards-pot', (e, M) => { e.replaceChildren(...M.cardsPot.map((c) => card(c, false))); });
   draw('bol-cards-fr', (e, M) => { e.replaceChildren(...M.cardsFr.map((c) => card(c, true))); });
   draw('bol-incorp', (e, M) => { e.replaceChildren(...bars(M.incorp, M.incorpMax, (x) => [x.x ? {v: F.int(x.v), s: 'incorp_secao', f: 'incorporados', w: where({cod: M.t, sec: x.x.sec})} : F.int(x.v), ' · ' + N1.format(x.pct) + '%'])); });
-  draw('bol-oficio', (e, M) => { e.replaceChildren(...(M.oficio ? parts(M.oficio.p) : [])); });
+  draw('bol-oficio', (e, M) => {
+    if (M.est) { e.replaceChildren(); return; }
+    const t = el('p', 'rt', [el('strong', null, ['Ofícios no radar.']), ' ', ...(M.radar.length ? [L0().sit.oficios_intro] : parts(fillRaw(L0().sit.oficios_nenhum)))]);
+    e.replaceChildren(t, ...M.radar.map((x) => el('div', 'ri ' + x.tipo, parts(x.p))));
+  });
+  draw('bol-aderencia', (e, M) => { e.replaceChildren(...parts(M.aderencia)); });
   ['s31', 's32', 's33', 's34', 's41'].forEach((k) => draw('bol-' + k, (e, M) => { e.replaceChildren(...M[k].map((p) => P(p))); }));
   draw('bol-kw-intro', (e, M) => { e.replaceChildren(...parts(M.kwIntro)); });
   draw('bol-kw', (e, M) => { e.replaceChildren(...M.kw.map((k) => el('li', null, [k]))); });

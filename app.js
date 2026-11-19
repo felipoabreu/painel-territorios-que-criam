@@ -1480,7 +1480,7 @@
     const esf = [...new Set(all.map((x) => x.esfera))];
     const cols2 = {'Prefeituras': dash.colors[0], 'Governo do Estado': dash.colors[2]};
     const yrs = d3.range(2014, 2025);
-    const h = 270, top = 30, bot = h - 26;
+    const h = 284, top = 48, bot = h - 26;
     const {svg, w} = svgIn(el, h);
     const vals = all.filter((x) => has(x.cult_pc_real)).map((x) => x.cult_pc_real);
     const y = d3.scaleLinear([0, d3.max(vals) || 1], [bot, top]).nice(4);
@@ -1492,10 +1492,11 @@
     svg.append('g').selectAll('text').data(yrs).join('text').attr('class', 'lbl').attr('x', (d) => x(d)).attr('y', h - 8).attr('text-anchor', 'middle').text((d) => (w < 520 && d % 2) ? '' : d);
     [[2020, 'Aldir Blanc emergencial'], [2023, 'Lei Paulo Gustavo'], [2024, 'PNAB']].forEach(([yy, lab], i) => {
       svg.append('line').attr('x1', x(yy)).attr('x2', x(yy)).attr('y1', top - 4).attr('y2', bot).attr('stroke', css('--cds-chart-reference')).attr('stroke-dasharray', '3 3');
-      svg.append('text').attr('class', 'lbl').attr('x', x(yy) + (yy === 2024 ? -3 : 3)).attr('y', 10 + (i % 2) * 12).attr('text-anchor', yy === 2024 ? 'end' : 'start').text(lab);
+      svg.append('text').attr('class', 'lbl').attr('x', x(yy) + (yy === 2024 ? -3 : 3)).attr('y', 11 + i * 15).attr('text-anchor', yy === 2024 ? 'end' : 'start').text(lab);
     });
     const tip = tipBox(el);
     const g = svg.append('g').attr('class', 'grow');
+    const fins = [];
     esf.forEach((e) => {
       const pts = all.filter((q) => q.esfera === e && has(q.cult_pc_real)).sort((a, b) => a.ano - b.ano);
       const c = cols2[e] || dash.colors[1];
@@ -1505,8 +1506,11 @@
         .on('mousemove', (ev, q) => showTip(el, tip, ev, e + ' · ' + q.ano, [[c, 'Por habitante: ' + F.brl2(q.cult_pc_real) + ' (R$ de 2024)'], [null, 'Valor da época: ' + F.brl2(q.cult_pc_nom) + ' por habitante'], [null, 'Total: ' + F.brlc(q.cultura_real) + ' (R$ de 2024) · ' + F.brlc(q.cultura_nom) + ' nominais'], [null, 'Cultura no orçamento: ' + F.pct2(q.pct_orc)], ...(has(q.n_mun) ? [[null, 'Municípios com balanço no Siconfi: ' + F.int(q.n_com_dca) + ' de ' + F.int(q.n_mun) + ' (' + F.pct1(q.cobertura_pct) + ' da população)']] : [])]))
         .on('mouseleave', () => { tip.hidden = true; });
       const l = pts[pts.length - 1];
-      if (l) g.append('text').attr('class', 'lbl').attr('x', x(l.ano) + 8).attr('y', y(l.cult_pc_real) + 4).style('fill', c).text(e === 'Prefeituras' ? 'Prefeituras' : 'Gov. Estado');
+      if (l) fins.push({x: x(l.ano) + 8, y: y(l.cult_pc_real) + 4, c, t: e === 'Prefeituras' ? 'Prefeituras' : 'Gov. Estado'});
     });
+    fins.sort((p, q) => p.y - q.y);
+    for (let i = 1; i < fins.length; i++) if (fins[i].y - fins[i - 1].y < 14) fins[i].y = fins[i - 1].y + 14;
+    fins.forEach((f) => g.append('text').attr('class', 'lbl').attr('x', f.x).attr('y', f.y).style('fill', f.c).text(f.t));
     legend(el, [...esf.map((e) => [cols2[e] || dash.colors[1], e]), [css('--cds-chart-muted'), 'Ponto vazado: balanços de menos de 95% da população']]);
     const p = all.filter((q) => q.esfera === 'Prefeituras').sort((a, b) => a.ano - b.ano);
     const a = p.find((q) => q.ano === 2014), b = p.find((q) => q.ano === 2024), c19 = p.find((q) => q.ano === 2019);
